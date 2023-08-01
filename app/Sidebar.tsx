@@ -84,15 +84,13 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
           icon={link.icon}
           name={link.name}
           href={link.href}
-        >
-          {link.name}
-        </NavItem>
+        />
       ))}
     </Box>
   );
 };
 
-const NavItem = ({ icon, name, href }: LinkItemProps) => {
+const NavItem = ({ icon, name, href, ...rest }: LinkItemProps) => {
   return (
     <Box
       as="a"

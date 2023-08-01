@@ -3,14 +3,15 @@ import { toast } from "react-toastify";
 
 const baseURL: string = process.env.BACKEND_URL || "";
 
-export const join = async (email: string) => {
+const user_id = "54e7adfb-8130-42cc-95d2-a3652334de44";
+
+export const devtoAnalytics = async () => {
   try {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const res = await axios.post(`${baseURL}/join`, {
-      email,
-      timezone,
+    const res = await axios.post(`${baseURL}/devto/analytics`, {
+      user_id,
     });
-    toast.success(res.data.data);
+    return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }

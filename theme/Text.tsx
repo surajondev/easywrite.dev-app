@@ -24,5 +24,12 @@ export const Text = defineStyleConfig({
       lineHeight: "normal",
       color: "red",
     },
+    "subTitle-text": {
+      fontFamily: "Inter",
+      fontSize: "14px",
+      fontStyle: "normal",
+      fontWeight: "400",
+      lineHeight: "normal",
+    },
   },
 });

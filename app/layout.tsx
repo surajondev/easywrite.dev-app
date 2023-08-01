@@ -6,7 +6,7 @@ import { Inter } from "next/font/google";
 const inter = Inter({ subsets: ["latin"] });
 
 import { Providers } from "./provider";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/app/Sidebar";
 
 const metadata = {
   title: "Create Next App",

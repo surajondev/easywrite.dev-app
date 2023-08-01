@@ -99,6 +99,13 @@ a {
   justify-content: center;
 }
 
+/* -----Icon------ */
+
+.stat-card-icon {
+  border-radius: 50%;
+  background-color: #f4f7fe;
+}
+
 /* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
