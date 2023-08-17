@@ -9,7 +9,7 @@ interface StatsBarCardInterface {
   name: string;
 }
 
-export const StatsBarCard = ({ icon, stat, name }: StatsBarCardInterface) => {
+const StatsBarCard = ({ icon, stat, name }: StatsBarCardInterface) => {
   return (
     <Box bg="white" padding="10px 20px" borderRadius="10px">
       <Flex gap="1em">
@@ -36,3 +36,5 @@ export const StatsBarCard = ({ icon, stat, name }: StatsBarCardInterface) => {
     </Box>
   );
 };
+
+export default StatsBarCard;
