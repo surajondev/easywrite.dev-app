@@ -1,5 +1,5 @@
 import { SimpleGrid } from "@chakra-ui/react";
-import StatsBarCard from "@/components/card/StatsBarCard";
+import StatsBarCard from "./StatusBarCard";
 
 import React from "react";
 
