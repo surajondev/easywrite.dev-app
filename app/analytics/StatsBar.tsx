@@ -1,8 +1,6 @@
-import { StatsBarCard } from "@/components/Card/StatsBarCard";
+import { StatsBarCard } from "@/components/card/StatsBarCard";
 import { SimpleGrid } from "@chakra-ui/react";
-import { VscReactions, VscComment } from "react-icons/vsc";
-import { AiOutlineClockCircle } from "react-icons/ai";
-import { IoIosStats } from "react-icons/io";
+
 import React from "react";
 
 export const StatsBar = ({ data }: any) => {
@@ -16,7 +14,12 @@ export const StatsBar = ({ data }: any) => {
     >
       {data &&
         data.map((item: any) => (
-          <StatsBarCard name={item.name} stat={item.stat} icon={item.icon} />
+          <StatsBarCard
+            name={item.name}
+            stat={item.stat}
+            icon={item.icon}
+            key={item.name}
+          />
         ))}
     </SimpleGrid>
   );

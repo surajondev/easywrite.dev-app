@@ -13,15 +13,17 @@ export const StatsBarCard = ({ icon, stat, name }: StatsBarCardInterface) => {
   return (
     <Box bg="white" padding="10px 20px" borderRadius="10px">
       <Flex gap="1em">
-        <IconContext.Provider
-          value={{
-            color: "#8B54BD",
-            size: "2em",
-            className: "stats-card-icon",
-          }}
-        >
-          {icon}
-        </IconContext.Provider>
+        {icon && (
+          <IconContext.Provider
+            value={{
+              color: "#8B54BD",
+              size: "2em",
+              className: "stats-card-icon",
+            }}
+          >
+            {icon}
+          </IconContext.Provider>
+        )}
         <Box>
           <Text variant="subTitle-text" color="gray">
             {name}

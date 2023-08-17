@@ -6,6 +6,7 @@ import { Box } from "./Box";
 import { Tabs } from "./Tabs";
 import { Input } from "./Input";
 import { Colors } from "./Colors";
+import { Accordion } from "./Accordion";
 
 const theme = extendTheme({
   colors: Colors,
@@ -16,6 +17,7 @@ const theme = extendTheme({
     Box: Box,
     Tabs: Tabs,
     Input: Input,
+    Accordion: Accordion,
   },
 });
 

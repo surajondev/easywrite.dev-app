@@ -31,5 +31,12 @@ export const Heading = defineStyleConfig({
       fontWeight: "600",
       lineHeight: "normal",
     },
+    "tertiary-heading": {
+      fontFamily: "Inter",
+      fontSize: "18px",
+      fontStyle: "normal",
+      fontWeight: "600",
+      lineHeight: "normal",
+    },
   },
 });

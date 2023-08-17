@@ -1,11 +1,15 @@
+"use client";
+
 import { Box } from "@chakra-ui/react";
 import React from "react";
-import Chart from "react-apexcharts";
+import dynamic from "next/dynamic";
+const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
+import { ApexOptions } from "apexcharts";
 
 export const PerformanceChart = ({ data }: any) => {
   console.log(data);
 
-  const options = {
+  const options: ApexOptions = {
     chart: {
       type: "bar",
       stacked: true,

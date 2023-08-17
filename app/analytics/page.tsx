@@ -10,6 +10,7 @@ import { devtoAnalytics } from "@/services/api";
 import { VscReactions, VscComment } from "react-icons/vsc";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { IoIosStats } from "react-icons/io";
+import { PopularTags } from "./PopularTags";
 
 export default function Home() {
   const [data, setData] = useState<any>();
@@ -32,7 +33,6 @@ export default function Home() {
       <SimpleGrid
         templateColumns={{
           base: "repeat(1, 1fr)",
-          md: "repeat(2, 1fr)",
           lg: "repeat(5, 1fr)",
         }}
         spacing="40px"
@@ -49,11 +49,28 @@ export default function Home() {
           </Heading>
           {data && <PerformanceChart data={data.latest_article_stats} />}
         </GridItem>
+        <GridItem colSpan={2}>
+          <Heading variant="secondary-heading" mb={2}>
+            Popular Tags
+          </Heading>
+          {data && (
+            <PopularTags
+              data={data.popular_tags.data}
+              label={data.popular_tags.label}
+            />
+          )}
+        </GridItem>
         <GridItem colSpan={5}>
           <Heading variant="secondary-heading" mb={2}>
             Articles Per Tag
           </Heading>
           {data && <ArticlePerTagTree data={data?.articles_per_tag} />}
+        </GridItem>
+        <GridItem colSpan={5}>
+          <Heading variant="secondary-heading" mb={2}>
+            All time stats
+          </Heading>
+          <StatsBar data={data?.randomStats} />
         </GridItem>
       </SimpleGrid>
     </Box>

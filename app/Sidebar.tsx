@@ -55,7 +55,7 @@ interface SidebarProps extends BoxProps {
 const LinkItems: Array<LinkItemProps> = [
   { name: "Dashboard", icon: FiHome, href: "/" },
   { name: "Analytics", icon: IoAnalyticsOutline, href: "/analytics" },
-  { name: "Explore", icon: FiCompass, href: "#" },
+  { name: "Topic Generation", icon: FiCompass, href: "/topic-generation" },
   { name: "Favourites", icon: FiStar, href: "#" },
   { name: "Settings", icon: FiSettings, href: "#" },
 ];
@@ -207,7 +207,7 @@ const Sidebar = ({ children }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
+    <Box minH="100vh" bg={useColorModeValue("gray.200", "gray.900")}>
       <SidebarContent
         onClose={() => onClose}
         display={{ base: "none", md: "block" }}
