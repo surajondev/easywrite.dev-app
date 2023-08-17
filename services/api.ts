@@ -1,7 +1,7 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const baseURL: string = process.env.BACKEND_URL || "";
+const baseURL: any = process.env.BACKEND_URL;
 
 const user_id = "54e7adfb-8130-42cc-95d2-a3652334de44";
 
