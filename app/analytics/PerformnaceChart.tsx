@@ -7,7 +7,6 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { ApexOptions } from "apexcharts";
 
 export const PerformanceChart = ({ data }: any) => {
-  console.log(data);
 
   const options: ApexOptions = {
     chart: {
