@@ -27,9 +27,22 @@ const getEmailPill = definePartsStyle({
   },
 });
 
+const formInput = definePartsStyle({
+  field: {
+    fontFamily: "Inter",
+    borderRadius: "5px",
+    padding: "1em",
+    backgroundColor: "gray.200",
+  },
+  element: {
+    cursor: "pointer",
+  },
+});
+
 const variants = {
   "light-input": lightInput,
   "email-pill": getEmailPill,
+  "form-input": formInput,
 };
 
 export const Input = defineMultiStyleConfig({ variants });

@@ -32,6 +32,7 @@ import {
 } from "react-icons/fi";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { IconType } from "react-icons";
+import { supabase } from "@/lib/supabase";
 
 interface LinkItemProps {
   name: string;
@@ -53,12 +54,20 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Dashboard", icon: FiHome, href: "/" },
-  { name: "Analytics", icon: IoAnalyticsOutline, href: "/analytics" },
-  { name: "Topic Generation", icon: FiCompass, href: "/topic-generation" },
-  { name: "Favourites", icon: FiStar, href: "#" },
-  { name: "Settings", icon: FiSettings, href: "#" },
+  { name: "Dashboard", icon: FiHome, href: "/dashboard" },
+  { name: "Analytics", icon: IoAnalyticsOutline, href: "/dashboard/analytics" },
+  {
+    name: "Topic Generation",
+    icon: FiCompass,
+    href: "/dashboard/topic-generation",
+  },
+  { name: "Profile", icon: FiStar, href: "/dashboard/profile" },
+  { name: "Settings", icon: FiSettings, href: "/dashboard/setting" },
 ];
+
+const hanldeSignOut = async () => {
+  const { error } = await supabase.auth.signOut();
+};
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
@@ -194,7 +203,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem onClick={hanldeSignOut}>Sign out</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

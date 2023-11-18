@@ -28,5 +28,12 @@ export const Button = defineStyleConfig({
       padding: "1.5em 3em",
       boxShadow: "0px 4px 9px 0px rgba(0, 0, 0, 0.1)",
     },
+    "form-button": {
+      fontFamily: "Inter",
+      fontSize: "16px",
+      borderRadius: "5px",
+      backgroundColor: "#8B54BD",
+      color: "white",
+    },
   },
 });

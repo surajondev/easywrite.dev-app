@@ -2,11 +2,13 @@
 
 import "./globals.css";
 import { Inter } from "next/font/google";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase";
+import {usePathname, useRouter } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
 import { Providers } from "./provider";
-import Sidebar from "@/app/Sidebar";
 
 const metadata = {
   title: "Create Next App",
@@ -15,15 +17,41 @@ const metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: {
+    session: any;
+  };
 }) {
+  const [isSession, setIsSession] = useState<boolean>(false);
+
+  // fetch localstorage data
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const getUser = async () => {
+    const {
+      data: { session },
+      error: sessionError,
+    } = await supabase.auth.getSession();
+
+    if (sessionError || session === null && pathname!="/register") {
+      router.push("/login");
+    }
+
+    console.log("layout", session)
+    params.session = session
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <html lang="en">
       <body>
-        <Providers>
-          <Sidebar>{children}</Sidebar>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

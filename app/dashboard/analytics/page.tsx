@@ -11,11 +11,18 @@ import { VscReactions, VscComment } from "react-icons/vsc";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { IoIosStats } from "react-icons/io";
 import { PopularTags } from "./PopularTags";
+import { supabase } from "@/lib/supabase";
 
-export default function Home() {
+export default function Home({params} : {params: {session: any}}) {
   const [data, setData] = useState<any>();
+
   const handleFetchData = async () => {
-    const res = await devtoAnalytics();
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    console.log("page", session)
+    
+    const res = await devtoAnalytics(session);
     res.last_article_stats[0].icon = <VscReactions />;
     res.last_article_stats[1].icon = <VscComment />;
     res.last_article_stats[2].icon = <AiOutlineClockCircle />;

@@ -11,6 +11,8 @@ const nextConfig = {
   },
   env: {
     BACKEND_URL: process.env.BACKEND_URL,
+    SUPABASE_URL: process.env.SUPABASE_URL,
+    SUPABASE_ANON: process.env.SUPABASE_ANON,
   },
 };
 

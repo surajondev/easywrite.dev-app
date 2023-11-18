@@ -99,6 +99,13 @@ a {
   justify-content: center;
 }
 
+.mainContainer {
+  width: 90%;
+  max-width: 1300px;
+  margin: 0 auto;
+  justify-content: center;
+}
+
 /* -----Icon------ */
 
 .stat-card-icon {
