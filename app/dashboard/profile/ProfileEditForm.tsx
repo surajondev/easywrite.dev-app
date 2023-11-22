@@ -9,6 +9,7 @@ import {
   FormLabel,
   Button,
   Center,
+  Avatar
 } from "@chakra-ui/react";
 import {
   Alert,
@@ -23,10 +24,12 @@ import { getProfile } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { ProfileSchema } from "@/utils/validations/profileSchema";
 import Link from "next/link";
+import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 
 interface ProfileDataInterface {
   first_name: string;
   last_name: string;
+  profile_img: string;
   devto_username: string;
   email: string;
 }
@@ -35,6 +38,7 @@ const ProfileEditForm = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
   const [profileData, setProfileData] = useState<Array<ProfileDataInterface>>();
   const [session, setSession] = useState<any>();
+  const [fileName, setFileName] = useState<any>();
 
   const handleUpdateProfile = async (values: any) => {
     const newValues = {
@@ -42,6 +46,7 @@ const ProfileEditForm = () => {
       first_name: values.first_name,
       last_name: values.last_name,
       email: values.email,
+      profile_img: values.profile_img,
       devto_username: values.devto_username,
     };
     const data = await updateProfile(newValues);
@@ -72,6 +77,7 @@ const ProfileEditForm = () => {
       initialValues={{
         first_name: profileData ? profileData[0].first_name : "",
         last_name: profileData ? profileData[0].last_name : "",
+        profile_img: profileData ? profileData[0].profile_img : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
         devto_username: profileData ? profileData[0].devto_username : "",
         email: profileData ? profileData[0].email : "",
       }}
@@ -86,6 +92,7 @@ const ProfileEditForm = () => {
         handleChange,
         handleBlur,
         handleSubmit,
+        setFieldValue
       }) => (
         <Stack
           spacing={10}
@@ -129,6 +136,49 @@ const ProfileEditForm = () => {
                   )}
                 </FormLabel>
               </FormControl>
+              <Stack>
+                <Heading variant="tertiary-heading">Profile Image</Heading>
+                <Flex gap={5}>
+                  <Avatar
+                    size={"md"}
+                    src={
+                      values.profile_img
+                    }
+                  />
+                  <FormControl>
+                    <Input
+                      variant={"form-input-file"}
+                      name="profile_img"
+                      type="file"
+                      onChange={async (e) => {
+                        const timestamp = Date.now();
+                        const { data, error } = await supabase.storage
+                          .from("profileImage")
+                          //@ts-ignore
+                          .upload(`${timestamp}-${e.target.files[0].name}`, e.target.files[0], {
+                            cacheControl: "3600",
+                            upsert: false,
+                          });
+                        if(error){
+                          console.log(error)
+                          return
+                        }
+                        console.log(`${SUPABASE_STORAGE}profileImage/${data.path}`)
+                        //@ts-ignore
+                        setFileName(e.target.value)
+                        setFieldValue("profile_img", `${SUPABASE_STORAGE}profileImage/${data.path}`)
+                      }}
+                      onBlur={handleBlur}
+                      value={fileName}
+                    />
+                    <FormLabel display="flex" justifyContent="space-between">
+                      {errors.email && touched.email && (
+                        <Text variant="input-error-text">{errors.email}</Text>
+                      )}
+                    </FormLabel>
+                  </FormControl>
+                </Flex>
+              </Stack>
               <FormControl>
                 <Heading variant="tertiary-heading">Email</Heading>
                 <Input

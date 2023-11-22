@@ -33,6 +33,9 @@ import {
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { IconType } from "react-icons";
 import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
+import { getProfile } from "@/services/api";
+import { useRouter } from "next/navigation";
 
 interface LinkItemProps {
   name: string;
@@ -65,9 +68,7 @@ const LinkItems: Array<LinkItemProps> = [
   { name: "Settings", icon: FiSettings, href: "/dashboard/setting" },
 ];
 
-const hanldeSignOut = async () => {
-  const { error } = await supabase.auth.signOut();
-};
+
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
@@ -129,6 +130,34 @@ const NavItem = ({ icon, name, href, ...rest }: LinkItemProps) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+
+  const [session, setSession] = useState<any>();
+  const [profileData, setProfileData] = useState<any>();
+  const router = useRouter()
+
+  const handleFetchData = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const data = await getProfile(session);
+    setSession(session);
+    console.log(data);
+    setProfileData(data);
+  };
+
+  const hanldeSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if(error){
+      console.log(error)
+    }
+    router.push("/login")
+  };
+
+  useEffect(() => {
+    handleFetchData();
+  }, []);
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -176,7 +205,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                 <Avatar
                   size={"sm"}
                   src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
+                    profileData && profileData[0].profile_img
                   }
                 />
                 <VStack
@@ -185,10 +214,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">Justina Clark</Text>
-                  <Text fontSize="xs" color="gray.600">
-                    Admin
-                  </Text>
+                  <Text fontSize="sm">{profileData && `${profileData[0].first_name} ${profileData[0].last_name}`}</Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
@@ -199,7 +225,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem>Profile</MenuItem>
+              <MenuItem onClick={() => router.push("/dashboard/profile")}>Profile</MenuItem>
               <MenuItem>Settings</MenuItem>
               <MenuItem>Billing</MenuItem>
               <MenuDivider />

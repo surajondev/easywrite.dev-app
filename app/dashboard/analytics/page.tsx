@@ -20,7 +20,6 @@ export default function Home({params} : {params: {session: any}}) {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    console.log("page", session)
     
     const res = await devtoAnalytics(session);
     res.last_article_stats[0].icon = <VscReactions />;

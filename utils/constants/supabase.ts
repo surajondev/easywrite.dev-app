@@ -1,0 +1,1 @@
+export const SUPABASE_STORAGE = 'https://tuzpwwmxeabokvldguol.supabase.co/storage/v1/object/public/'

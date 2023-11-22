@@ -39,10 +39,24 @@ const formInput = definePartsStyle({
   },
 });
 
+const formInputFile = definePartsStyle({
+  field: {
+    height:"3em",
+    fontFamily: "Inter",
+    borderRadius: "5px",
+    padding: "0.5em",
+    backgroundColor: "gray.200",
+  },
+  element: {
+    cursor: "pointer",
+  },
+});
+
 const variants = {
   "light-input": lightInput,
   "email-pill": getEmailPill,
   "form-input": formInput,
+  "form-input-file": formInputFile,
 };
 
 export const Input = defineMultiStyleConfig({ variants });
