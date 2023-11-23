@@ -49,13 +49,13 @@ export default function Home({params} : {params: {session: any}}) {
           </Heading>
           <StatsBar data={data?.last_article_stats} />
         </GridItem>
-        <GridItem colSpan={3}>
-          <Heading variant="secondary-heading" mb={2}>
+        <GridItem colSpan={5}>
+          <Heading variant="secondary-heading" mb={2} height="10%">
             Last 5 Article
           </Heading>
           {data && <PerformanceChart data={data.latest_article_stats} />}
         </GridItem>
-        <GridItem colSpan={2}>
+        <GridItem colSpan={5}>
           <Heading variant="secondary-heading" mb={2}>
             Popular Tags
           </Heading>

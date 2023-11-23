@@ -15,6 +15,7 @@ export const PopularTags = ({ data, label }: PopularTagsInterface) => {
   const options: ApexOptions = {
     chart: {
       type: "donut",
+      height:"10%"
     },
     labels: label,
     dataLabels: {

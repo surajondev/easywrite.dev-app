@@ -40,6 +40,14 @@ export default function RootLayout({
       router.push("/login");
     }
 
+    if (session && pathname=="/") {
+      router.push("/dashboard");
+    }
+
+    if (sessionError && pathname=="/") {
+      router.push("/login");
+    }
+
     console.log("layout", session)
     params.session = session
   };
