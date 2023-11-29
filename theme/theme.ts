@@ -7,6 +7,7 @@ import { Tabs } from "./Tabs";
 import { Input } from "./Input";
 import { Colors } from "./Colors";
 import { Accordion } from "./Accordion";
+import { Textarea } from "./Textarea";
 
 const theme = extendTheme({
   colors: Colors,
@@ -18,6 +19,7 @@ const theme = extendTheme({
     Tabs: Tabs,
     Input: Input,
     Accordion: Accordion,
+    Textarea: Textarea
   },
 });
 
