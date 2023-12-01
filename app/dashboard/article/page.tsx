@@ -2,9 +2,7 @@
 
 import React, { useState } from "react";
 import { Stack, Box, Heading } from "@chakra-ui/react";
-import Image from "next/image";
 import WriteArticle from "./WriteArticle";
-import PreviewArticle from "./PreviewArticle";
 
 const articlePage = () => {
   const [view, setView] = useState("write")

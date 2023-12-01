@@ -11,7 +11,9 @@ import {
   Box
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { markdownToHtml } from "@/utils/renderer/markdownToHtml";
+import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
+import Markdown from "react-markdown";
+import MarkdownTheme from "@/theme/MarkdownTheme";
 
 const WriteArticle = () => {
   const [view, setView] = useState('write')
@@ -77,15 +79,10 @@ const WriteArticle = () => {
 }
 
 const PreviewArticle = ({contentMarkdown}:any) => {
-  const content = markdownToHtml(contentMarkdown);
   return(
             <Box>
-              <Heading variant="tertiary-heading">Preview Article Here</Heading>
-              <div
-			className="hashnode-content-style mx-auto w-full px-5 md:max-w-screen-md"
-			dangerouslySetInnerHTML={{ __html: content }}
-		/>
-              </Box>
+              <Markdown components={ChakraUIRenderer(MarkdownTheme)} children={contentMarkdown} skipHtml />;
+            </Box>
   )
 }
 

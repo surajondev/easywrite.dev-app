@@ -30,6 +30,7 @@ import {
   FiBell,
   FiChevronDown,
 } from "react-icons/fi";
+import {MdOutlineArticle } from 'react-icons/md'
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { IconType } from "react-icons";
 import { supabase } from "@/lib/supabase";
@@ -58,6 +59,7 @@ interface SidebarProps extends BoxProps {
 
 const LinkItems: Array<LinkItemProps> = [
   { name: "Dashboard", icon: FiHome, href: "/dashboard" },
+  { name: "Article", icon: MdOutlineArticle, href: "/dashboard/article" },
   { name: "Analytics", icon: IoAnalyticsOutline, href: "/dashboard/analytics" },
   {
     name: "Topic Generation",
