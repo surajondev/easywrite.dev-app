@@ -81,7 +81,7 @@ const WriteArticle = () => {
 const PreviewArticle = ({contentMarkdown}:any) => {
   return(
             <Box>
-              <Markdown components={ChakraUIRenderer(MarkdownTheme)} children={contentMarkdown} skipHtml />;
+              <Markdown components={ChakraUIRenderer(MarkdownTheme)} children={contentMarkdown} skipHtml/>
             </Box>
   )
 }
