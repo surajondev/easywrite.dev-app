@@ -14,9 +14,11 @@ import { Formik } from "formik";
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import Markdown from "react-markdown";
 import MarkdownTheme from "@/theme/MarkdownTheme";
+import SettingPopup from "./SettingPopup";
 
-const WriteArticle = () => {
+const WriteArticle = ({setPopup}: any) => {
   const [view, setView] = useState('write')
+  // const [Popup, setPopup] = useState(false)
 
   const handlePublish = async (values: any) => {
   };
@@ -42,6 +44,7 @@ const WriteArticle = () => {
             <Flex gap={4}>
             <Button variant="primary-button" onClick={() => setView('write')}>Edit</Button>
             <Button variant="primary-button" onClick={() => setView('preview')}>Preview</Button>
+            <Button variant="primary-button" onClick={() => setPopup(true)}>Publish</Button>
             </Flex>
             {
               view === "write" && 

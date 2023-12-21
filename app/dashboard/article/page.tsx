@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState } from "react";
-import { Stack, Box, Heading } from "@chakra-ui/react";
+import { Stack } from "@chakra-ui/react";
 import WriteArticle from "./WriteArticle";
+import SettingPopup from "./SettingPopup";
 
 const articlePage = () => {
   const [view, setView] = useState("write")
   const [contentMarkdown, setContentMarkdown] = useState('');
+  const [Popup, setPopup] = useState(false);
 
   return (
-    <Stack spacing={5} className="mainContainer">
-      <Box bg="white" borderRadius="10px" p="18px 25px" mt={10}>
-        <h1>Hello Developer</h1>
-      </Box>
-      <WriteArticle />
+    <Stack spacing={5} position="relative" className="mainContainer">
+        <SettingPopup />
+      <WriteArticle setPopup={setPopup}/>
     </Stack>
   );
 };

@@ -5,15 +5,10 @@ import {
   FormControl,
   InputGroup,
   InputLeftElement,
-  Text,
   Button,
-  Spinner,
 } from "@chakra-ui/react";
 import {
-  AsyncCreatableSelect,
-  AsyncSelect,
-  CreatableSelect,
-  Select,
+  Select
 } from "chakra-react-select";
 import { tagOption } from "./TagOptions";
 import React, { useState } from "react";
@@ -23,7 +18,6 @@ import { generateByTag, generateByText } from "@/services/api";
 
 export const SearchBar = ({ settingData, settingLoading }: any) => {
   const [searchBy, setSearchBy] = useState<any>("text");
-  const [tags, setTags] = useState<any>();
 
   const handleSubmit = async (values: any) => {
     let res;

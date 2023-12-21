@@ -32,6 +32,7 @@ import {
 } from "react-icons/fi";
 import {MdOutlineArticle } from 'react-icons/md'
 import { IoAnalyticsOutline } from "react-icons/io5";
+import { SiPlatformdotsh } from "react-icons/si";
 import { IconType } from "react-icons";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
@@ -66,6 +67,7 @@ const LinkItems: Array<LinkItemProps> = [
     icon: FiCompass,
     href: "/dashboard/topic-generation",
   },
+  { name: "Platform", icon: SiPlatformdotsh, href: "/dashboard/platform" },
   { name: "Profile", icon: FiStar, href: "/dashboard/profile" },
   { name: "Settings", icon: FiSettings, href: "/dashboard/setting" },
 ];
