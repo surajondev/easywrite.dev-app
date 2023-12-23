@@ -16,6 +16,12 @@ interface loginInterface {
   password: string;
 }
 
+interface platformIntegrateInterface{
+  user_id: string
+  devto: string
+  hashnode: string
+}
+
 // Getting user Profile
 export const getProfile = async (session : any) => {
   const res = await axios.post(`${baseURL}/get-profile`, {
@@ -109,6 +115,35 @@ export const generateByTag = async (query: string) => {
     const res = await axios.post(`${baseURL}/topic-generation/by-tag`, {
       query,
     });
+    return res.data;
+  } catch (error: any) {
+    toast.error(error.response.data.error);
+  }
+};
+
+// Platform integration
+
+export const platformIntegrate = async (user_id : string, devto :string, hashnode: string) => {
+  try {
+    const res = await axios.post(`${baseURL}/platform/integrate`, {
+      user_id,
+      devto,
+      hashnode
+    });
+    console.log(res)
+    toast.success(res.data.data)
+    return res.data;
+  } catch (error: any) {
+    toast.error(error.response.data.error);
+  }
+};
+
+export const checkIntegration = async (user_id : string) => {
+  try {
+    const res = await axios.post(`${baseURL}/platform/check-integration`, {
+      user_id,
+    });
+    console.log(res)
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
