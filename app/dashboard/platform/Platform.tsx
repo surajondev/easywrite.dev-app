@@ -12,47 +12,44 @@ import {
   Stack,
   FormLabel,
 } from "@chakra-ui/react";
-import { useFormik } from "formik";
+import { Formik } from "formik";
 import { supabase } from "@/lib/supabase";
-import { checkIntegration, platformIntegrate } from "@/services/api";
+import {
+  checkIntegration,
+  platformIntegrate,
+  updateDevto,
+  updateHashnode,
+} from "@/services/api";
 
 const Platform = () => {
   const [session, setSession] = useState<any>();
-  const [checkData, setCheckData] = useState<any>(null);
+  const [checkData, setCheckData] = useState<any>({devto:false, hashnode:false});
   const [devtoChange, setDevtoChange] = useState<boolean>(false);
   const [hashnodeChange, setHashnodeChange] = useState<boolean>(false);
-  const [updateDevto, setUpdateDevto] = useState(false)
-  const [updateHashnode, setUpdateHashnode] = useState(false)
 
   const handleSubmit = async (values: any) => {
+    console.log("running1")
     if (session) {
-      if(!updateDevto && !updateHashnode){
-        const response = await platformIntegrate(
-          session?.user.id,
-          values?.devto,
-          values?.hashnode
-        );
-        console.log("runningTrue");
-      }
-      if(updateDevto){
-        console.log("runnning")
-      }
+      console.log("running2")
+      const response = await platformIntegrate(
+        session?.user.id,
+        values?.devto,
+        values?.hashnode
+      );
+      handlecheckIntegration()
     }
   };
 
-  const formik = useFormik({
-    initialValues: {
-      devto: "",
-      hashnode: "",
-    },
-    onSubmit: (values) => {
-      handleSubmit(values);
-    },
-  });
-
-  useEffect(() => {
-    handlecheckIntegration();
-  },[]);
+  const handleUpdateHashnode = (key: string) => {
+    console.log("sessionh", session?.user.id)
+    const response = updateHashnode(session?.user.id, key);
+    console.log(response);
+  };
+  const handleUpdateDevto = (key: string) => {
+    console.log("sessionh", session?.user.id)
+    const response = updateDevto(session?.user.id, key);
+    console.log(response);
+  };
 
   const handlecheckIntegration = async () => {
     const {
@@ -60,17 +57,36 @@ const Platform = () => {
     } = await supabase.auth.getSession();
 
     setSession(session);
-    
-    if(session){
-      console.log("running")   
-      const response = await checkIntegration(session?.user.id)
-      setCheckData(response.resData)
-      console.log(response)
+
+    if (session) {
+      console.log("running");
+      const response = await checkIntegration(session?.user.id);
+      setCheckData(response.data);
+      console.log(response);
     }
   };
 
+  useEffect(() => {
+    handlecheckIntegration();
+  },[])
+
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <Formik
+      initialValues={{
+        devto:"",
+        hashnode:""
+      }}
+      onSubmit={(values) => console.log(values)}
+      // validationSchema={LoginSchema}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        handleChange,
+        handleBlur,
+        setFieldValue,
+      }) => (
       <Grid templateColumns="repeat(2, 1fr)" gap={6}>
         <Box bg="white" borderRadius="10px" p="18px 25px">
           <Center flexDir="column" gap="1em">
@@ -79,34 +95,40 @@ const Platform = () => {
               src={PlatfromData.devto.image}
             />
             <Text variant="secondary-text">{PlatfromData.devto.name}</Text>
-            {checkData !==null && (devtoChange || !checkData.devto) && <FormControl>
-              <FormLabel textAlign="center">API Key</FormLabel>
-              <InputGroup>
-                <Input
-                  id="devto"
-                  name="devto"
-                  type="text"
-                  variant="form-input"
-                  placeholder="Enter API Keys"
-                  onChange={formik.handleChange}
-                  value={formik.values.devto}
-                />
-              </InputGroup>
-            </FormControl>}
-            {
-              checkData && !devtoChange && checkData.devto ?
+            {checkData !== null && (devtoChange || !checkData.devto) && (
+              <FormControl>
+                <FormLabel textAlign="center">API Key</FormLabel>
+                <InputGroup>
+                  <Input
+                    id="devto"
+                    name="devto"
+                    type="text"
+                    variant="form-input"
+                    placeholder="Enter API Keys"
+                    onChange={handleChange}
+                    value={values.devto}
+                  />
+                </InputGroup>
+              </FormControl>
+            )}
+            {!devtoChange && checkData.devto && (
               <Stack flexDir="row" gap={3}>
-              <Button disabled variant="secondary-button" backgroundColor="gray.300">
-              Connected
-            </Button>
-              <Button variant="primary-button" onClick={() => setDevtoChange(true)}>
-              Change
-            </Button>
-            </Stack>
-            :
-            <Button type="submit" variant="primary-button" onClick={() => setUpdateDevto(true)}>
-              Update
-            </Button>
+                <Button
+                  disabled
+                  variant="secondary-button"
+                  backgroundColor="gray.300"
+                >
+                  Connected
+                </Button>
+                <Button variant="primary-button" onClick={() => setDevtoChange(true)}>Change</Button>
+              </Stack>
+            )}
+            {
+              (!checkData.devto && !checkData.hashnode ) && 
+              ( !devtoChange ?
+              <Button variant="primary-button" onClick={() => handleSubmit(values)}>Connect</Button>
+              :
+              <Button variant="primary-button" onClick={() => handleUpdateDevto(values.devto)}>Connect</Button>)
             }
           </Center>
         </Box>
@@ -117,40 +139,46 @@ const Platform = () => {
               src={PlatfromData.hashnode.image}
             />
             <Text variant="secondary-text">{PlatfromData.hashnode.name}</Text>
-            {checkData !==null && (hashnodeChange || !checkData.hahsnode) && <FormControl>
-              <FormLabel textAlign="center">API Key</FormLabel>
-              <InputGroup>
-                <Input
-                  id="hashnode"
-                  name="hashnode"
-                  type="text"
-                  variant="form-input"
-                  placeholder="Enter API keys"
-                  onChange={formik.handleChange}
-                  value={formik.values.hashnode}
-                />
-              </InputGroup>
-            
-            </FormControl>}
-            {
-              checkData && !hashnodeChange && checkData.devto ?
+            {(!checkData.hashnode || hashnodeChange) && (
+              <FormControl>
+                <FormLabel textAlign="center">API Key</FormLabel>
+                <InputGroup>
+                  <Input
+                    id="hashnode"
+                    name="hashnode"
+                    type="text"
+                    variant="form-input"
+                    placeholder="Enter API keys"
+                    onChange={handleChange}
+                    value={values.hashnode}
+                  />
+                </InputGroup>
+              </FormControl>
+            )}
+            {!hashnodeChange && checkData.hashnode && (
               <Stack flexDir="row" gap={3}>
-              <Button disabled variant="secondary-button" backgroundColor="gray.300">
-              Connected
-            </Button>
-              <Button variant="primary-button" onClick={() => setHashnodeChange(true)}>
-              Change
-            </Button>
-            </Stack>
-            :
-            <Button type="submit" variant="primary-button">
-              Connect
-            </Button>
+                <Button
+                  disabled
+                  variant="secondary-button"
+                  backgroundColor="gray.300"
+                >
+                  Connected
+                </Button>
+                <Button variant="primary-button" onClick={() => setHashnodeChange(true)}>Change</Button>
+              </Stack>
+            )}
+            {
+              (!checkData.devto && !checkData.hashnode ) && 
+              ( !hashnodeChange ?
+              <Button variant="primary-button" onClick={() => handleSubmit(values)}>Connect</Button>
+              :
+              <Button variant="primary-button" onClick={() => handleUpdateHashnode(values.hashnode)}>Connect</Button>)
             }
           </Center>
         </Box>
       </Grid>
-    </form>
+    )}
+    </Formik>
   );
 };
 

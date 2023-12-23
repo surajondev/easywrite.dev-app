@@ -29,12 +29,12 @@ const SignUpForm = () => {
   const [fileName, setFileName] = useState<string>();
 
   const handleSignin = async (values: any) => {
-    console.log(values);
-    // const data = await register(values);
-    // if (data) {
-    //   toast.success("User Register!");
-    //   setSubmitted(true);
-    // }
+    // console.log(values);
+    const data = await register(values);
+    if (data) {
+      toast.success("User Register!");
+      setSubmitted(true);
+    }
   };
 
   return (
