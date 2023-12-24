@@ -8,6 +8,7 @@ interface registerInterface {
   last_name: string;
   email: string;
   password: string;
+  profile_img:string;
   devto_username: string;
 }
 
@@ -54,6 +55,7 @@ export const register = async ({
   email,
   password,
   devto_username,
+  profile_img
 }: registerInterface) => {
   try {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -63,6 +65,7 @@ export const register = async ({
       email,
       timezone,
       password,
+      profile_img,
       devto_username,
     });
     return res.data;

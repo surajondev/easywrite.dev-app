@@ -124,11 +124,12 @@ const Platform = () => {
               </Stack>
             )}
             {
-              (!checkData.devto && !checkData.hashnode ) && 
-              ( !devtoChange ?
+              (
+                (!checkData.devto || devtoChange) && 
+                (!checkData.devto && !checkData.hashnode ?
               <Button variant="primary-button" onClick={() => handleSubmit(values)}>Connect</Button>
               :
-              <Button variant="primary-button" onClick={() => handleUpdateDevto(values.devto)}>Connect</Button>)
+              <Button variant="primary-button" onClick={() => handleUpdateDevto(values.devto)}>Connect</Button>))
             }
           </Center>
         </Box>
@@ -168,8 +169,8 @@ const Platform = () => {
               </Stack>
             )}
             {
-              (!checkData.devto && !checkData.hashnode ) && 
-              ( !hashnodeChange ?
+              (!checkData.hashnode || hashnodeChange) && 
+              ( !checkData.devto && !checkData.hashnode ?
               <Button variant="primary-button" onClick={() => handleSubmit(values)}>Connect</Button>
               :
               <Button variant="primary-button" onClick={() => handleUpdateHashnode(values.hashnode)}>Connect</Button>)

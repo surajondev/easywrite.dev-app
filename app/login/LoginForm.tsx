@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { LoginSchema } from "@/utils/validations/loginSchema";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LoginForm = () => {
   const router = useRouter();
@@ -93,6 +94,7 @@ const LoginForm = () => {
               )}
             </FormLabel>
           </FormControl>
+          <Text variant="secondary-text">New member?, register <Link href="/register" style={{textDecoration:"underline"}}>here</Link></Text>
           <Center>
             <Button
               variant="form-button"

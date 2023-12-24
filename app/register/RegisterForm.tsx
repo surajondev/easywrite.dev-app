@@ -23,13 +23,14 @@ import { toast } from "react-toastify";
 import { RegisterSchema } from "@/utils/validations/registerSchema";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
+import Link from "next/link";
 
 const SignUpForm = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
   const [fileName, setFileName] = useState<string>();
 
   const handleSignin = async (values: any) => {
-    // console.log(values);
+    console.log(values);
     const data = await register(values);
     if (data) {
       toast.success("User Register!");
@@ -191,6 +192,7 @@ const SignUpForm = () => {
                   )}
                 </FormLabel>
               </FormControl>
+              <Text variant="secondary-text">Already a member?, login <Link href="/login" style={{textDecoration:"underline"}}>here</Link></Text>
               <Center>
                 <Button
                   variant="form-button"
@@ -227,6 +229,7 @@ const AlertContainer = () => {
       </AlertTitle>
       <AlertDescription maxWidth="sm" color="whiteAlpha.600">
         Check your email to confirm it before login.
+      <Text variant="secondary-text" color="white">Click <Link href="/login" style={{textDecoration:"underline"}}>here</Link> to login</Text>
       </AlertDescription>
     </Alert>
   );
