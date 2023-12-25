@@ -14,9 +14,8 @@ import { Formik } from "formik";
 import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import Markdown from "react-markdown";
 import MarkdownTheme from "@/theme/MarkdownTheme";
-import SettingPopup from "./SettingPopup";
 
-const WriteArticle = ({setPopup}: any) => {
+const WriteArticle = ({setContentMarkdown}: any) => {
   const [view, setView] = useState('write')
   // const [Popup, setPopup] = useState(false)
 
@@ -28,7 +27,7 @@ const WriteArticle = ({setPopup}: any) => {
         initialValues={{
           content:"",
         }}
-        onSubmit={(values) => handlePublish(values)}
+        onSubmit={(values) => console.log(values)}
       //   validationSchema={LoginSchema}
       >
         {({
@@ -38,13 +37,13 @@ const WriteArticle = ({setPopup}: any) => {
           handleChange,
           handleBlur,
           handleSubmit,
+          setFieldValue
         }) => (
           
           <Stack spacing={10} width="100%" padding="2em 2em" bg="white" borderRadius="10px" >
             <Flex gap={4}>
             <Button variant="primary-button" onClick={() => setView('write')}>Edit</Button>
             <Button variant="primary-button" onClick={() => setView('preview')}>Preview</Button>
-            <Button variant="primary-button" onClick={() => setPopup(true)}>Publish</Button>
             </Flex>
             {
               view === "write" && 
@@ -55,7 +54,11 @@ const WriteArticle = ({setPopup}: any) => {
                 name="content"
                 size="lg"
                 placeholder={"write article here...."}
-                onChange={handleChange}
+                onChange={(e) => {
+                  setFieldValue("content",e.target.value)
+                  setContentMarkdown(e.target.value)
+                  console.log(e.target.value)
+                }}
                 onBlur={handleBlur}
                 value={values.content}
                 mt={5}
@@ -84,6 +87,7 @@ const WriteArticle = ({setPopup}: any) => {
 const PreviewArticle = ({contentMarkdown}:any) => {
   return(
             <Box>
+              {/* @ts-ignore */}
               <Markdown components={ChakraUIRenderer(MarkdownTheme)} children={contentMarkdown} skipHtml/>
             </Box>
   )

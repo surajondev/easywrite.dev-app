@@ -1,19 +1,30 @@
 "use client";
 
-import React, { useState } from "react";
-import { Stack } from "@chakra-ui/react";
-import WriteArticle from "./WriteArticle";
-import SettingPopup from "./SettingPopup";
+import React from "react";
+import { Stack, Heading, Button, Box } from "@chakra-ui/react";
+import Article from "./Article";
+import Link from "next/link";
 
 const articlePage = () => {
-  const [view, setView] = useState("write")
-  const [contentMarkdown, setContentMarkdown] = useState('');
-  const [Popup, setPopup] = useState(false);
-
   return (
-    <Stack spacing={5} position="relative" className="mainContainer">
-        <SettingPopup />
-      <WriteArticle setPopup={setPopup}/>
+    <Stack spacing={5} className="mainContainer">
+      <Heading
+        bg="white"
+        borderRadius="10px"
+        p="18px 25px"
+        mt={5}
+        variant="tertiary-heading"
+      >
+        Manage Article
+      </Heading>
+      <Box textAlign="right">
+      <Link href="/dashboard/article/write">
+        <Button left="0" variant="primary-button">
+          New Article
+        </Button>
+      </Link>
+      </Box>
+      <Article />
     </Stack>
   );
 };

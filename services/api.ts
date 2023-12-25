@@ -182,3 +182,25 @@ export const updateDevto = async (user_id : string, devto: string) => {
     toast.error(error.response.data.error);
   }
 };
+
+
+// ARTICLE
+
+export const addArticle = async ({user_id, body, devto, hashnode,published_time, is_published} : any ) => {
+  try {
+    console.log("user_id", user_id)
+    const res = await axios.post(`${baseURL}/article/add`, {
+      user_id,
+      body,
+      devto,
+      hashnode,
+      published_time,
+      is_published
+    });
+    console.log(res)
+    toast.success(res.data.data)
+    return res.data;
+  } catch (error: any) {
+    toast.error(error.response.data.error);
+  }
+};
