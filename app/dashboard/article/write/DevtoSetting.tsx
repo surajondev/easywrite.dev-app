@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   Text,
   Stack,
@@ -12,19 +12,22 @@ import {
   Input,
   FormControl,
   FormLabel,
+  Image,
   Button,
   Flex,
-  Center
+  Center,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import {
-  Select,
-} from "chakra-react-select";
+import { Select } from "chakra-react-select";
 import { tagOption } from "../../topic-generation/TagOptions";
-import { addArticle } from "@/services/api";
+import { addArticle, updateDevtoArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
+import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 
-const SettingPopup = ({ body }: any) => {
+const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
+  const [fileName, setFileName] = useState<any>(null);
+  const [imgURL, setImgURL] = useState<any>(null);
+
   const handleSubmit = async (values: any) => {
     const {
       data: { session },
@@ -35,23 +38,49 @@ const SettingPopup = ({ body }: any) => {
       body_markdown: body,
       published: true,
       series: values.series,
-      canonical_url : values.canonical_url,
-      description : values.description,
-      tags:values.tags,
-      organization_id: values.organization_id
-    }
+      canonical_url: values.canonical_url,
+      description: values.description,
+      main_image: values.main_image,
+      tags: values.tags,
+      organization_id: values.organization_id,
+    };
 
     const articleData = {
-      user_id : session?.user.id,
-      body : body,
+      user_id: session?.user.id,
       devto: devtoData,
-      hashnode : null,
-      published_time : values.published_time,
-      is_published : true
-    }
+    };
     console.log(articleData)
-    const response = addArticle(articleData)
-    console.log(response)
+    const response = await addArticle(articleData);
+    if(response){
+      console.log(response[0])
+      setArticleId(response[0].article_id)
+    }
+  };
+
+  const handleUpdate = async (values: any) => {
+
+    const devtoData = {
+      title: values.title,
+      body_markdown: body,
+      published: true,
+      series: values.series,
+      canonical_url: values.canonical_url,
+      description: values.description,
+      main_image: values.main_image,
+      tags: values.tags,
+      organization_id: values.organization_id,
+    };
+
+    const articleData = {
+      article_id: articleId,
+      devto: devtoData,
+    };
+    console.log(articleData)
+    const response = await updateDevtoArticle(articleData);
+    if(response){
+      console.log(response[0])
+      setArticleId(response[0].article_id)
+    }
   };
 
   return (
@@ -59,11 +88,12 @@ const SettingPopup = ({ body }: any) => {
       initialValues={{
         title: "",
         tags: "",
-        description:"",
-        series:"",
-        organization_id:"",
-        canonical_url:"",
-        published_time:""
+        description: "",
+        series: "",
+        main_image: "",
+        organization_id: "",
+        canonical_url: "",
+        published_time: "",
       }}
       onSubmit={(values) => handleSubmit(values)}
       // validationSchema={LoginSchema}
@@ -122,7 +152,7 @@ const SettingPopup = ({ body }: any) => {
                       variant={"form-input"}
                       name="description"
                       type="text"
-                      placeholder={"description of the Article"}
+                      placeholder={"Description of the Article"}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.description}
@@ -133,10 +163,70 @@ const SettingPopup = ({ body }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.description && touched.description && (
-                        <Text variant="input-error-text">{errors.description}</Text>
+                        <Text variant="input-error-text">
+                          {errors.description}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
+                    <Heading variant="tertiary-heading">Thumbnail</Heading>
+                  <Stack>
+                     { imgURL != null && 
+                     <div><Image
+                      width={{base:"100%", md:"60%", lg:"40%"}}
+                      objectFit="cover"
+                      src={imgURL}
+                      alt={values.title}
+                      />
+                      </div>
+                    }
+                    <FormControl>
+                      <Input
+                        variant={"form-input-file"}
+                        name="main_image"
+                        type="file"
+                        onChange={async (e) => {
+                          const timestamp = Date.now();
+                          const { data, error } = await supabase.storage
+                            .from("profileImage")
+                            //@ts-ignore
+                            .upload(
+                              //@ts-ignore
+                              `${timestamp}-${e.target.files[0].name}`,
+                              //@ts-ignore
+                              e.target.files[0],
+                              {
+                                cacheControl: "3600",
+                                upsert: false,
+                              }
+                            );
+                          if (error) {
+                            console.log(error);
+                            return;
+                          }
+                          console.log(
+                            `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                          );
+                          //@ts-ignore
+                          // setFileName(e.target.value);
+                          setImgURL(`${SUPABASE_STORAGE}/profileImage/${data.path}`)
+                          setFieldValue(
+                            "main_image",
+                            `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                          );
+                        }}
+                        onBlur={handleBlur}
+                        value={fileName}
+                      />
+                      <FormLabel display="flex" justifyContent="space-between">
+                        {errors.main_image && touched.main_image && (
+                          <Text variant="input-error-text">
+                            {errors.main_image}
+                          </Text>
+                        )}
+                      </FormLabel>
+                    </FormControl>
+                  </Stack>
                   <FormControl>
                     <Heading variant="tertiary-heading">Time</Heading>
                     <Input
@@ -154,7 +244,9 @@ const SettingPopup = ({ body }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.published_time && touched.published_time && (
-                        <Text variant="input-error-text">{errors.published_time}</Text>
+                        <Text variant="input-error-text">
+                          {errors.published_time}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -184,17 +276,14 @@ const SettingPopup = ({ body }: any) => {
                   </FormControl>
                   <FormControl>
                     <Heading variant="tertiary-heading">Series</Heading>
-                    <Select
-                      id="tag"
-                      name="tag"
-                      variant="filled"
-                      isMulti={true}
-                      colorScheme="purple"
-                      onChange={(e) => {
-                        const sereisArr = e.map((item) => item.value);
-                        setFieldValue("series", sereisArr);
-                      }}
-                      options={tagOption}
+                    <Input
+                      variant={"form-input"}
+                      name="series"
+                      type="text"
+                      placeholder={"Serie of the Article"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.series}
                     />
                     <FormLabel
                       mt={1}
@@ -208,17 +297,14 @@ const SettingPopup = ({ body }: any) => {
                   </FormControl>
                   <FormControl>
                     <Heading variant="tertiary-heading">Organization</Heading>
-                    <Select
-                      id="organization_id"
+                    <Input
+                      variant={"form-input"}
                       name="organization_id"
-                      variant="filled"
-                      isMulti={true}
-                      colorScheme="purple"
-                      onChange={(e) => {
-                        const organizationId = e.map((item) => item.value);
-                        setFieldValue("organization_id", organizationId);
-                      }}
-                      options={tagOption}
+                      type="text"
+                      placeholder={"Organization"}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.organization_id}
                     />
                     <FormLabel
                       mt={1}
@@ -226,7 +312,9 @@ const SettingPopup = ({ body }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.organization_id && touched.organization_id && (
-                        <Text variant="input-error-text">{errors.organization_id}</Text>
+                        <Text variant="input-error-text">
+                          {errors.organization_id}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -247,16 +335,40 @@ const SettingPopup = ({ body }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.canonical_url && touched.canonical_url && (
-                        <Text variant="input-error-text">{errors.canonical_url}</Text>
+                        <Text variant="input-error-text">
+                          {errors.canonical_url}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
-                  
-                    <Center>
-                  <Flex gap="1em">
-                  <Button variant="secondary-button" bgColor="gray.300" onClick={() => handleSubmit()}>Save Draft</Button>
-                  <Button variant="primary-button" onClick={() => handleSubmit()}>Publish</Button>
-                  </Flex>
+
+                  <Center>
+                    <Flex gap="1em">
+                      <Button
+                        variant="secondary-button"
+                        bgColor="gray.300"
+                        onClick={() => handleSubmit()}
+                      >
+                        Save Draft
+                      </Button>
+                      {
+                        articleId === null ?
+                        <Button
+                        variant="primary-button"
+                        onClick={() => handleSubmit()}
+                      >
+                        Publish
+                      </Button>
+                    :
+                    <Button
+                        variant="primary-button"
+                        onClick={() => handleUpdate(values)}
+                      >
+                        Update
+                      </Button>
+
+                    }
+                    </Flex>
                   </Center>
                 </Stack>
               </AccordionPanel>
@@ -268,4 +380,4 @@ const SettingPopup = ({ body }: any) => {
   );
 };
 
-export default SettingPopup;
+export default DevtoSetting;
