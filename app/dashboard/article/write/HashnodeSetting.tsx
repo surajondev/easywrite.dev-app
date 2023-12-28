@@ -42,25 +42,29 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
-      published: true,
-      seriesId: values.seriesId,
-      originalArticleURL: values.originalArticleURL,
-      subtitle: values.subtitle,
-      coverImageOptions: {
-        coverImageURL: values.main_image,
-        isCoverAttributionHidden: false,
-        coverImageAttribution: values.title,
-        coverImagePhotographer: {},
-        "stickCoverToBottom": false
+      isRepublished: {
+        originalArticleURL: values.originalArticleURL
       },
+      subtitle: values.subtitle,
+      coverImageURL: values.main_image,
       slug:getSlug(),
-      tags: values.tags,
-      publicationId: values.publicationId,
+      tags: [{
+        "_id": "56744723958ef13879b9549b",
+        "slug": "testing",
+        "name": "Testing"
+      }],
+      isPartOfPublication: {publicationId : "658d492fd5ca6e025263a309"},
     };
+
+    const hashnode_data = {
+        type:"schueduled",
+        error:"",
+    }
 
     const articleData = {
       user_id: session?.user.id,
       hashnode: hashnodeData,
+      hashnode_data
     };
     console.log(articleData);
     const response = await addArticle(articleData);
@@ -80,25 +84,33 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
-      published: true,
-      seriesId: values.seriesId,
-      originalArticleURL: values.originalArticleURL,
       subtitle: values.subtitle,
-      coverImageOptions: {
-        coverImageURL: values.main_image,
-        isCoverAttributionHidden: false,
-        coverImageAttribution: values.title,
-        coverImagePhotographer: {},
-        "stickCoverToBottom": false
-      },
+      coverImageURL: values.main_image,
       slug:getSlug(),
-      tags: values.tags,
-      publicationId: values.publicationId,
+      tags: [{
+        "_id": "56744723958ef13879b9549b",
+        "slug": "testing",
+        "name": "Testing"
+      }],
+      isPartOfPublication: {publicationId : "658d492fd5ca6e025263a309"},
     };
+
+    if(values.originalArticleURL){
+      //@ts-ignore
+      hashnodeData.isRepublished = {
+        originalArticleURL: values.orgioriginalArticleURL
+      }
+    }
+
+    const hashnode_data = {
+      type:"schueduled",
+      error:"",
+  }
 
     const articleData = {
       article_id: articleId,
       hashnode: hashnodeData,
+      hashnode_data
     };
     console.log(articleData);
     const response = await updateHashnodeArticle(articleData)
@@ -228,17 +240,18 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                             console.log(error);
                             return;
                           }
+                          const path =  data.path.replace(/ /g, '%20');
                           console.log(
-                            `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                            `${SUPABASE_STORAGE}/profileImage/${path}`
                           );
                           //@ts-ignore
                           // setFileName(e.target.value);
                           setImgURL(
-                            `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                            `${SUPABASE_STORAGE}/profileImage/${path}`
                           );
                           setFieldValue(
                             "main_image",
-                            `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                            `${SUPABASE_STORAGE}/profileImage/${path}`
                           );
                         }}
                         onBlur={handleBlur}

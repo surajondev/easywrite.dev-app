@@ -163,10 +163,10 @@ const ProfileEditForm = () => {
                           console.log(error)
                           return
                         }
-                        console.log(`${SUPABASE_STORAGE}profileImage/${data.path}`)
+                        console.log(`${SUPABASE_STORAGE}/profileImage/${data.path}`)
                         //@ts-ignore
                         setFileName(e.target.value)
-                        setFieldValue("profile_img", `${SUPABASE_STORAGE}profileImage/${data.path}`)
+                        setFieldValue("profile_img", `${SUPABASE_STORAGE}/profileImage/${data.path}`)
                       }}
                       onBlur={handleBlur}
                       value={fileName}

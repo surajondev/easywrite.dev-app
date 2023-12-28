@@ -45,9 +45,15 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
       organization_id: values.organization_id,
     };
 
+    const devto_data = {
+        type:"schueduled",
+        error:"",
+    }
+
     const articleData = {
       user_id: session?.user.id,
       devto: devtoData,
+      devto_data
     };
     console.log(articleData)
     const response = await addArticle(articleData);
@@ -71,9 +77,15 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
       organization_id: values.organization_id,
     };
 
+    const devto_data = {
+        type:"schueduled",
+        error:"",
+    }
+
     const articleData = {
       article_id: articleId,
       devto: devtoData,
+      devto_data,
     };
     console.log(articleData)
     const response = await updateDevtoArticle(articleData);
@@ -204,15 +216,16 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                             console.log(error);
                             return;
                           }
+                          const path =  data.path.replace(/ /g, '%20');
                           console.log(
-                            `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                            `${SUPABASE_STORAGE}/profileImage/${path}`
                           );
                           //@ts-ignore
                           // setFileName(e.target.value);
-                          setImgURL(`${SUPABASE_STORAGE}/profileImage/${data.path}`)
+                          setImgURL(`${SUPABASE_STORAGE}/profileImage/${path}`)
                           setFieldValue(
                             "main_image",
-                            `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                            `${SUPABASE_STORAGE}/profileImage/${path}`
                           );
                         }}
                         onBlur={handleBlur}

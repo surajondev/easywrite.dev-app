@@ -186,12 +186,14 @@ export const updateDevto = async (user_id : string, devto: string) => {
 
 // ARTICLE
 
-export const addArticle = async ({user_id, devto, hashnode} : any ) => {
+export const addArticle = async ({user_id, devto, hashnode, devto_data, hashnode_data} : any ) => {
   try {
     const res = await axios.post(`${baseURL}/article/add`, {
       user_id,
       devto,
-      hashnode
+      hashnode,
+      devto_data,
+      hashnode_data
     });
     toast.success("Article Added Successfully")
     return res.data;
@@ -200,12 +202,13 @@ export const addArticle = async ({user_id, devto, hashnode} : any ) => {
   }
 };
 
-export const updateDevtoArticle = async ({article_id, devto} : any ) => {
+export const updateDevtoArticle = async ({article_id, devto, devto_data} : any ) => {
   try {
     console.log("article", article_id)
     const res = await axios.post(`${baseURL}/article/update-devto`, {
       article_id,
       devto,
+      devto_data
     });
     toast.success("Article Updated Successfully")
     return res.data;
@@ -214,12 +217,13 @@ export const updateDevtoArticle = async ({article_id, devto} : any ) => {
   }
 };
 
-export const updateHashnodeArticle = async ({article_id, hashnode} : any ) => {
+export const updateHashnodeArticle = async ({article_id, hashnode, hashnode_data} : any ) => {
   try {
 
     const res = await axios.post(`${baseURL}/article/update-hashnode`, {
       article_id,
       hashnode,
+      hashnode_data
     });
     toast.success("Article Updated Successfully")
     return res.data;
