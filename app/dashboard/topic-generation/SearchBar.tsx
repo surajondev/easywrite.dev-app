@@ -10,7 +10,7 @@ import {
 import {
   Select
 } from "chakra-react-select";
-import { tagOption } from "./TagOptions";
+import { tagOption } from "./DevtoTagOptions";
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import { BiSearch } from "react-icons/bi";

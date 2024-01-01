@@ -16,7 +16,8 @@ import { Formik } from "formik";
 import { supabase } from "@/lib/supabase";
 import {
   checkIntegration,
-  platformIntegrate,
+  platformIntegrateDevto,
+  platformIntegrateHashnode,
   updateDevto,
   updateHashnode,
 } from "@/services/api";
@@ -27,13 +28,24 @@ const Platform = () => {
   const [devtoChange, setDevtoChange] = useState<boolean>(false);
   const [hashnodeChange, setHashnodeChange] = useState<boolean>(false);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmitDevto = async (values: any) => {
     console.log("running1")
     if (session) {
       console.log("running2")
-      const response = await platformIntegrate(
+      const response = await platformIntegrateDevto(
         session?.user.id,
         values?.devto,
+      );
+      handlecheckIntegration()
+    }
+  };
+
+  const handleSubmitHashnode = async (values: any) => {
+    console.log("running1")
+    if (session) {
+      console.log("running2")
+      const response = await platformIntegrateHashnode(
+        session?.user.id,
         values?.hashnode
       );
       handlecheckIntegration()
@@ -71,6 +83,7 @@ const Platform = () => {
   },[])
 
   return (
+    <Grid templateColumns="repeat(2, 1fr)" gap={6}>
     <Formik
       initialValues={{
         devto:"",
@@ -81,13 +94,8 @@ const Platform = () => {
     >
       {({
         values,
-        errors,
-        touched,
         handleChange,
-        handleBlur,
-        setFieldValue,
       }) => (
-      <Grid templateColumns="repeat(2, 1fr)" gap={6}>
         <Box bg="white" borderRadius="10px" p="18px 25px">
           <Center flexDir="column" gap="1em">
             <Avatar
@@ -127,12 +135,26 @@ const Platform = () => {
               (
                 (!checkData.devto || devtoChange) && 
                 (!checkData.devto && !checkData.hashnode ?
-              <Button variant="primary-button" onClick={() => handleSubmit(values)}>Connect</Button>
+              <Button variant="primary-button" onClick={() => handleSubmitDevto(values)}>Connect</Button>
               :
               <Button variant="primary-button" onClick={() => handleUpdateDevto(values.devto)}>Connect</Button>))
             }
           </Center>
         </Box>
+      )}
+        </Formik>
+        <Formik
+      initialValues={{
+        devto:"",
+        hashnode:""
+      }}
+      onSubmit={(values) => console.log(values)}
+      // validationSchema={LoginSchema}
+    >
+      {({
+        values,
+        handleChange,
+      }) => (
         <Box bg="white" borderRadius="10px" p="18px 25px">
           <Center flexDir="column" gap="1em">
             <Avatar
@@ -171,15 +193,15 @@ const Platform = () => {
             {
               (!checkData.hashnode || hashnodeChange) && 
               ( !checkData.devto && !checkData.hashnode ?
-              <Button variant="primary-button" onClick={() => handleSubmit(values)}>Connect</Button>
+              <Button variant="primary-button" onClick={() => handleSubmitHashnode(values)}>Connect</Button>
               :
               <Button variant="primary-button" onClick={() => handleUpdateHashnode(values.hashnode)}>Connect</Button>)
             }
           </Center>
-        </Box>
+        </Box>)}
+        </Formik>
       </Grid>
-    )}
-    </Formik>
+      
   );
 };
 

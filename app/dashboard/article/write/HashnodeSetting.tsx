@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { Select } from "chakra-react-select";
-import { tagOption } from "../../topic-generation/TagOptions";
+import { tagOption } from "../../topic-generation/HashnodeTagOptions";
 import { addArticle, updateHashnodeArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
@@ -29,6 +29,13 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
   const [imgURL, setImgURL] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
+
+    const tagsArr = values.tags.map((e : string) =>{ return(
+      {
+        "_id":e
+      }
+    )}) 
+    
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -39,6 +46,8 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
         return slug
     }
 
+    const tagsArray = values.tags
+
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
@@ -48,11 +57,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
       subtitle: values.subtitle,
       coverImageURL: values.main_image,
       slug:getSlug(),
-      tags: [{
-        "_id": "56744723958ef13879b9549b",
-        "slug": "testing",
-        "name": "Testing"
-      }],
+      tags: tagsArr,
       isPartOfPublication: {publicationId : "658d492fd5ca6e025263a309"},
     };
 
@@ -81,17 +86,19 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
         return slug
     }
 
+    const tagsArr = values.tags.map((e : string) =>{ return(
+      {
+        "_id":e
+      }
+    )}) 
+
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
       subtitle: values.subtitle,
       coverImageURL: values.main_image,
       slug:getSlug(),
-      tags: [{
-        "_id": "56744723958ef13879b9549b",
-        "slug": "testing",
-        "name": "Testing"
-      }],
+      tags: tagsArr,
       isPartOfPublication: {publicationId : "658d492fd5ca6e025263a309"},
     };
 
@@ -119,6 +126,10 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
       }
   };
 
+  const fetchPublicationId = () => {
+
+  }
+
   return (
     <Formik
       initialValues={{
@@ -127,7 +138,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
         subtitle: "",
         seriesId: "",
         main_image: "",
-        publicationId: "",
+        publicationId: fetchPublicationId(),
         originalArticleURL: "",
         publishedAt: "",
       }}
@@ -314,35 +325,12 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                     </FormLabel>
                   </FormControl>
                   <FormControl>
-                    <Heading variant="tertiary-heading">seriesId</Heading>
-                    <Input
-                      variant={"form-input"}
-                      name="seriesId"
-                      type="text"
-                      placeholder={"Serie of the Article"}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.seriesId}
-                    />
-                    <FormLabel
-                      mt={1}
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      {errors.seriesId && touched.seriesId && (
-                        <Text variant="input-error-text">
-                          {errors.seriesId}
-                        </Text>
-                      )}
-                    </FormLabel>
-                  </FormControl>
-                  <FormControl>
-                    <Heading variant="tertiary-heading">Organization</Heading>
+                    <Heading variant="tertiary-heading">Publication ID</Heading>
                     <Input
                       variant={"form-input"}
                       name="publicationId"
                       type="text"
-                      placeholder={"Organization"}
+                      placeholder={"Default: Personal"}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.publicationId}

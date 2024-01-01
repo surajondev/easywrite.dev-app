@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { Select } from "chakra-react-select";
-import { tagOption } from "../../topic-generation/TagOptions";
+import { tagOption } from "../../topic-generation/DevtoTagOptions";
 import { addArticle, updateDevtoArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";

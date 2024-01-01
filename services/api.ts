@@ -126,11 +126,24 @@ export const generateByTag = async (query: string) => {
 
 // Platform integration
 
-export const platformIntegrate = async (user_id : string, devto :string, hashnode: string) => {
+export const platformIntegrateDevto = async (user_id : string, devto :string) => {
   try {
-    const res = await axios.post(`${baseURL}/platform/integrate`, {
+    const res = await axios.post(`${baseURL}/platform/integrate-devto`, {
       user_id,
       devto,
+    });
+    console.log(res)
+    toast.success(res.data.data)
+    return res.data;
+  } catch (error: any) {
+    toast.error(error.response.data.error);
+  }
+};
+
+export const platformIntegrateHashnode = async (user_id : string, hashnode: string) => {
+  try {
+    const res = await axios.post(`${baseURL}/platform/integrate-hashnode`, {
+      user_id,
       hashnode
     });
     console.log(res)
