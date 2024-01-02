@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Stack,
@@ -27,6 +27,7 @@ import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
   const [fileName, setFileName] = useState<any>(null);
   const [imgURL, setImgURL] = useState<any>(null);
+  const [hashnodePublication, setHashnodePublication] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
 
@@ -58,7 +59,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
       coverImageURL: values.main_image,
       slug:getSlug(),
       tags: tagsArr,
-      isPartOfPublication: {publicationId : "658d492fd5ca6e025263a309"},
+      isPartOfPublication: {publicationId : values.publicationId},
     };
 
     const hashnode_data = {
@@ -126,9 +127,30 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
       }
   };
 
-  const fetchPublicationId = () => {
+  const handleFetchHashnodePublication = async () => {
+    const { data, error } = await supabase
+  .from('hashnode_key')
+  .select(`
+    label,
+    value
+  `)
 
+  if(data !== null){
+    const newArray = data[0].value.map(() => {
+      return ({
+        "label":data[0].label,
+        "value":data[0].value
+      })
+    })
+
+    setHashnodePublication(newArray)
   }
+  }
+
+
+  useEffect(()=> {
+    handleFetchHashnodePublication()
+  },[])
 
   return (
     <Formik
@@ -138,7 +160,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
         subtitle: "",
         seriesId: "",
         main_image: "",
-        publicationId: fetchPublicationId(),
+        publicationId: "",
         originalArticleURL: "",
         publishedAt: "",
       }}
@@ -325,15 +347,17 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                     </FormLabel>
                   </FormControl>
                   <FormControl>
-                    <Heading variant="tertiary-heading">Publication ID</Heading>
-                    <Input
-                      variant={"form-input"}
+                    <Heading variant="tertiary-heading">Publication</Heading>
+                    <Select
+                      id="publicationId"
                       name="publicationId"
-                      type="text"
-                      placeholder={"Default: Personal"}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.publicationId}
+                      variant="filled"
+                      isMulti={false}
+                      colorScheme="purple"
+                      onChange={(e) => {
+                        setFieldValue("publicationId", e);
+                      }}
+                      options={hashnodePublication}
                     />
                     <FormLabel
                       mt={1}
@@ -341,9 +365,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.publicationId && touched.publicationId && (
-                        <Text variant="input-error-text">
-                          {errors.publicationId}
-                        </Text>
+                        <Text variant="input-error-text">{errors.publicationId}</Text>
                       )}
                     </FormLabel>
                   </FormControl>
