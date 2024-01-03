@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Text,
   Stack,
@@ -27,6 +27,7 @@ import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
   const [fileName, setFileName] = useState<any>(null);
   const [imgURL, setImgURL] = useState<any>(null);
+  const [devtoPublication, setDevtoPublication] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
     const {
@@ -42,7 +43,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
       description: values.description,
       main_image: values.main_image,
       tags: values.tags,
-      organization_id: values.organization_id,
+      organization_id: values.organization_id.value,
     };
 
     const devto_data = {
@@ -74,7 +75,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
       description: values.description,
       main_image: values.main_image,
       tags: values.tags,
-      organization_id: values.organization_id,
+      organization_id: values.organization_id.value,
     };
 
     const devto_data = {
@@ -94,6 +95,37 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
       setArticleId(response[0].article_id)
     }
   };
+
+  const handleFetchDevtoPublication = async () => {
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const { data, error } = await supabase
+  .from('devto_key')
+  .select(`
+    label,
+    organization_id
+  `).eq("user_id", session?.user.id)
+
+  if(data !== null){
+    const newArray = data[0].organization_id.map((item:any, index:any) => {
+      return ({
+        "label":data[0].label[index],
+        "value":data[0].organization_id[index]
+      })
+    })
+
+    console.log(newArray)
+    setDevtoPublication(newArray)
+  }
+  }
+
+
+  useEffect(()=> {
+    handleFetchDevtoPublication()
+  },[])
 
   return (
     <Formik
@@ -310,14 +342,16 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                   </FormControl>
                   <FormControl>
                     <Heading variant="tertiary-heading">Organization</Heading>
-                    <Input
-                      variant={"form-input"}
+                    <Select
+                      id="organization_id"
                       name="organization_id"
-                      type="text"
-                      placeholder={"Organization"}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      value={values.organization_id}
+                      variant="filled"
+                      isMulti={false}
+                      colorScheme="purple"
+                      onChange={(e) => {
+                        setFieldValue("organization_id", e);
+                      }}
+                      options={devtoPublication}
                     />
                     <FormLabel
                       mt={1}
@@ -325,9 +359,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.organization_id && touched.organization_id && (
-                        <Text variant="input-error-text">
-                          {errors.organization_id}
-                        </Text>
+                        <Text variant="input-error-text">{errors.organization_id}</Text>
                       )}
                     </FormLabel>
                   </FormControl>

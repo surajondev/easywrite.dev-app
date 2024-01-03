@@ -59,7 +59,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
       coverImageURL: values.main_image,
       slug:getSlug(),
       tags: tagsArr,
-      isPartOfPublication: {publicationId : values.publicationId},
+      isPartOfPublication: {publicationId : values.publicationId.value},
     };
 
     const hashnode_data = {
@@ -100,7 +100,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
       coverImageURL: values.main_image,
       slug:getSlug(),
       tags: tagsArr,
-      isPartOfPublication: {publicationId : "658d492fd5ca6e025263a309"},
+      isPartOfPublication: {publicationId : values.publicationId.value},
     };
 
     if(values.originalArticleURL){
@@ -128,21 +128,27 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
   };
 
   const handleFetchHashnodePublication = async () => {
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
     const { data, error } = await supabase
   .from('hashnode_key')
   .select(`
     label,
     value
-  `)
+  `).eq("user_id", session?.user.id)
 
   if(data !== null){
-    const newArray = data[0].value.map(() => {
+    const newArray = data[0].value.map((item:any, index:any) => {
       return ({
-        "label":data[0].label,
-        "value":data[0].value
+        "label":data[0].label[index],
+        "value":data[0].value[index]
       })
     })
 
+    console.log(newArray)
     setHashnodePublication(newArray)
   }
   }

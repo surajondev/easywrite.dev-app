@@ -197,6 +197,22 @@ export const updateHashnodePublication = async (user_id : string, label:any, val
   }
 };
 
+export const updateDevtoPublication = async (user_id : string, label:any, value:any) => {
+  try {
+    console.log("user_idh", user_id)
+    const res = await axios.post(`${baseURL}/platform/update-devto-publication`, {
+      user_id,
+      label, 
+      value
+    });
+    console.log(res)
+    toast.success(res.data.data)
+    return res.data;
+  } catch (error: any) {
+    toast.error(error.response.data.error);
+  }
+};
+
 export const updateDevto = async (user_id : string, devto: string) => {
   try {
     console.log("user_idh", user_id)
