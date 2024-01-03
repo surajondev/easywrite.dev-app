@@ -18,7 +18,7 @@ const articlePage = () => {
         Manage Article
       </Heading>
       <Box textAlign="right">
-      <Link href="/dashboard/article/write">
+      <Link href="/dashboard/article/new-article">
         <Button left="0" variant="primary-button">
           New Article
         </Button>

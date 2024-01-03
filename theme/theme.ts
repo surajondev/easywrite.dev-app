@@ -8,6 +8,7 @@ import { Input } from "./Input";
 import { Colors } from "./Colors";
 import { Accordion } from "./Accordion";
 import { Textarea } from "./Textarea";
+import { Divider } from "./Divider";
 
 const theme = extendTheme({
   colors: Colors,
@@ -19,7 +20,8 @@ const theme = extendTheme({
     Tabs: Tabs,
     Input: Input,
     Accordion: Accordion,
-    Textarea: Textarea
+    Textarea: Textarea,
+    Divider: Divider
   },
 });
 

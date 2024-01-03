@@ -24,152 +24,232 @@ import { addArticle, updateHashnodeArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 
-const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
+const HashnodeSetting = ({
+  articleData,
+  body,
+  articleId,
+  setArticleId,
+}: any) => {
   const [fileName, setFileName] = useState<any>(null);
   const [imgURL, setImgURL] = useState<any>(null);
   const [hashnodePublication, setHashnodePublication] = useState<any>(null);
+  const [timeStampTZ, setTimeStampTZ] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
+    const tagsArr = values.tags.map((e: any) => {
+      return {
+        _id: e._id,
+      };
+    });
 
-    const tagsArr = values.tags.map((e : string) =>{ return(
-      {
-        "_id":e
-      }
-    )}) 
-    
     const {
       data: { session },
     } = await supabase.auth.getSession();
 
     const getSlug = () => {
-        const lowerCase = values.title.toLowerCase()
-        var slug = lowerCase.replace(/ /g, '-');
-        return slug
-    }
-
-    const tagsArray = values.tags
+      const lowerCase = values.title.toLowerCase();
+      var slug = lowerCase.replace(/ /g, "-");
+      return slug;
+    };
 
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
       isRepublished: {
-        originalArticleURL: values.originalArticleURL
+        originalArticleURL: values.originalArticleURL,
       },
       subtitle: values.subtitle,
       coverImageURL: values.main_image,
-      slug:getSlug(),
+      slug: getSlug(),
       tags: tagsArr,
-      isPartOfPublication: {publicationId : values.publicationId.value},
+      isPartOfPublication: { publicationId: values.publicationId.value },
     };
 
     const hashnode_data = {
-        type:"schueduled",
-        error:"",
-    }
+      type: "scheduled",
+      error: "",
+    };
+
+    const timestamp = new Date(values.publishedAt);
 
     const articleData = {
       user_id: session?.user.id,
       hashnode: hashnodeData,
-      hashnode_data
+      title: values.title,
+      tags_hashnode: values.tags_label,
+      body_markdown: body,
+      hashnode_time: timestamp,
+      publicationId: values.publicationId,
+      hashnode_data,
     };
     console.log(articleData);
     const response = await addArticle(articleData);
-    if(response){
-        console.log(response)
-        setArticleId(response[0].articleId)
-      }
+    if (response) {
+      console.log(response);
+      setArticleId(response[0].articleId);
+    }
   };
 
   const handleUpdate = async (values: any) => {
     const getSlug = () => {
-        const lowerCase = values.title.toLowerCase()
-        var slug = lowerCase.replace(/ /g, '-');
-        return slug
-    }
+      const lowerCase = values.title.toLowerCase();
+      var slug = lowerCase.replace(/ /g, "-");
+      return slug;
+    };
 
-    const tagsArr = values.tags.map((e : string) =>{ return(
-      {
-        "_id":e
-      }
-    )}) 
+    const tagsArr = values.tags.map((e: string) => {
+      return {
+        _id: e,
+      };
+    });
 
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
       subtitle: values.subtitle,
       coverImageURL: values.main_image,
-      slug:getSlug(),
+      slug: getSlug(),
       tags: tagsArr,
-      isPartOfPublication: {publicationId : values.publicationId.value},
+      isPartOfPublication: { publicationId: values.publicationId.value },
     };
 
-    if(values.originalArticleURL){
+    if (values.originalArticleURL) {
       //@ts-ignore
       hashnodeData.isRepublished = {
-        originalArticleURL: values.orgioriginalArticleURL
-      }
+        originalArticleURL: values.orgioriginalArticleURL,
+      };
     }
 
     const hashnode_data = {
-      type:"schueduled",
-      error:"",
-  }
+      type: "scheduled",
+      error: "",
+    };
 
+    const timestamp = new Date(values.publishedAt);
     const articleData = {
       article_id: articleId,
       hashnode: hashnodeData,
-      hashnode_data
+      title: values.title,
+      tags_hashnode: values.tags_label,
+      body_markdown: body,
+      hashnode_time: timestamp,
+      publicationId: values.publicationId,
+      hashnode_data,
     };
     console.log(articleData);
-    const response = await updateHashnodeArticle(articleData)
-    if(response){
-        console.log(response)
-      }
+    const response = await updateHashnodeArticle(articleData);
+    if (response) {
+      console.log(response);
+    }
   };
 
   const handleFetchHashnodePublication = async () => {
-
     const {
       data: { session },
     } = await supabase.auth.getSession();
 
     const { data, error } = await supabase
-  .from('hashnode_key')
-  .select(`
+      .from("hashnode_key")
+      .select(
+        `
     label,
     value
-  `).eq("user_id", session?.user.id)
+  `
+      )
+      .eq("user_id", session?.user.id);
 
-  if(data !== null){
-    const newArray = data[0].value.map((item:any, index:any) => {
-      return ({
-        "label":data[0].label[index],
-        "value":data[0].value[index]
-      })
-    })
+    if (data !== null) {
+      const newArray = data[0].value.map((item: any, index: any) => {
+        return {
+          label: data[0].label[index],
+          value: data[0].value[index],
+        };
+      });
 
-    console.log(newArray)
-    setHashnodePublication(newArray)
-  }
-  }
+      if (articleData !== "new-article" && articleData[0].hashnode != null) {
+        console.log("Runningnnnnfds");
+        setImgURL(articleData[0].hashnode.coverImageURL);
 
+        const dateObject = new Date(articleData[0].hashnode_time);
 
-  useEffect(()=> {
-    handleFetchHashnodePublication()
-  },[])
+        const options = {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false, // Use 24-hour format
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Replace with your desired time zone
+        };
+
+        // Format the date as a string using toLocaleString
+        //@ts-ignore
+        const formattedDateString = dateObject.toLocaleString("en-US", options);
+        function convertDateFormat(dateTimeStr: any) {
+          // Split the date and time parts
+          let [datePart, timePart] = dateTimeStr.split(", ");
+
+          // Reformat the date from DD/MM/YYYY to YYYY-MM-DD
+          let [day, month, year] = datePart.split("/");
+          let formattedDate = `${year}-${month}-${day}`;
+
+          // Combine the reformatted date with the time
+          return `${formattedDate} ${timePart}`;
+        }
+
+        const datetime = convertDateFormat(formattedDateString);
+
+        setTimeStampTZ(datetime);
+        console.log("toLocaleHashnode", datetime);
+      }
+
+      console.log(newArray);
+      setHashnodePublication(newArray);
+    }
+  };
+
+  useEffect(() => {
+    handleFetchHashnodePublication();
+  }, []);
 
   return (
     <Formik
       initialValues={{
-        title: "",
-        tags: "",
-        subtitle: "",
-        seriesId: "",
-        main_image: "",
-        publicationId: "",
-        originalArticleURL: "",
-        publishedAt: "",
+        title:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].hashnode.title
+            : "",
+        tags:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].tags_hashnode
+            : "",
+        tags_label:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].tags_hashnode
+            : "",
+        subtitle:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].hashnode.subtitle
+            : "",
+        seriesId:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].hashnode.seriesId
+            : "",
+        main_image:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].hashnode.coverImageURL
+            : "",
+        publicationId:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].publicationId
+            : "",
+        originalArticleURL:
+          articleData !== "new-article" && articleData[0].hashnode != null
+            ? articleData[0].hashnode.originalArticleURL
+            : "",
+        publishedAt: timeStampTZ ? timeStampTZ : "",
       }}
+      enableReinitialize={true}
       onSubmit={(values) => handleSubmit(values)}
       // validationSchema={LoginSchema}
     >
@@ -216,12 +296,12 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.title && touched.title && (
-                        <Text variant="input-error-text">{errors.title}</Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
                   <FormControl>
-                    <Heading variant="tertiary-heading">subtitle</Heading>
+                    <Heading variant="tertiary-heading">Subtitle</Heading>
                     <Input
                       variant={"form-input"}
                       name="subtitle"
@@ -237,9 +317,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.subtitle && touched.subtitle && (
-                        <Text variant="input-error-text">
-                          {errors.subtitle}
-                        </Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -279,15 +357,13 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                             console.log(error);
                             return;
                           }
-                          const path =  data.path.replace(/ /g, '%20');
+                          const path = data.path.replace(/ /g, "%20");
                           console.log(
                             `${SUPABASE_STORAGE}/profileImage/${path}`
                           );
                           //@ts-ignore
                           // setFileName(e.target.value);
-                          setImgURL(
-                            `${SUPABASE_STORAGE}/profileImage/${path}`
-                          );
+                          setImgURL(`${SUPABASE_STORAGE}/profileImage/${path}`);
                           setFieldValue(
                             "main_image",
                             `${SUPABASE_STORAGE}/profileImage/${path}`
@@ -298,9 +374,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       />
                       <FormLabel display="flex" justifyContent="space-between">
                         {errors.main_image && touched.main_image && (
-                          <Text variant="input-error-text">
-                            {errors.main_image}
-                          </Text>
+                          <Text variant="input-error-text"></Text>
                         )}
                       </FormLabel>
                     </FormControl>
@@ -322,23 +396,26 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.publishedAt && touched.publishedAt && (
-                        <Text variant="input-error-text">
-                          {errors.publishedAt}
-                        </Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
                   <FormControl>
                     <Heading variant="tertiary-heading">Tag(Max:5)</Heading>
                     <Select
-                      id="tag"
-                      name="tag"
+                      id="tags_label"
+                      name="tag_label"
                       variant="filled"
                       isMulti={true}
                       colorScheme="purple"
+                      value={values.tags_label}
                       onChange={(e) => {
-                        const tagArr = e.map((item) => item.value);
+                        setFieldValue("tags_label", e);
+                        const tagArr = e.map((item) => {
+                          return { _id: item.value };
+                        });
                         setFieldValue("tags", tagArr);
+                        console.log(tagArr);
                       }}
                       options={tagOption}
                     />
@@ -348,7 +425,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.tags && touched.tags && (
-                        <Text variant="input-error-text">{errors.tags}</Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -360,6 +437,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       variant="filled"
                       isMulti={false}
                       colorScheme="purple"
+                      value={values.publicationId}
                       onChange={(e) => {
                         setFieldValue("publicationId", e);
                       }}
@@ -371,7 +449,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.publicationId && touched.publicationId && (
-                        <Text variant="input-error-text">{errors.publicationId}</Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -393,9 +471,7 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                     >
                       {errors.originalArticleURL &&
                         touched.originalArticleURL && (
-                          <Text variant="input-error-text">
-                            {errors.originalArticleURL}
-                          </Text>
+                          <Text variant="input-error-text"></Text>
                         )}
                     </FormLabel>
                   </FormControl>
@@ -409,23 +485,21 @@ const HashnodeSetting = ({ body, articleId, setArticleId }: any) => {
                       >
                         Save Draft
                       </Button>
-                      {
-                        articleId === null ?
+                      {articleId === null ? (
                         <Button
-                        variant="primary-button"
-                        onClick={() => handleSubmit()}
-                      >
-                        Publish
-                      </Button>
-                    :
-                    <Button
-                        variant="primary-button"
-                        onClick={() => handleUpdate(values)}
-                      >
-                        Update
-                      </Button>
-
-                    }
+                          variant="primary-button"
+                          onClick={() => handleSubmit()}
+                        >
+                          Publish
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="primary-button"
+                          onClick={() => handleUpdate(values)}
+                        >
+                          Update
+                        </Button>
+                      )}
                     </Flex>
                   </Center>
                 </Stack>

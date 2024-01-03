@@ -15,17 +15,14 @@ import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
 import Markdown from "react-markdown";
 import MarkdownTheme from "@/theme/MarkdownTheme";
 
-const WriteArticle = ({setContentMarkdown}: any) => {
+const WriteArticle = ({body, setContentMarkdown}: any) => {
   const [view, setView] = useState('write')
   // const [Popup, setPopup] = useState(false)
-
-  const handlePublish = async (values: any) => {
-  };
 
     return (
       <Formik
         initialValues={{
-          content:"",
+          content:body !=="new-article" ? body : "",
         }}
         onSubmit={(values) => console.log(values)}
       //   validationSchema={LoginSchema}
@@ -34,9 +31,7 @@ const WriteArticle = ({setContentMarkdown}: any) => {
           values,
           errors,
           touched,
-          handleChange,
           handleBlur,
-          handleSubmit,
           setFieldValue
         }) => (
           
@@ -66,7 +61,7 @@ const WriteArticle = ({setContentMarkdown}: any) => {
               />
               <FormLabel mt={1} display="flex" justifyContent="space-between">
                 {errors.content && touched.content && (
-                  <Text variant="input-error-text">{errors.content}</Text>
+                  <Text variant="input-error-text"></Text>
                 )}
               </FormLabel>
             </FormControl>

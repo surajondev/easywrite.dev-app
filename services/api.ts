@@ -8,7 +8,7 @@ interface registerInterface {
   last_name: string;
   email: string;
   password: string;
-  profile_img:string;
+  profile_img: string;
   devto_username: string;
 }
 
@@ -17,23 +17,22 @@ interface loginInterface {
   password: string;
 }
 
-interface platformIntegrateInterface{
-  user_id: string
-  devto: string
-  hashnode: string
+interface platformIntegrateInterface {
+  user_id: string;
+  devto: string;
+  hashnode: string;
 }
 
 // Getting user Profile
-export const getProfile = async (session : any) => {
+export const getProfile = async (session: any) => {
   const res = await axios.post(`${baseURL}/get-profile`, {
     session,
   });
   return res.data;
 };
 
-
 // Getting email of the User
-export const getEmail = async (session : any) => {
+export const getEmail = async (session: any) => {
   const res = await axios.post(`${baseURL}/get-email`, {
     session,
   });
@@ -55,7 +54,7 @@ export const register = async ({
   email,
   password,
   devto_username,
-  profile_img
+  profile_img,
 }: registerInterface) => {
   try {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -88,11 +87,11 @@ export const login = async ({ email, password }: loginInterface) => {
 };
 
 // devto Analytics data
-export const devtoAnalytics = async (session : any) => {
-  console.log(session)
+export const devtoAnalytics = async (session: any) => {
+  console.log(session);
   try {
     const res = await axios.post(`${baseURL}/devto/analytics`, {
-      user_id:session?.user?.id,
+      user_id: session?.user?.id,
     });
     return res.data;
   } catch (error: any) {
@@ -126,151 +125,219 @@ export const generateByTag = async (query: string) => {
 
 // Platform integration
 
-export const platformIntegrateDevto = async (user_id : string, devto :string) => {
+export const platformIntegrateDevto = async (
+  user_id: string,
+  devto: string
+) => {
   try {
     const res = await axios.post(`${baseURL}/platform/integrate-devto`, {
       user_id,
       devto,
     });
-    console.log(res)
-    toast.success(res.data.data)
+    console.log(res);
+    toast.success(res.data.data);
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const platformIntegrateHashnode = async (user_id : string, hashnode: string) => {
+export const platformIntegrateHashnode = async (
+  user_id: string,
+  hashnode: string
+) => {
   try {
     const res = await axios.post(`${baseURL}/platform/integrate-hashnode`, {
       user_id,
-      hashnode
+      hashnode,
     });
-    console.log(res)
-    toast.success(res.data.data)
+    console.log(res);
+    toast.success(res.data.data);
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const checkIntegration = async (user_id : string) => {
+export const checkIntegration = async (user_id: string) => {
   try {
     const res = await axios.post(`${baseURL}/platform/check-integration`, {
       user_id,
     });
-    console.log(res)
+    console.log(res);
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const updateHashnode = async (user_id : string, hashnode: string) => {
+export const updateHashnode = async (user_id: string, hashnode: string) => {
   try {
-    console.log("user_idh", user_id)
+    console.log("user_idh", user_id);
     const res = await axios.post(`${baseURL}/platform/update-hashnode`, {
       user_id,
-      hashnode
+      hashnode,
     });
-    console.log(res)
-    toast.success(res.data.data)
+    console.log(res);
+    toast.success(res.data.data);
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const updateHashnodePublication = async (user_id : string, label:any, value:any) => {
+export const updateHashnodePublication = async (
+  user_id: string,
+  label: any,
+  value: any
+) => {
   try {
-    console.log("user_idh", user_id)
-    const res = await axios.post(`${baseURL}/platform/update-hashnode-publication`, {
-      user_id,
-      label, 
-      value
-    });
-    console.log(res)
-    toast.success(res.data.data)
+    console.log("user_idh", user_id);
+    const res = await axios.post(
+      `${baseURL}/platform/update-hashnode-publication`,
+      {
+        user_id,
+        label,
+        value,
+      }
+    );
+    console.log(res);
+    toast.success(res.data.data);
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const updateDevtoPublication = async (user_id : string, label:any, value:any) => {
+export const updateDevtoPublication = async (
+  user_id: string,
+  label: any,
+  value: any
+) => {
   try {
-    console.log("user_idh", user_id)
-    const res = await axios.post(`${baseURL}/platform/update-devto-publication`, {
-      user_id,
-      label, 
-      value
-    });
-    console.log(res)
-    toast.success(res.data.data)
+    console.log("user_idh", user_id);
+    const res = await axios.post(
+      `${baseURL}/platform/update-devto-publication`,
+      {
+        user_id,
+        label,
+        value,
+      }
+    );
+    console.log(res);
+    toast.success(res.data.data);
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const updateDevto = async (user_id : string, devto: string) => {
+export const updateDevto = async (user_id: string, devto: string) => {
   try {
-    console.log("user_idh", user_id)
+    console.log("user_idh", user_id);
     const res = await axios.post(`${baseURL}/platform/update-devto`, {
       user_id,
-      devto
+      devto,
     });
-    console.log(res)
-    toast.success(res.data.data)
+    console.log(res);
+    toast.success(res.data.data);
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
-
 
 // ARTICLE
 
-export const addArticle = async ({user_id, devto, hashnode, devto_data, hashnode_data} : any ) => {
+export const addArticle = async ({
+  user_id,
+  devto,
+  hashnode,
+  devto_data,
+  hashnode_data,
+  title,
+  body_markdown,
+  tags_devto,
+  tags_hashnode,
+  organization_id,
+  devto_time,
+  hashnode_time,
+  publication_id,
+}: any) => {
   try {
     const res = await axios.post(`${baseURL}/article/add`, {
       user_id,
       devto,
       hashnode,
       devto_data,
-      hashnode_data
+      title,
+      tags_devto,
+      body_markdown,
+      tags_hashnode,
+      organization_id,
+      publication_id,
+      hashnode_data,
+      devto_time,
+      hashnode_time,
     });
-    toast.success("Article Added Successfully")
+    toast.success("Article Added Successfully");
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const updateDevtoArticle = async ({article_id, devto, devto_data} : any ) => {
+export const updateDevtoArticle = async ({
+  article_id,
+  devto,
+  devto_data,
+  tags_devto,
+  body_markdown,
+  organization_id,
+  devto_time,
+  title,
+}: any) => {
   try {
-    console.log("article", article_id)
+    console.log("article", article_id);
     const res = await axios.post(`${baseURL}/article/update-devto`, {
       article_id,
       devto,
-      devto_data
+      body_markdown,
+      tags_devto,
+      organization_id,
+      devto_time,
+      title,
+      devto_data,
     });
-    toast.success("Article Updated Successfully")
+    toast.success("Article Updated Successfully");
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);
   }
 };
 
-export const updateHashnodeArticle = async ({article_id, hashnode, hashnode_data} : any ) => {
+export const updateHashnodeArticle = async ({
+  article_id,
+  hashnode,
+  hashnode_data,
+  tags_hashnode,
+  hashnode_time,
+  body_markdown,
+  publicationId,
+  title,
+}: any) => {
   try {
-
     const res = await axios.post(`${baseURL}/article/update-hashnode`, {
       article_id,
       hashnode,
-      hashnode_data
+      title,
+      tags_hashnode,
+      body_markdown,
+      hashnode_time,
+      publicationId,
+      hashnode_data,
     });
-    toast.success("Article Updated Successfully")
+    toast.success("Article Updated Successfully");
     return res.data;
   } catch (error: any) {
     toast.error(error.response.data.error);

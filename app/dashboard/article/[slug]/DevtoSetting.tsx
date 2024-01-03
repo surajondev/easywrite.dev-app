@@ -24,10 +24,11 @@ import { addArticle, updateDevtoArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 
-const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
+const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
   const [fileName, setFileName] = useState<any>(null);
   const [imgURL, setImgURL] = useState<any>(null);
   const [devtoPublication, setDevtoPublication] = useState<any>(null);
+  const [timeStampTZ, setTimeStampTZ] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
     const {
@@ -47,25 +48,31 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
     };
 
     const devto_data = {
-        type:"schueduled",
-        error:"",
-    }
+      type: "scheduled",
+      error: "",
+    };
+
+    const timestamp = new Date(values.published_time);
 
     const articleData = {
       user_id: session?.user.id,
       devto: devtoData,
-      devto_data
+      title: values.title,
+      tags_devto: values.tags_label,
+      organization_id: values.organization_id,
+      devto_time: timestamp,
+      body_markdown: body,
+      devto_data,
     };
-    console.log(articleData)
+    console.log(articleData);
     const response = await addArticle(articleData);
-    if(response){
-      console.log(response[0])
-      setArticleId(response[0].article_id)
+    if (response) {
+      console.log(response[0]);
+      setArticleId(response[0].article_id);
     }
   };
 
   const handleUpdate = async (values: any) => {
-
     const devtoData = {
       title: values.title,
       body_markdown: body,
@@ -79,66 +86,138 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
     };
 
     const devto_data = {
-        type:"schueduled",
-        error:"",
-    }
+      type: "scheduled",
+      error: "",
+    };
+
+    const timestamp = new Date(values.published_time);
 
     const articleData = {
       article_id: articleId,
+      title: values.title,
       devto: devtoData,
+      tags_devto: values.tags_label,
+      organization_id: values.organization_id,
+      body_markdown: body,
+      devto_time: timestamp,
       devto_data,
     };
-    console.log(articleData)
+    console.log(articleData);
     const response = await updateDevtoArticle(articleData);
-    if(response){
-      console.log(response[0])
-      setArticleId(response[0].article_id)
+    if (response) {
+      console.log(response[0]);
+      setArticleId(response[0].article_id);
     }
   };
 
   const handleFetchDevtoPublication = async () => {
-
     const {
       data: { session },
     } = await supabase.auth.getSession();
 
     const { data, error } = await supabase
-  .from('devto_key')
-  .select(`
+      .from("devto_key")
+      .select(
+        `
     label,
     organization_id
-  `).eq("user_id", session?.user.id)
+  `
+      )
+      .eq("user_id", session?.user.id);
 
-  if(data !== null){
-    const newArray = data[0].organization_id.map((item:any, index:any) => {
-      return ({
-        "label":data[0].label[index],
-        "value":data[0].organization_id[index]
-      })
-    })
+    if (data !== null) {
+      const newArray = data[0].organization_id.map((item: any, index: any) => {
+        return {
+          label: data[0].label[index],
+          value: data[0].organization_id[index],
+        };
+      });
 
-    console.log(newArray)
-    setDevtoPublication(newArray)
-  }
-  }
+      if (articleData !== "new-article" && articleData[0].devto != null) {
+        console.log("devto", articleData[0].devto.main_image);
+        setImgURL(articleData[0].devto.main_image);
 
+        const dateObject = new Date(articleData[0].devto_time);
 
-  useEffect(()=> {
-    handleFetchDevtoPublication()
-  },[])
+        const options = {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false, // Use 24-hour format
+          timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // Replace with your desired time zone
+        };
+
+        // Format the date as a string using toLocaleString
+        //@ts-ignore
+        const formattedDateString = dateObject.toLocaleString("en-US", options);
+        function convertDateFormat(dateTimeStr:any) {
+          // Split the date and time parts
+          let [datePart, timePart] = dateTimeStr.split(', ');
+      
+          // Reformat the date from DD/MM/YYYY to YYYY-MM-DD
+          let [day, month, year] = datePart.split('/');
+          let formattedDate = `${year}-${month}-${day}`;
+      
+          // Combine the reformatted date with the time
+          return `${formattedDate} ${timePart}`;
+      }
+
+      const datetime = convertDateFormat(formattedDateString)
+
+        setTimeStampTZ(datetime);
+        console.log("toLocale", datetime);
+      }
+
+      console.log(newArray);
+      setDevtoPublication(newArray);
+    }
+  };
+
+  useEffect(() => {
+    console.log(articleData);
+    handleFetchDevtoPublication();
+  }, []);
 
   return (
     <Formik
       initialValues={{
-        title: "",
-        tags: "",
-        description: "",
-        series: "",
-        main_image: "",
-        organization_id: "",
-        canonical_url: "",
-        published_time: "",
+        title:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].devto.title
+            : "",
+        tags:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].devto.tags
+            : "",
+        tags_label:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].tags_devto
+            : "",
+        description:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].devto.description
+            : "",
+        series:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].devto.series
+            : "",
+        main_image:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].devto.main_image
+            : "",
+        organization_id:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].organization_id
+            : "",
+        canonical_url:
+          articleData !== "new-article" && articleData[0].devto != null
+            ? articleData[0].devto.canonical_url
+            : "",
+        published_time: timeStampTZ ? timeStampTZ : "",
       }}
+      enableReinitialize={true}
       onSubmit={(values) => handleSubmit(values)}
       // validationSchema={LoginSchema}
     >
@@ -185,9 +264,9 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       display="flex"
                       justifyContent="space-between"
                     >
-                      {errors.title && touched.title && (
+                      {/* {errors.title && touched.title && (
                         <Text variant="input-error-text">{errors.title}</Text>
-                      )}
+                      )} */}
                     </FormLabel>
                   </FormControl>
                   <FormControl>
@@ -207,23 +286,22 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.description && touched.description && (
-                        <Text variant="input-error-text">
-                          {errors.description}
-                        </Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
-                    <Heading variant="tertiary-heading">Thumbnail</Heading>
+                  <Heading variant="tertiary-heading">Thumbnail</Heading>
                   <Stack>
-                     { imgURL != null && 
-                     <div><Image
-                      width={{base:"100%", md:"60%", lg:"40%"}}
-                      objectFit="cover"
-                      src={imgURL}
-                      alt={values.title}
-                      />
+                    {imgURL != null && (
+                      <div>
+                        <Image
+                          width={{ base: "100%", md: "60%", lg: "40%" }}
+                          objectFit="cover"
+                          src={imgURL}
+                          alt={values.title}
+                        />
                       </div>
-                    }
+                    )}
                     <FormControl>
                       <Input
                         variant={"form-input-file"}
@@ -248,13 +326,13 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                             console.log(error);
                             return;
                           }
-                          const path =  data.path.replace(/ /g, '%20');
+                          const path = data.path.replace(/ /g, "%20");
                           console.log(
                             `${SUPABASE_STORAGE}/profileImage/${path}`
                           );
                           //@ts-ignore
                           // setFileName(e.target.value);
-                          setImgURL(`${SUPABASE_STORAGE}/profileImage/${path}`)
+                          setImgURL(`${SUPABASE_STORAGE}/profileImage/${path}`);
                           setFieldValue(
                             "main_image",
                             `${SUPABASE_STORAGE}/profileImage/${path}`
@@ -265,9 +343,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       />
                       <FormLabel display="flex" justifyContent="space-between">
                         {errors.main_image && touched.main_image && (
-                          <Text variant="input-error-text">
-                            {errors.main_image}
-                          </Text>
+                          <Text variant="input-error-text"></Text>
                         )}
                       </FormLabel>
                     </FormControl>
@@ -289,24 +365,28 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.published_time && touched.published_time && (
-                        <Text variant="input-error-text">
-                          {errors.published_time}
-                        </Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
                   <FormControl>
                     <Heading variant="tertiary-heading">Tag(Max:4)</Heading>
                     <Select
-                      id="tag"
-                      name="tag"
+                      id="tags_label"
+                      name="tags_label"
                       variant="filled"
                       isMulti={true}
                       colorScheme="purple"
+                      value={values.tags_label}
                       onChange={(e) => {
+                        //@ts-ignore
+                        setFieldValue("tags_label", e);
+                        console.log(e);
+                        //@ts-ignore
                         const tagArr = e.map((item) => item.value);
                         setFieldValue("tags", tagArr);
                       }}
+                      //@ts-ignore
                       options={tagOption}
                     />
                     <FormLabel
@@ -315,7 +395,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.tags && touched.tags && (
-                        <Text variant="input-error-text">{errors.tags}</Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -336,7 +416,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.series && touched.series && (
-                        <Text variant="input-error-text">{errors.series}</Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -348,7 +428,9 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       variant="filled"
                       isMulti={false}
                       colorScheme="purple"
+                      value={values.organization_id}
                       onChange={(e) => {
+                        console.log(e);
                         setFieldValue("organization_id", e);
                       }}
                       options={devtoPublication}
@@ -359,7 +441,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.organization_id && touched.organization_id && (
-                        <Text variant="input-error-text">{errors.organization_id}</Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -380,9 +462,7 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.canonical_url && touched.canonical_url && (
-                        <Text variant="input-error-text">
-                          {errors.canonical_url}
-                        </Text>
+                        <Text variant="input-error-text"></Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -396,23 +476,21 @@ const DevtoSetting = ({ body, setArticleId, articleId }: any) => {
                       >
                         Save Draft
                       </Button>
-                      {
-                        articleId === null ?
+                      {articleId === null ? (
                         <Button
-                        variant="primary-button"
-                        onClick={() => handleSubmit()}
-                      >
-                        Publish
-                      </Button>
-                    :
-                    <Button
-                        variant="primary-button"
-                        onClick={() => handleUpdate(values)}
-                      >
-                        Update
-                      </Button>
-
-                    }
+                          variant="primary-button"
+                          onClick={() => handleSubmit()}
+                        >
+                          Publish
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="primary-button"
+                          onClick={() => handleUpdate(values)}
+                        >
+                          Update
+                        </Button>
+                      )}
                     </Flex>
                   </Center>
                 </Stack>
