@@ -38,7 +38,7 @@ const HashnodeSetting = ({
   const handleSubmit = async (values: any) => {
     const tagsArr = values.tags.map((e: any) => {
       return {
-        _id: e._id,
+        id: e.id.value,
       };
     });
 
@@ -55,14 +55,14 @@ const HashnodeSetting = ({
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
-      isRepublished: {
-        originalArticleURL: values.originalArticleURL,
-      },
+      originalArticleURL: values.originalArticleURL,
       subtitle: values.subtitle,
-      coverImageURL: values.main_image,
+      coverImageOptions:{
+        coverImageURL: values.main_image,
+      },
       slug: getSlug(),
       tags: tagsArr,
-      isPartOfPublication: { publicationId: values.publicationId.value },
+      publicationId: values.publicationId.value
     };
 
     const hashnode_data = {
@@ -99,25 +99,26 @@ const HashnodeSetting = ({
 
     const tagsArr = values.tags.map((e: string) => {
       return {
-        _id: e,
+        id: e.value,
       };
     });
 
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
+      
       subtitle: values.subtitle,
-      coverImageURL: values.main_image,
+      coverImageOptions:{
+        coverImageURL: values.main_image,
+      },
       slug: getSlug(),
       tags: tagsArr,
-      isPartOfPublication: { publicationId: values.publicationId.value },
+      publicationId: values.publicationId.value
     };
 
     if (values.originalArticleURL) {
       //@ts-ignore
-      hashnodeData.isRepublished = {
-        originalArticleURL: values.orgioriginalArticleURL,
-      };
+      hashnodeData.originalArticleURL= values.originalArticleURL
     }
 
     const hashnode_data = {
@@ -168,7 +169,7 @@ const HashnodeSetting = ({
 
       if (articleData !== "new-article" && articleData[0].hashnode != null) {
         console.log("Runningnnnnfds");
-        setImgURL(articleData[0].hashnode.coverImageURL);
+        setImgURL(articleData[0].hashnode.coverImageOptions.coverImageURL);
 
         const dateObject = new Date(articleData[0].hashnode_time);
 
@@ -237,7 +238,7 @@ const HashnodeSetting = ({
             : "",
         main_image:
           articleData !== "new-article" && articleData[0].hashnode != null
-            ? articleData[0].hashnode.coverImageURL
+            ? articleData[0].hashnode.coverImageOptions.coverImageURL
             : "",
         publicationId:
           articleData !== "new-article" && articleData[0].hashnode != null
@@ -412,7 +413,7 @@ const HashnodeSetting = ({
                       onChange={(e) => {
                         setFieldValue("tags_label", e);
                         const tagArr = e.map((item) => {
-                          return { _id: item.value };
+                          return { id: item.value };
                         });
                         setFieldValue("tags", tagArr);
                         console.log(tagArr);

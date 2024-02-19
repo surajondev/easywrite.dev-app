@@ -13,7 +13,7 @@ const ArticleContainer = ({ article, type }: any) => {
   if (type === "scheduled") {
     return <Box>
       <Flex justifyContent="space-between" alignItems="center">
-    <Text variant="primary-text">{article.title}R</Text>
+    <Text variant="primary-text">{article.title}</Text>
     <Link href={`article/${article.article_id}`}>
     <Button variant="primary-button">Edit</Button>
     </Link>
@@ -25,7 +25,7 @@ const ArticleContainer = ({ article, type }: any) => {
     return <Box>
     <Flex justifyContent="space-between" alignItems="center">
   <Text variant="primary-text">{article.title}</Text>
-  <Link href={article.article_id}>
+  <Link href={`article/${article.article_id}`}>
   <Button variant="primary-button">Edit</Button>
   </Link>
   </Flex>
