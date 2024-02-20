@@ -30,12 +30,12 @@ import {
   FiBell,
   FiChevronDown,
 } from "react-icons/fi";
-import {MdOutlineArticle } from 'react-icons/md'
+import { MdOutlineArticle } from "react-icons/md";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { SiPlatformdotsh } from "react-icons/si";
 import { IconType } from "react-icons";
 import { supabase } from "@/lib/supabase";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useMemo } from "react";
 import { getProfile } from "@/services/api";
 import { useRouter } from "next/navigation";
 
@@ -69,10 +69,7 @@ const LinkItems: Array<LinkItemProps> = [
   },
   { name: "Platform", icon: SiPlatformdotsh, href: "/dashboard/platform" },
   { name: "Profile", icon: FiStar, href: "/dashboard/profile" },
-  { name: "Settings", icon: FiSettings, href: "/dashboard/setting" },
 ];
-
-
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   return (
@@ -88,7 +85,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
     >
       <Flex h="20" alignItems="center" mx="8" justifyContent="space-between">
         <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-          Logo
+          EasyWrite Dev
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
@@ -134,33 +131,63 @@ const NavItem = ({ icon, name, href, ...rest }: LinkItemProps) => {
 };
 
 const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+  const FETCH_SUCCESS = "FETCH_SUCCESS";
+  const FETCH_FAILURE = "FETCH_FAILURE";
 
-  const [session, setSession] = useState<any>();
-  const [profileData, setProfileData] = useState<any>();
-  const router = useRouter()
-
-  const handleFetchData = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    const data = await getProfile(session);
-    setSession(session);
-    console.log(data);
-    setProfileData(data);
+  const reducer = (state: any, action: any) => {
+    switch (action.type) {
+      case FETCH_SUCCESS:
+        return {
+          ...state,
+          profileData: action.payload,
+          loading: false,
+          error: null,
+        };
+      case FETCH_FAILURE:
+        return { ...state, data: null, loading: false, error: action.payload };
+      default:
+        return state;
+    }
   };
+
+  const [state, dispatch] = useReducer(reducer, {
+    profileData: null,
+    loading: true,
+    error: null,
+  });
+
+  // const [profileData, setProfileData] = useState<any>();
+  const router = useRouter();
+
+  const handleFetchData = useMemo(
+    () => async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      try {
+        const data = await getProfile(session);
+        dispatch({ type: FETCH_SUCCESS, payload: data });
+        console.log("Loading Profile....");
+      } catch (error) {
+        dispatch({ type: FETCH_FAILURE, payload: error });
+      }
+    },
+    []
+  );
 
   const hanldeSignOut = async () => {
     const { error } = await supabase.auth.signOut();
-    if(error){
-      console.log(error)
+    if (error) {
+      console.log(error);
     }
-    router.push("/login")
+    router.push("/login");
   };
 
   useEffect(() => {
     handleFetchData();
-  }, []);
+    return () => {};
+  }, [handleFetchData]);
 
   return (
     <Flex
@@ -208,9 +235,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <HStack>
                 <Avatar
                   size={"sm"}
-                  src={
-                    profileData && profileData[0].profile_img
-                  }
+                  src={state.profileData && state.profileData[0].profile_img}
                 />
                 <VStack
                   display={{ base: "none", md: "flex" }}
@@ -218,7 +243,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   spacing="1px"
                   ml="2"
                 >
-                  <Text fontSize="sm">{profileData && `${profileData[0].first_name} ${profileData[0].last_name}`}</Text>
+                  <Text fontSize="sm">
+                    {state.profileData &&
+                      `${state.profileData[0].first_name} ${state.profileData[0].last_name}`}
+                  </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }}>
                   <FiChevronDown />
@@ -229,9 +257,9 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue("white", "gray.900")}
               borderColor={useColorModeValue("gray.200", "gray.700")}
             >
-              <MenuItem onClick={() => router.push("/dashboard/profile")}>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              <MenuItem onClick={() => router.push("/dashboard/profile")}>
+                Profile
+              </MenuItem>
               <MenuDivider />
               <MenuItem onClick={hanldeSignOut}>Sign out</MenuItem>
             </MenuList>

@@ -27,13 +27,14 @@ const Article = () => {
       .select()
       .eq("user_id", session?.user.id);
 
-      console.log("data", data)
+    console.log("data", data);
 
     if (data) {
       const publishedData = data.filter((item) => {
         return (
           (item.hashnode_data == null && item.devto_data.type == "published") ||
-          (item.hashnode_data.type == "published" && item.devto_data.type == null) ||
+          (item.hashnode_data.type == "published" &&
+            item.devto_data.type == null) ||
           (item.hashnode_data.type == "published" &&
             item.devto_data.type == "published")
         );
@@ -53,7 +54,8 @@ const Article = () => {
       const draftData = data.filter((item) => {
         return (
           (item.hashnode_data == null && item.devto_data.type == "draft") ||
-          (item.hashnode_data.type == "draft" && item.devto_data.type == null) ||
+          (item.hashnode_data.type == "draft" &&
+            item.devto_data.type == null) ||
           (item.hashnode_data.type == "scheduled" &&
             item.devto_data.type == "draft") ||
           (item.hashnode_data.type == "draft" &&
@@ -97,31 +99,37 @@ const Article = () => {
           <TabPanel>
             {published.length > 0 &&
               published.map((item: any) => {
-                return <ArticleContainer
-                  article={item}
-                  key={item.article_id}
-                  type="published"
-                />;
+                return (
+                  <ArticleContainer
+                    article={item}
+                    key={item.article_id}
+                    type="published"
+                  />
+                );
               })}
           </TabPanel>
           <TabPanel>
             {scheduled.length > 0 &&
               scheduled.map((item: any) => {
-                return <ArticleContainer
-                  article={item}
-                  key={item.article_id}
-                  type="scheduled"
-                />;
+                return (
+                  <ArticleContainer
+                    article={item}
+                    key={item.article_id}
+                    type="scheduled"
+                  />
+                );
               })}
           </TabPanel>
           <TabPanel>
             {draft.length > 0 &&
               draft.map((item: any) => {
-                return <ArticleContainer
-                  article={item}
-                  key={item.article_id}
-                  type="draft"
-                />;
+                return (
+                  <ArticleContainer
+                    article={item}
+                    key={item.article_id}
+                    type="draft"
+                  />
+                );
               })}
           </TabPanel>
         </TabPanels>

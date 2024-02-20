@@ -8,41 +8,43 @@ import {
   Textarea,
   Button,
   Flex,
-  Box
+  Box,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import ChakraUIRenderer from 'chakra-ui-markdown-renderer';
+import ChakraUIRenderer from "chakra-ui-markdown-renderer";
 import Markdown from "react-markdown";
 import MarkdownTheme from "@/theme/MarkdownTheme";
 
-const WriteArticle = ({body, setContentMarkdown}: any) => {
-  const [view, setView] = useState('write')
+const WriteArticle = ({ body, setContentMarkdown }: any) => {
+  const [view, setView] = useState("write");
   // const [Popup, setPopup] = useState(false)
 
-    return (
-      <Formik
-        initialValues={{
-          content:body !=="new-article" ? body : "",
-        }}
-        onSubmit={(values) => console.log(values)}
+  return (
+    <Formik
+      initialValues={{
+        content: body !== "new-article" ? body : "",
+      }}
+      onSubmit={(values) => console.log(values)}
       //   validationSchema={LoginSchema}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          setFieldValue
-        }) => (
-          
-          <Stack spacing={10} width="100%" padding="2em 2em" bg="white" borderRadius="10px" >
-            <Flex gap={4}>
-            <Button variant="primary-button" onClick={() => setView('write')}>Edit</Button>
-            <Button variant="primary-button" onClick={() => setView('preview')}>Preview</Button>
-            </Flex>
-            {
-              view === "write" && 
-              <FormControl>
+    >
+      {({ values, errors, touched, handleBlur, setFieldValue }) => (
+        <Stack
+          spacing={10}
+          width="100%"
+          padding="2em 2em"
+          bg="white"
+          borderRadius="10px"
+        >
+          <Flex gap={4}>
+            <Button variant="primary-button" onClick={() => setView("write")}>
+              Edit
+            </Button>
+            <Button variant="primary-button" onClick={() => setView("preview")}>
+              Preview
+            </Button>
+          </Flex>
+          {view === "write" && (
+            <FormControl>
               <Heading variant="tertiary-heading">Write Article Here</Heading>
               <Textarea
                 variant={"content-textarea"}
@@ -50,9 +52,9 @@ const WriteArticle = ({body, setContentMarkdown}: any) => {
                 size="lg"
                 placeholder={"write article here...."}
                 onChange={(e) => {
-                  setFieldValue("content",e.target.value)
-                  setContentMarkdown(e.target.value)
-                  console.log(e.target.value)
+                  setFieldValue("content", e.target.value);
+                  setContentMarkdown(e.target.value);
+                  console.log(e.target.value);
                 }}
                 onBlur={handleBlur}
                 value={values.content}
@@ -65,27 +67,28 @@ const WriteArticle = ({body, setContentMarkdown}: any) => {
                 )}
               </FormLabel>
             </FormControl>
-            }
+          )}
 
-            {
-              view === "preview" && 
-              <PreviewArticle contentMarkdown={values.content}/>
-            }
-            
-          </Stack>
-        )}
-      </Formik>
-    );
-    
-}
+          {view === "preview" && (
+            <PreviewArticle contentMarkdown={values.content} />
+          )}
+        </Stack>
+      )}
+    </Formik>
+  );
+};
 
-const PreviewArticle = ({contentMarkdown}:any) => {
-  return(
-            <Box>
-              {/* @ts-ignore */}
-              <Markdown components={ChakraUIRenderer(MarkdownTheme)} children={contentMarkdown} skipHtml/>
-            </Box>
-  )
-}
+const PreviewArticle = ({ contentMarkdown }: any) => {
+  return (
+    <Box>
+      {/* @ts-ignore */}
+      <Markdown
+        components={ChakraUIRenderer(MarkdownTheme)}
+        children={contentMarkdown}
+        skipHtml
+      />
+    </Box>
+  );
+};
 
 export default WriteArticle;

@@ -57,12 +57,12 @@ const HashnodeSetting = ({
       contentMarkdown: body,
       originalArticleURL: values.originalArticleURL,
       subtitle: values.subtitle,
-      coverImageOptions:{
+      coverImageOptions: {
         coverImageURL: values.main_image,
       },
       slug: getSlug(),
       tags: tagsArr,
-      publicationId: values.publicationId.value
+      publicationId: values.publicationId.value,
     };
 
     const hashnode_data = {
@@ -99,6 +99,7 @@ const HashnodeSetting = ({
 
     const tagsArr = values.tags.map((e: string) => {
       return {
+        //@ts-ignore
         id: e.value,
       };
     });
@@ -106,19 +107,19 @@ const HashnodeSetting = ({
     const hashnodeData = {
       title: values.title,
       contentMarkdown: body,
-      
+
       subtitle: values.subtitle,
-      coverImageOptions:{
+      coverImageOptions: {
         coverImageURL: values.main_image,
       },
       slug: getSlug(),
       tags: tagsArr,
-      publicationId: values.publicationId.value
+      publicationId: values.publicationId.value,
     };
 
     if (values.originalArticleURL) {
       //@ts-ignore
-      hashnodeData.originalArticleURL= values.originalArticleURL
+      hashnodeData.originalArticleURL = values.originalArticleURL;
     }
 
     const hashnode_data = {

@@ -152,19 +152,19 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
         // Format the date as a string using toLocaleString
         //@ts-ignore
         const formattedDateString = dateObject.toLocaleString("en-US", options);
-        function convertDateFormat(dateTimeStr:any) {
+        function convertDateFormat(dateTimeStr: any) {
           // Split the date and time parts
-          let [datePart, timePart] = dateTimeStr.split(', ');
-      
+          let [datePart, timePart] = dateTimeStr.split(", ");
+
           // Reformat the date from DD/MM/YYYY to YYYY-MM-DD
-          let [day, month, year] = datePart.split('/');
+          let [day, month, year] = datePart.split("/");
           let formattedDate = `${year}-${month}-${day}`;
-      
+
           // Combine the reformatted date with the time
           return `${formattedDate} ${timePart}`;
-      }
+        }
 
-      const datetime = convertDateFormat(formattedDateString)
+        const datetime = convertDateFormat(formattedDateString);
 
         setTimeStampTZ(datetime);
         console.log("toLocale", datetime);

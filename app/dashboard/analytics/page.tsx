@@ -1,6 +1,13 @@
 "use client";
 
-import { Box, SimpleGrid, GridItem, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  SimpleGrid,
+  GridItem,
+  Heading,
+  Center,
+  Spinner,
+} from "@chakra-ui/react";
 import { StatsBar } from "./StatsBar";
 import { PerformanceChart } from "./PerformnaceChart";
 import { ArticlePerTagTree } from "./ArticlePerTagTree";
@@ -13,14 +20,14 @@ import { IoIosStats } from "react-icons/io";
 import { PopularTags } from "./PopularTags";
 import { supabase } from "@/lib/supabase";
 
-export default function Home({params} : {params: {session: any}}) {
+export default function Home({ params }: { params: { session: any } }) {
   const [data, setData] = useState<any>();
 
   const handleFetchData = async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
-    
+
     const res = await devtoAnalytics(session);
     res.last_article_stats[0].icon = <VscReactions />;
     res.last_article_stats[1].icon = <VscComment />;
@@ -36,49 +43,55 @@ export default function Home({params} : {params: {session: any}}) {
 
   return (
     <Box className="mainContainer">
-      <SimpleGrid
-        templateColumns={{
-          base: "repeat(1, 1fr)",
-          lg: "repeat(5, 1fr)",
-        }}
-        spacing="40px"
-      >
-        <GridItem colSpan={5}>
-          <Heading variant="secondary-heading" mb={2}>
-            Last Article Performance
-          </Heading>
-          <StatsBar data={data?.last_article_stats} />
-        </GridItem>
-        <GridItem colSpan={5}>
-          <Heading variant="secondary-heading" mb={2} height="10%">
-            Last 5 Article
-          </Heading>
-          {data && <PerformanceChart data={data.latest_article_stats} />}
-        </GridItem>
-        <GridItem colSpan={5}>
-          <Heading variant="secondary-heading" mb={2}>
-            Popular Tags
-          </Heading>
-          {data && (
-            <PopularTags
-              data={data.popular_tags.data}
-              label={data.popular_tags.label}
+      {!data && (
+        <Box p="18px 25px" mt="32px">
+          <Center>
+            <Spinner
+              thickness="4px"
+              speed="0.65s"
+              emptyColor="gray.200"
+              color="brand.100"
+              size="xl"
             />
-          )}
-        </GridItem>
-        <GridItem colSpan={5}>
-          <Heading variant="secondary-heading" mb={2}>
-            Articles Per Tag
-          </Heading>
-          {data && <ArticlePerTagTree data={data?.articles_per_tag} />}
-        </GridItem>
-        <GridItem colSpan={5}>
-          <Heading variant="secondary-heading" mb={2}>
-            All time stats
-          </Heading>
-          <StatsBar data={data?.randomStats} />
-        </GridItem>
-      </SimpleGrid>
+          </Center>
+        </Box>
+      )}
+      {data && (
+        <SimpleGrid
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            lg: "repeat(5, 1fr)",
+          }}
+          spacing="40px"
+        >
+          <GridItem colSpan={5}>
+            <Heading variant="secondary-heading" mb={2}>
+              Last Article Performance
+            </Heading>
+            <StatsBar data={data?.last_article_stats} />
+          </GridItem>
+          <GridItem colSpan={3}>
+            {data && <PerformanceChart data={data.latest_article_stats} />}
+          </GridItem>
+          <GridItem colSpan={2}>
+            {data && (
+              <PopularTags
+                data={data.popular_tags.data}
+                label={data.popular_tags.label}
+              />
+            )}
+          </GridItem>
+          <GridItem colSpan={5}>
+            {data && <ArticlePerTagTree data={data?.articles_per_tag} />}
+          </GridItem>
+          <GridItem colSpan={5}>
+            <Heading variant="secondary-heading" mb={2}>
+              All time stats
+            </Heading>
+            <StatsBar data={data?.randomStats} />
+          </GridItem>
+        </SimpleGrid>
+      )}
     </Box>
   );
 }

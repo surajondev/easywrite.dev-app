@@ -1,6 +1,6 @@
 "use client";
 
-import { Box } from "@chakra-ui/react";
+import { Box, Heading } from "@chakra-ui/react";
 import React from "react";
 import dynamic from "next/dynamic";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
@@ -15,7 +15,7 @@ export const PopularTags = ({ data, label }: PopularTagsInterface) => {
   const options: ApexOptions = {
     chart: {
       type: "donut",
-      height:"10%"
+      height: "10%",
     },
     labels: label,
     dataLabels: {
@@ -26,7 +26,10 @@ export const PopularTags = ({ data, label }: PopularTagsInterface) => {
   const series = data;
 
   return (
-    <Box borderRadius="10px" bg="white">
+    <Box borderRadius="10px" bg="white" height="100%">
+      <Heading variant="secondary-heading" mb={2} p={4}>
+        Popular Tags
+      </Heading>
       {data && <Chart type="donut" series={series} options={options} />}
     </Box>
   );

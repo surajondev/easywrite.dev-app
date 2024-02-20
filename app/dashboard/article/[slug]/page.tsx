@@ -20,46 +20,50 @@ const articlePage = () => {
     const slugArr = pathname.split("/");
     const slug = slugArr[slugArr.length - 1];
     if (slug !== "new-article") {
-      const { data, error } = await supabase.from("article").select().eq("article_id", slug);
-      console.log(data)
-      setArticleData(data)
+      const { data, error } = await supabase
+        .from("article")
+        .select()
+        .eq("article_id", slug);
+      console.log(data);
+      setArticleData(data);
       //@ts-ignore
-      setArticleId(data[0]?.article_id)
+      setArticleId(data[0]?.article_id);
       //@ts-ignore
-      setContentMarkdown(data[0]?.body_markdown)
-    }else{
-      setArticleData("new-article")
-      setContentMarkdown("new-article")
+      setContentMarkdown(data[0]?.body_markdown);
+    } else {
+      setArticleData("new-article");
+      setContentMarkdown("new-article");
     }
   };
 
   useEffect(() => {
     handleFetchParam();
-  },[]);
+  }, []);
 
   return (
     <Stack spacing={5} position="relative" className="mainContainer">
-        {
-          articleData &&  
+      {articleData && (
         <DevtoSetting
-        articleId={articleId}
-        articleData={articleData}
-        body={contentMarkdown}
-        setArticleId={(e: any) => setArticleId(e)}
-      />}
-      {
-        articleData &&  
+          articleId={articleId}
+          articleData={articleData}
+          body={contentMarkdown}
+          setArticleId={(e: any) => setArticleId(e)}
+        />
+      )}
+      {articleData && (
         <HashnodeSetting
           articleId={articleId}
           articleData={articleData}
           body={contentMarkdown}
           setArticleId={(e: any) => setArticleId(e)}
         />
-      }
-      {
-        contentMarkdown && 
-        <WriteArticle body={contentMarkdown} setContentMarkdown={(e: any) => setContentMarkdown(e)} />
-      }
+      )}
+      {contentMarkdown && (
+        <WriteArticle
+          body={contentMarkdown}
+          setContentMarkdown={(e: any) => setContentMarkdown(e)}
+        />
+      )}
     </Stack>
   );
 };
