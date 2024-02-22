@@ -19,10 +19,15 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { IoIosStats } from "react-icons/io";
 import { PopularTags } from "./PopularTags";
 import { supabase } from "@/lib/supabase";
+import { useAnalyticalStore } from "@/utils/state/store";
 
 export default function Home({ params }: { params: { session: any } }) {
   const [data, setData] = useState<any>();
-
+  const analyticalD = useAnalyticalStore((state: any) => state.analyticalData);
+  const updateAnalyticalData = useAnalyticalStore(
+    (state: any) => state.updateAnalyticalData
+  );
+  console.log(analyticalD);
   const handleFetchData = async () => {
     const {
       data: { session },
@@ -33,12 +38,16 @@ export default function Home({ params }: { params: { session: any } }) {
     res.last_article_stats[1].icon = <VscComment />;
     res.last_article_stats[2].icon = <AiOutlineClockCircle />;
     res.last_article_stats[3].icon = <IoIosStats />;
-    console.log(res);
     setData(res);
+    updateAnalyticalData(res);
+    
   };
 
   useEffect(() => {
-    handleFetchData();
+    if (!analyticalD) {
+      handleFetchData();
+    }
+    setData(analyticalD);
   }, []);
 
   return (

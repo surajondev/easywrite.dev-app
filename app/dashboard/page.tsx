@@ -20,15 +20,26 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { IoIosStats } from "react-icons/io";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import { useAnalyticalStore, useArticleStore } from "@/utils/state/store";
 
 function Dashboard({ params }: { params: { session: any } }) {
-  const [data, setData] = useState<any>();
-  const [articleData, setArticleData] = useState<any>();
+  const [data, setData] = useState<any>(null);
+  const [articleData, setArticleData] = useState<any>(null);
+  const analyticalD = useAnalyticalStore((state: any) => state.analyticalData);
+  const updateAnalyticalData = useAnalyticalStore(
+    (state: any) => state.updateAnalyticalData
+  );
+  const articleD = useArticleStore((state: any) => state.articleData);
+  const updateArticleData = useArticleStore(
+    (state: any) => state.updateArticleData
+  );
 
   const handleFetchData = async () => {
     const {
       data: { session },
     } = await supabase.auth.getSession();
+
+    console.log("fetching data...");
 
     const res = await devtoAnalytics(session);
     res.last_article_stats[0].icon = <VscReactions />;
@@ -37,6 +48,7 @@ function Dashboard({ params }: { params: { session: any } }) {
     res.last_article_stats[3].icon = <IoIosStats />;
     console.log(res);
     setData(res);
+    updateAnalyticalData(res);
 
     const { data, error } = await supabase
       .from("article")
@@ -44,10 +56,15 @@ function Dashboard({ params }: { params: { session: any } }) {
       .eq("user_id", session?.user.id);
     console.log("data", data);
     setArticleData(data);
+    updateArticleData(data);
   };
 
   useEffect(() => {
-    handleFetchData();
+    if (!articleD && !analyticalD) {
+      handleFetchData();
+    }
+    setArticleData(articleD);
+    setData(analyticalD);
   }, []);
 
   return (
@@ -71,7 +88,7 @@ function Dashboard({ params }: { params: { session: any } }) {
               articleData.map((item: any, index: any) => {
                 if (index < 5) {
                   return (
-                    <Box pb={5}>
+                    <Box pb={5} key={index}>
                       <Text variant="primary-text" pl={5} pr={3}>
                         {item.title}
                       </Text>
@@ -113,7 +130,7 @@ function Dashboard({ params }: { params: { session: any } }) {
               </Button>
             </Box>
           </Flex>
-              </GridItem>
+        </GridItem>
       </SimpleGrid>
     </Box>
   );

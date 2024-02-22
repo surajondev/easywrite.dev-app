@@ -9,7 +9,7 @@ import {
   FormLabel,
   Button,
   Center,
-  Avatar
+  Avatar,
 } from "@chakra-ui/react";
 import {
   Alert,
@@ -49,6 +49,7 @@ const ProfileEditForm = () => {
       profile_img: values.profile_img,
       devto_username: values.devto_username,
     };
+    console.log(newValues);
     const data = await updateProfile(newValues);
     if (data) {
       toast.success(data.data);
@@ -77,7 +78,9 @@ const ProfileEditForm = () => {
       initialValues={{
         first_name: profileData ? profileData[0].first_name : "",
         last_name: profileData ? profileData[0].last_name : "",
-        profile_img: profileData ? profileData[0].profile_img : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
+        profile_img: profileData
+          ? profileData[0].profile_img
+          : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
         devto_username: profileData ? profileData[0].devto_username : "",
         email: profileData ? profileData[0].email : "",
       }}
@@ -92,7 +95,7 @@ const ProfileEditForm = () => {
         handleChange,
         handleBlur,
         handleSubmit,
-        setFieldValue
+        setFieldValue,
       }) => (
         <Stack
           spacing={10}
@@ -139,12 +142,7 @@ const ProfileEditForm = () => {
               <Stack>
                 <Heading variant="tertiary-heading">Profile Image</Heading>
                 <Flex gap={5}>
-                  <Avatar
-                    size={"md"}
-                    src={
-                      values.profile_img
-                    }
-                  />
+                  <Avatar size={"md"} src={values.profile_img} />
                   <FormControl>
                     <Input
                       variant={"form-input-file"}
@@ -155,18 +153,29 @@ const ProfileEditForm = () => {
                         const { data, error } = await supabase.storage
                           .from("profileImage")
                           //@ts-ignore
-                          .upload(`${timestamp}-${e.target.files[0].name}`, e.target.files[0], {
-                            cacheControl: "3600",
-                            upsert: false,
-                          });
-                        if(error){
-                          console.log(error)
-                          return
+                          .upload(
+                            //@ts-ignore
+                            `${timestamp}-${e.target.files[0].name}`,
+                            //@ts-ignore
+                            e.target.files[0],
+                            {
+                              cacheControl: "3600",
+                              upsert: false,
+                            }
+                          );
+                        if (error) {
+                          console.log(error);
+                          return;
                         }
-                        console.log(`${SUPABASE_STORAGE}/profileImage/${data.path}`)
+                        console.log(
+                          `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                        );
                         //@ts-ignore
-                        setFileName(e.target.value)
-                        setFieldValue("profile_img", `${SUPABASE_STORAGE}/profileImage/${data.path}`)
+                        setFileName(e.target.value);
+                        setFieldValue(
+                          "profile_img",
+                          `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                        );
                       }}
                       onBlur={handleBlur}
                       value={fileName}

@@ -18,6 +18,7 @@ import {
   MenuButton,
   MenuDivider,
   MenuItem,
+  Stack,
   MenuList,
 } from "@chakra-ui/react";
 import {
@@ -38,12 +39,8 @@ import { supabase } from "@/lib/supabase";
 import { useEffect, useReducer, useMemo } from "react";
 import { getProfile } from "@/services/api";
 import { useRouter } from "next/navigation";
-
-interface LinkItemProps {
-  name: string;
-  icon: IconType;
-  href: string;
-}
+import Link from "next/link";
+import { IconContext } from "react-icons";
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
@@ -58,17 +55,21 @@ interface SidebarProps extends BoxProps {
   onClose: () => void;
 }
 
-const LinkItems: Array<LinkItemProps> = [
-  { name: "Dashboard", icon: FiHome, href: "/dashboard" },
-  { name: "Article", icon: MdOutlineArticle, href: "/dashboard/article" },
-  { name: "Analytics", icon: IoAnalyticsOutline, href: "/dashboard/analytics" },
+const LinkItems: Array<any> = [
+  { name: "Dashboard", icon: <FiHome />, href: "/dashboard" },
+  { name: "Article", icon: <MdOutlineArticle />, href: "/dashboard/article" },
+  {
+    name: "Analytics",
+    icon: <IoAnalyticsOutline />,
+    href: "/dashboard/analytics",
+  },
   {
     name: "Topic Generation",
-    icon: FiCompass,
+    icon: <FiCompass />,
     href: "/dashboard/topic-generation",
   },
-  { name: "Platform", icon: SiPlatformdotsh, href: "/dashboard/platform" },
-  { name: "Profile", icon: FiStar, href: "/dashboard/profile" },
+  { name: "Platform", icon: <SiPlatformdotsh />, href: "/dashboard/platform" },
+  { name: "Profile", icon: <FiStar />, href: "/dashboard/profile" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
@@ -89,19 +90,29 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         </Text>
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
-      {LinkItems.map((link) => (
-        <NavItem
-          key={link.name}
-          icon={link.icon}
-          name={link.name}
-          href={link.href}
-        />
-      ))}
+      <Stack gap={5} pl={7} mt={2}>
+        {LinkItems.map((link) => (
+          <Link href={link.href}>
+            <Flex gap={5} _hover={{ color: "#8B54BD" }} pt={1} pb={1}>
+              <IconContext.Provider
+                value={{
+                  color: "#8B54BD",
+                  size: "1em",
+                  className: "stats-card-icon",
+                }}
+              >
+                {link.icon}
+              </IconContext.Provider>
+              <Text variant="secondary-text">{link.name}</Text>
+            </Flex>
+          </Link>
+        ))}
+      </Stack>
     </Box>
   );
 };
 
-const NavItem = ({ icon, name, href, ...rest }: LinkItemProps) => {
+const NavItem = ({ icon, name, href, ...rest }: any) => {
   return (
     <Box
       as="a"
@@ -215,16 +226,10 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
         fontFamily="monospace"
         fontWeight="bold"
       >
-        Logo
+        EasyWrite Dev
       </Text>
 
       <HStack spacing={{ base: "0", md: "6" }}>
-        <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
-        />
         <Flex alignItems={"center"}>
           <Menu>
             <MenuButton

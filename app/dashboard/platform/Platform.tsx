@@ -32,6 +32,7 @@ import {
   updateHashnodePublication,
   updateDevtoPublication,
 } from "@/services/api";
+import { usePlatformStore } from "@/utils/state/store";
 
 const Platform = () => {
   const [session, setSession] = useState<any>();
@@ -51,8 +52,23 @@ const Platform = () => {
     useState<any>(null);
   const [hashnodePublicationValue, setHashnodePublicationValue] =
     useState<any>(null);
-  const [devtoOrganizationLabel, setDevtoOrganizationLabel] = useState<any>(null);
-  const [devtoOrganizationValue, setDevtoOrganizationValue] = useState<any>(null);
+  const [devtoOrganizationLabel, setDevtoOrganizationLabel] =
+    useState<any>(null);
+  const [devtoOrganizationValue, setDevtoOrganizationValue] =
+    useState<any>(null);
+
+  const devtoD = usePlatformStore((state: any) => state.devtoData);
+  const hashnodeD = usePlatformStore((state: any) => state.hashnodeData);
+  const checkD = usePlatformStore((state: any) => state.checkData);
+  const updateDevtoData = usePlatformStore(
+    (state: any) => state.updateDevtoData
+  );
+  const updateHashnodeData = usePlatformStore(
+    (state: any) => state.updateHashnodeData
+  );
+  const updateCheckData = usePlatformStore(
+    (state: any) => state.updateCheckData
+  );
 
   const handleSubmitDevto = async (values: any) => {
     console.log("running1");
@@ -104,12 +120,22 @@ const Platform = () => {
     console.log(response);
   };
 
-  
-
   const handleUpdateDevto = (key: string) => {
     console.log("sessionh", session?.user.id);
     const response = updateDevto(session?.user.id, key);
     console.log(response);
+  };
+
+  const sessionSet = async () => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      setSession(session);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handlecheckIntegration = async () => {
@@ -118,11 +144,10 @@ const Platform = () => {
     } = await supabase.auth.getSession();
 
     setSession(session);
-
     if (session) {
-      console.log("running");
       const response = await checkIntegration(session?.user.id);
       setCheckData(response.data);
+      updateCheckData(response.data);
       console.log(response);
     }
 
@@ -136,7 +161,7 @@ const Platform = () => {
       )
       .eq("user_id", session?.user.id);
 
-    const { data : hashnodeData, error:hashnodeError } = await supabase
+    const { data: hashnodeData, error: hashnodeError } = await supabase
       .from("hashnode_key")
       .select(
         `
@@ -146,36 +171,73 @@ const Platform = () => {
       )
       .eq("user_id", session?.user.id);
 
+    //@ts-ignore
+    if (data[0]?.label?.length > 0) {
       //@ts-ignore
-        if(data[0]?.label?.length>0){
-          //@ts-ignore
-          setDevtoOrganizationLabel(data[0].label)
-          //@ts-ignore
-          setDevtoOrganizationValue(data[0].value)
+      setDevtoOrganizationLabel(data[0].label);
+      //@ts-ignore
+      setDevtoOrganizationValue(data[0].value);
 
-          //@ts-ignore
-          const newArray = data[0].label.map((item:any,index:any)=> {return index})
-          setDevtoArray(newArray)
-        }
+      //@ts-ignore
+      const newArray = data[0].label.map((item: any, index: any) => {
+        return index;
+      });
+      setDevtoArray(newArray);
+      updateDevtoData(data);
+    }
 
-        //@ts-ignore
-        if(hashnodeData[0]?.label?.length>0){
-          console.log("hashnodeData",hashnodeData)
-          //@ts-ignore
-          setHashnodePublicationLabel(hashnodeData[0].label)
-          //@ts-ignore
-          setHashnodePublicationValue(hashnodeData[0].value)
-
-          //@ts-ignore
-          const newArray = hashnodeData[0].label.map((item:any,index:any)=> {return index})
-          setHashnodeArray(newArray)
-        }
+    //@ts-ignore
+    if (hashnodeData[0]?.label?.length > 0) {
+      console.log("hashnodeData", hashnodeData);
+      //@ts-ignore
+      setHashnodePublicationLabel(hashnodeData[0].label);
+      //@ts-ignore
+      setHashnodePublicationValue(hashnodeData[0].value);
+      //@ts-ignore
+      const newArray = hashnodeData[0].label.map((item: any, index: any) => {
+        return index;
+      });
+      console.log(newArray);
+      setHashnodeArray(newArray);
+      updateHashnodeData(hashnodeData);
+    }
   };
 
-
-
   useEffect(() => {
-    handlecheckIntegration();
+    if (checkD) {
+      sessionSet();
+      setCheckData(checkD);
+    }
+    if (!devtoD) {
+      handlecheckIntegration();
+    } else {
+      console.log(devtoD);
+      //@ts-ignore
+      setDevtoOrganizationLabel(devtoD[0].label);
+      //@ts-ignore
+      setDevtoOrganizationValue(devtoD[0].value);
+
+      //@ts-ignore
+      const newArray = devtoD[0].label.map((item: any, index: any) => {
+        return index;
+      });
+      setDevtoArray(newArray);
+    }
+
+    if (!hashnodeD) {
+      handlecheckIntegration();
+    } else {
+      //@ts-ignore
+      setHashnodePublicationLabel(hashnodeD[0].label);
+      //@ts-ignore
+      setHashnodePublicationValue(hashnodeD[0].value);
+
+      //@ts-ignore
+      const newArray = hashnodeD[0].label.map((item: any, index: any) => {
+        return index;
+      });
+      setHashnodeArray(newArray);
+    }
   }, []);
 
   return (
@@ -183,8 +245,8 @@ const Platform = () => {
       <Formik
         initialValues={{
           devto: "",
-          label: devtoOrganizationLabel !== null? devtoOrganizationLabel :[],
-          value: devtoOrganizationValue !== null? devtoOrganizationValue :[],
+          label: devtoOrganizationLabel !== null ? devtoOrganizationLabel : [],
+          value: devtoOrganizationValue !== null ? devtoOrganizationValue : [],
         }}
         enableReinitialize={true}
         onSubmit={(values) => console.log(values)}
@@ -228,7 +290,7 @@ const Platform = () => {
                         {devtoArray.map((item: any, index: any) => {
                           console.log(item);
                           return (
-                            <Tr>
+                            <Tr key={index}>
                               <Td>
                                 <FormControl>
                                   <InputGroup>
@@ -365,9 +427,12 @@ const Platform = () => {
       <Formik
         initialValues={{
           hashnode: "",
-          label: hashnodePublicationLabel !== null? hashnodePublicationLabel :[],
-          value: hashnodePublicationValue !== null? hashnodePublicationValue :[],
+          label:
+            hashnodePublicationLabel !== null ? hashnodePublicationLabel : [],
+          value:
+            hashnodePublicationValue !== null ? hashnodePublicationValue : [],
         }}
+        enableReinitialize={true}
         onSubmit={(values) => console.log(values)}
         // validationSchema={LoginSchema}
       >
@@ -409,7 +474,7 @@ const Platform = () => {
                         {HashnodeArray.map((item: any, index: any) => {
                           console.log(item);
                           return (
-                            <Tr>
+                            <Tr key={index}>
                               <Td>
                                 <FormControl>
                                   <InputGroup>
