@@ -11,19 +11,20 @@ import {
   Divider,
   Center,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { devtoAnalytics } from "@/services/api";
 import { PerformanceChart } from "./analytics/PerformnaceChart";
-import { StatsBar } from "./analytics/StatsBar";
 import { VscReactions, VscComment } from "react-icons/vsc";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { IoIosStats } from "react-icons/io";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { useAnalyticalStore, useArticleStore } from "@/utils/state/store";
+import AnalyticLoading from "./loading";
 
 function Dashboard({ params }: { params: { session: any } }) {
   const [data, setData] = useState<any>(null);
+  const [error, setError] = useState<any>(null);
   const [articleData, setArticleData] = useState<any>(null);
   const analyticalD = useAnalyticalStore((state: any) => state.analyticalData);
   const updateAnalyticalData = useAnalyticalStore(
@@ -39,24 +40,26 @@ function Dashboard({ params }: { params: { session: any } }) {
       data: { session },
     } = await supabase.auth.getSession();
 
-    console.log("fetching data...");
-
     const res = await devtoAnalytics(session);
-    res.last_article_stats[0].icon = <VscReactions />;
-    res.last_article_stats[1].icon = <VscComment />;
-    res.last_article_stats[2].icon = <AiOutlineClockCircle />;
-    res.last_article_stats[3].icon = <IoIosStats />;
-    console.log(res);
-    setData(res);
-    updateAnalyticalData(res);
+    if (res.error) {
+      setError(res.error);
+    } else {
+      res.last_article_stats[0].icon = <VscReactions />;
+      res.last_article_stats[1].icon = <VscComment />;
+      res.last_article_stats[2].icon = <AiOutlineClockCircle />;
+      res.last_article_stats[3].icon = <IoIosStats />;
+      console.log(res);
+      setData(res);
+      updateAnalyticalData(res);
 
-    const { data, error } = await supabase
-      .from("article")
-      .select()
-      .eq("user_id", session?.user.id);
-    console.log("data", data);
-    setArticleData(data);
-    updateArticleData(data);
+      const { data, error } = await supabase
+        .from("article")
+        .select()
+        .eq("user_id", session?.user.id);
+      console.log("data", data);
+      setArticleData(data);
+      updateArticleData(data);
+    }
   };
 
   useEffect(() => {
@@ -77,7 +80,19 @@ function Dashboard({ params }: { params: { session: any } }) {
         spacing="40px"
       >
         <GridItem colSpan={3}>
-          {data && <PerformanceChart data={data.latest_article_stats} />}
+          <Suspense fallback={<AnalyticLoading />}>
+            {data && <PerformanceChart data={data.latest_article_stats} />}
+            {error && (
+              <Box borderRadius="10px" bg="white" height="100%">
+                <Heading variant="secondary-heading" mb={2} p={5}>
+                  Last Articles
+                </Heading>
+                <Text variant="primary-text" pl={3} pb={5}>
+                  {error}
+                </Text>
+              </Box>
+            )}
+          </Suspense>
         </GridItem>
         <GridItem colSpan={2}>
           <Box borderRadius="10px" bg="white" height="100%">

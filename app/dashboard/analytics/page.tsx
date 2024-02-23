@@ -23,6 +23,7 @@ import { useAnalyticalStore } from "@/utils/state/store";
 
 export default function Home({ params }: { params: { session: any } }) {
   const [data, setData] = useState<any>();
+  const [error, setError] = useState<any>();
   const analyticalD = useAnalyticalStore((state: any) => state.analyticalData);
   const updateAnalyticalData = useAnalyticalStore(
     (state: any) => state.updateAnalyticalData
@@ -34,13 +35,16 @@ export default function Home({ params }: { params: { session: any } }) {
     } = await supabase.auth.getSession();
 
     const res = await devtoAnalytics(session);
-    res.last_article_stats[0].icon = <VscReactions />;
-    res.last_article_stats[1].icon = <VscComment />;
-    res.last_article_stats[2].icon = <AiOutlineClockCircle />;
-    res.last_article_stats[3].icon = <IoIosStats />;
-    setData(res);
-    updateAnalyticalData(res);
-    
+    if (res.error) {
+      setError(res.error);
+    } else {
+      res.last_article_stats[0].icon = <VscReactions />;
+      res.last_article_stats[1].icon = <VscComment />;
+      res.last_article_stats[2].icon = <AiOutlineClockCircle />;
+      res.last_article_stats[3].icon = <IoIosStats />;
+      setData(res);
+      updateAnalyticalData(res);
+    }
   };
 
   useEffect(() => {
@@ -52,7 +56,7 @@ export default function Home({ params }: { params: { session: any } }) {
 
   return (
     <Box className="mainContainer">
-      {!data && (
+      {!data && !error && (
         <Box p="18px 25px" mt="32px">
           <Center>
             <Spinner
@@ -64,6 +68,17 @@ export default function Home({ params }: { params: { session: any } }) {
             />
           </Center>
         </Box>
+      )}
+      {error && (
+        <Heading
+          bg="white"
+          borderRadius="10px"
+          p="18px 25px"
+          mt={5}
+          variant="tertiary-heading"
+        >
+          {error}
+        </Heading>
       )}
       {data && (
         <SimpleGrid

@@ -7,7 +7,6 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 import { ApexOptions } from "apexcharts";
 
 export const PerformanceChart = ({ data }: any) => {
-
   const options: ApexOptions = {
     chart: {
       type: "bar",
@@ -30,8 +29,8 @@ export const PerformanceChart = ({ data }: any) => {
   return (
     <Box borderRadius="10px" bg="white">
       <Heading variant="secondary-heading" mb={2} p={5}>
-            Last 5 Article
-          </Heading>
+        Last Articles
+      </Heading>
       {data && <Chart type="bar" series={series} options={options} />}
     </Box>
   );
