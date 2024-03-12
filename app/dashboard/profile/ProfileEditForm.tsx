@@ -137,6 +137,11 @@ const ProfileEditForm = () => {
                   {errors.first_name && touched.first_name && (
                     <Text variant="input-error-text">{errors.first_name}</Text>
                   )}
+                  {errors.last_name &&
+                    !errors.first_name &&
+                    touched.last_name && (
+                      <Text variant="input-error-text">{errors.last_name}</Text>
+                    )}
                 </FormLabel>
               </FormControl>
               <Stack>
@@ -202,25 +207,6 @@ const ProfileEditForm = () => {
                 <FormLabel display="flex" justifyContent="space-between">
                   {errors.email && touched.email && (
                     <Text variant="input-error-text">{errors.email}</Text>
-                  )}
-                </FormLabel>
-              </FormControl>
-              <FormControl>
-                <Heading variant="tertiary-heading">Dev.to Username</Heading>
-                <Input
-                  variant={"form-input"}
-                  name="devto_username"
-                  type="text"
-                  placeholder={"johndoe"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.devto_username}
-                />
-                <FormLabel display="flex" justifyContent="space-between">
-                  {errors.devto_username && touched.devto_username && (
-                    <Text variant="input-error-text">
-                      {errors.devto_username}
-                    </Text>
                   )}
                 </FormLabel>
               </FormControl>

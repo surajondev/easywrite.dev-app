@@ -24,13 +24,20 @@ import { supabase } from "@/lib/supabase";
 import { ProfileSchema } from "@/utils/validations/profileSchema";
 import Link from "next/link";
 
-const ChangePassword = () => {
+const UpdatePassword = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
 
   const handleUpdateProfile = async (values: any) => {
-    const data = await updatePassword(values.email);
+    const { data, error } = await supabase.auth.updateUser({
+      password: values.password,
+    });
+
+    if (error) {
+      console.log(error);
+    }
+
     if (data) {
-      toast.success(data.data);
+      toast.success("Password successfully reset");
       console.log(data);
     }
   };
@@ -38,7 +45,8 @@ const ChangePassword = () => {
   return (
     <Formik
       initialValues={{
-        email: "",
+        password: "",
+        confirm_password: "",
       }}
       onSubmit={(values) => handleUpdateProfile(values)}
       // validationSchema={ProfileSchema}
@@ -59,45 +67,65 @@ const ChangePassword = () => {
           alignItems="center"
           padding="4em 4em"
         >
-          <Heading variant="secondary-heading">Change Password</Heading>
+          <Heading variant="secondary-heading">Update Password</Heading>
           <Text variant="primary-text" color="gray.400">
-            A password reset email will be sent to your registered email address
-            for your security.
+            Enter the new password below to update the existing password.
           </Text>
           {!isSubmitted && (
-            <Stack spacing={10}>
+            <Stack spacing={5}>
               <FormControl>
-                <Heading variant="tertiary-heading">Enter Email</Heading>
+                <Heading variant="tertiary-heading">Enter Password</Heading>
                 <Flex gap="2em">
                   <Input
                     variant={"form-input"}
-                    name="email"
-                    type="text"
-                    placeholder={"johndoe@email.com"}
+                    name="password"
+                    type="password"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.email}
+                    value={values.password}
                     width={300}
                   />
                 </Flex>
                 <FormLabel display="flex" justifyContent="space-between">
-                  {errors.email && touched.email && (
-                    <Text variant="input-error-text">{errors.email}</Text>
+                  {errors.password && touched.password && (
+                    <Text variant="input-error-text">{errors.password}</Text>
                   )}
                 </FormLabel>
               </FormControl>
-              <Link href="/dashboard/profile">
-                <Text variant="secondary-text" color="brand.300" mt={-5}>
-                  Change Profile
-                </Text>
-              </Link>
+              <FormControl>
+                <Heading variant="tertiary-heading">Confirm Password</Heading>
+                <Flex gap="2em">
+                  <Input
+                    variant={"form-input"}
+                    name="confirm_password"
+                    type="password"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.confirm_password}
+                    width={300}
+                  />
+                </Flex>
+                <FormLabel display="flex" justifyContent="space-between">
+                  {errors.confirm_password && touched.confirm_password && (
+                    <Text variant="input-error-text">
+                      {errors.confirm_password}
+                    </Text>
+                  )}
+                  {touched.confirm_password &&
+                    values.confirm_password !== values.password && (
+                      <Text variant="input-error-text">
+                        Password does not match
+                      </Text>
+                    )}
+                </FormLabel>
+              </FormControl>
               <Center>
                 <Button
                   variant="form-button"
                   width="100%"
                   onClick={() => handleSubmit()}
                 >
-                  Send Email
+                  Reset Password
                 </Button>
               </Center>
             </Stack>
@@ -132,4 +160,4 @@ const AlertContainer = () => {
   );
 };
 
-export default ChangePassword;
+export default UpdatePassword;

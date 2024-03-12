@@ -94,7 +94,20 @@ const LoginForm = () => {
               )}
             </FormLabel>
           </FormControl>
-          <Text variant="secondary-text">New member?, register <Link href="/register" style={{textDecoration:"underline"}}>here</Link></Text>
+          <Text variant="input-error-text">
+            <Link
+              href="/forgot-password"
+              style={{ textDecoration: "underline" }}
+            >
+              Forgot Password
+            </Link>
+          </Text>
+          <Text variant="secondary-text">
+            New member?, register{" "}
+            <Link href="/register" style={{ textDecoration: "underline" }}>
+              here
+            </Link>
+          </Text>
           <Center>
             <Button
               variant="form-button"

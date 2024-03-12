@@ -47,6 +47,20 @@ export const updateProfile = async (values: any) => {
   return res.data;
 };
 
+export const changePassword = async (email: string) => {
+  const res = await axios.post(`${baseURL}/change-password`, {
+    email,
+  });
+  return res.data;
+};
+
+export const updatePassword = async (email: string) => {
+  const res = await axios.post(`${baseURL}/change-password`, {
+    email,
+  });
+  return res.data;
+};
+
 // Register the User
 export const register = async ({
   first_name,

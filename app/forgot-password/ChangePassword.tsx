@@ -17,9 +17,9 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { updatePassword } from "@/services/api";
+import { changePassword } from "@/services/api";
 import { toast } from "react-toastify";
-import { getProfile } from "@/services/api";
+import { updatePassword } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { ProfileSchema } from "@/utils/validations/profileSchema";
 import Link from "next/link";
@@ -28,7 +28,7 @@ const ChangePassword = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
 
   const handleUpdateProfile = async (values: any) => {
-    const data = await updatePassword(values.email);
+    const data = await changePassword(values.email);
     if (data) {
       toast.success(data.data);
       console.log(data);
@@ -59,7 +59,7 @@ const ChangePassword = () => {
           alignItems="center"
           padding="4em 4em"
         >
-          <Heading variant="secondary-heading">Change Password</Heading>
+          <Heading variant="secondary-heading">Forgot Password</Heading>
           <Text variant="primary-text" color="gray.400">
             A password reset email will be sent to your registered email address
             for your security.
@@ -86,11 +86,6 @@ const ChangePassword = () => {
                   )}
                 </FormLabel>
               </FormControl>
-              <Link href="/dashboard/profile">
-                <Text variant="secondary-text" color="brand.300" mt={-5}>
-                  Change Profile
-                </Text>
-              </Link>
               <Center>
                 <Button
                   variant="form-button"

@@ -4,7 +4,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import {usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,20 +36,26 @@ export default function RootLayout({
       error: sessionError,
     } = await supabase.auth.getSession();
 
-    if (sessionError || session === null && pathname!="/register") {
+    if (
+      sessionError ||
+      (session === null &&
+        pathname != "/register" &&
+        pathname != "/update-password" &&
+        pathname != "/forgot-password")
+    ) {
       router.push("/login");
     }
 
-    if (session && pathname=="/") {
+    if (session && pathname == "/") {
       router.push("/dashboard");
     }
 
-    if (sessionError && pathname=="/") {
+    if (sessionError && pathname == "/") {
       router.push("/login");
     }
 
-    console.log("layout", session)
-    params.session = session
+    console.log("layout", session);
+    params.session = session;
   };
 
   useEffect(() => {
