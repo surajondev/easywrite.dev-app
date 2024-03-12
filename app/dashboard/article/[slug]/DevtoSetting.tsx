@@ -23,6 +23,7 @@ import { tagOption } from "../../topic-generation/DevtoTagOptions";
 import { addArticle, updateDevtoArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
+import { DevtoArticleSchema } from "@/utils/validations/devtoArticleSchema";
 
 const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
   const [fileName, setFileName] = useState<any>(null);
@@ -219,7 +220,7 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
       }}
       enableReinitialize={true}
       onSubmit={(values) => handleSubmit(values)}
-      // validationSchema={LoginSchema}
+      validationSchema={DevtoArticleSchema}
     >
       {({
         values,
@@ -264,9 +265,10 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
                       display="flex"
                       justifyContent="space-between"
                     >
-                      {/* {errors.title && touched.title && (
+                      {errors.title && touched.title && (
+                        //@ts-ignore
                         <Text variant="input-error-text">{errors.title}</Text>
-                      )} */}
+                      )}
                     </FormLabel>
                   </FormControl>
                   <FormControl>
@@ -280,15 +282,6 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
                       onBlur={handleBlur}
                       value={values.description}
                     />
-                    <FormLabel
-                      mt={1}
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      {errors.description && touched.description && (
-                        <Text variant="input-error-text"></Text>
-                      )}
-                    </FormLabel>
                   </FormControl>
                   <Heading variant="tertiary-heading">Thumbnail</Heading>
                   <Stack>
@@ -343,7 +336,9 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
                       />
                       <FormLabel display="flex" justifyContent="space-between">
                         {errors.main_image && touched.main_image && (
-                          <Text variant="input-error-text"></Text>
+                          <Text variant="input-error-text">
+                            {errors.main_image}
+                          </Text>
                         )}
                       </FormLabel>
                     </FormControl>
@@ -365,7 +360,10 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.published_time && touched.published_time && (
-                        <Text variant="input-error-text"></Text>
+                        //@ts-ignore
+                        <Text variant="input-error-text">
+                          {errors.published_time}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -395,7 +393,7 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.tags && touched.tags && (
-                        <Text variant="input-error-text"></Text>
+                        <Text variant="input-error-text">{errors.tags}</Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -441,7 +439,9 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
                       justifyContent="space-between"
                     >
                       {errors.organization_id && touched.organization_id && (
-                        <Text variant="input-error-text"></Text>
+                        <Text variant="input-error-text">
+                          {errors.organization_id}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -456,15 +456,6 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
                       onBlur={handleBlur}
                       value={values.canonical_url}
                     />
-                    <FormLabel
-                      mt={1}
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      {errors.canonical_url && touched.canonical_url && (
-                        <Text variant="input-error-text"></Text>
-                      )}
-                    </FormLabel>
                   </FormControl>
 
                   <Center>

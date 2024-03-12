@@ -23,6 +23,7 @@ import { tagOption } from "../../topic-generation/HashnodeTagOptions";
 import { addArticle, updateHashnodeArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
+import { HashnodeArticleSchema } from "@/utils/validations/hashnodeArticleSchema";
 
 const HashnodeSetting = ({
   articleData,
@@ -253,7 +254,7 @@ const HashnodeSetting = ({
       }}
       enableReinitialize={true}
       onSubmit={(values) => handleSubmit(values)}
-      // validationSchema={LoginSchema}
+      validationSchema={HashnodeArticleSchema}
     >
       {({
         values,
@@ -298,7 +299,7 @@ const HashnodeSetting = ({
                       justifyContent="space-between"
                     >
                       {errors.title && touched.title && (
-                        <Text variant="input-error-text"></Text>
+                        <Text variant="input-error-text">{errors.title}</Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -313,15 +314,6 @@ const HashnodeSetting = ({
                       onBlur={handleBlur}
                       value={values.subtitle}
                     />
-                    <FormLabel
-                      mt={1}
-                      display="flex"
-                      justifyContent="space-between"
-                    >
-                      {errors.subtitle && touched.subtitle && (
-                        <Text variant="input-error-text"></Text>
-                      )}
-                    </FormLabel>
                   </FormControl>
                   <Heading variant="tertiary-heading">Thumbnail</Heading>
                   <Stack>
@@ -376,7 +368,9 @@ const HashnodeSetting = ({
                       />
                       <FormLabel display="flex" justifyContent="space-between">
                         {errors.main_image && touched.main_image && (
-                          <Text variant="input-error-text"></Text>
+                          <Text variant="input-error-text">
+                            {errors.main_image}
+                          </Text>
                         )}
                       </FormLabel>
                     </FormControl>
@@ -398,7 +392,9 @@ const HashnodeSetting = ({
                       justifyContent="space-between"
                     >
                       {errors.publishedAt && touched.publishedAt && (
-                        <Text variant="input-error-text"></Text>
+                        <Text variant="input-error-text">
+                          {errors.publishedAt}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -427,7 +423,7 @@ const HashnodeSetting = ({
                       justifyContent="space-between"
                     >
                       {errors.tags && touched.tags && (
-                        <Text variant="input-error-text"></Text>
+                        <Text variant="input-error-text">{errors.tags}</Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -451,7 +447,9 @@ const HashnodeSetting = ({
                       justifyContent="space-between"
                     >
                       {errors.publicationId && touched.publicationId && (
-                        <Text variant="input-error-text"></Text>
+                        <Text variant="input-error-text">
+                          {errors.publicationId}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>

@@ -43,10 +43,10 @@ const SignUpForm = () => {
       initialValues={{
         first_name: "",
         last_name: "",
-        profile_img: "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
+        profile_img:
+          "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
         email: "",
         password: "",
-        devto_username: "",
       }}
       onSubmit={(values) => handleSignin(values)}
       validationSchema={RegisterSchema}
@@ -94,17 +94,17 @@ const SignUpForm = () => {
                   {errors.first_name && touched.first_name && (
                     <Text variant="input-error-text">{errors.first_name}</Text>
                   )}
+                  {errors.last_name &&
+                    !errors.first_name &&
+                    touched.last_name && (
+                      <Text variant="input-error-text">{errors.last_name}</Text>
+                    )}
                 </FormLabel>
               </FormControl>
               <Stack>
                 <Heading variant="tertiary-heading">Profile Image</Heading>
                 <Flex gap={5}>
-                  <Avatar
-                    size={"md"}
-                    src={
-                      values.profile_img
-                    }
-                  />
+                  <Avatar size={"md"} src={values.profile_img} />
                   <FormControl>
                     <Input
                       variant={"form-input-file"}
@@ -115,25 +115,38 @@ const SignUpForm = () => {
                         const { data, error } = await supabase.storage
                           .from("profileImage")
                           //@ts-ignore
-                          .upload(`${timestamp}-${e.target.files[0].name}`, e.target.files[0], {
-                            cacheControl: "3600",
-                            upsert: false,
-                          });
-                        if(error){
-                          console.log(error)
-                          return
+                          .upload(
+                            //@ts-ignore
+                            `${timestamp}-${e.target.files[0].name}`,
+                            //@ts-ignore
+                            e.target.files[0],
+                            {
+                              cacheControl: "3600",
+                              upsert: false,
+                            }
+                          );
+                        if (error) {
+                          console.log(error);
+                          return;
                         }
-                        console.log(`${SUPABASE_STORAGE}/profileImage/${data.path}`)
+                        console.log(
+                          `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                        );
                         //@ts-ignore
-                        setFileName(e.target.value)
-                        setFieldValue("profile_img", `${SUPABASE_STORAGE}/profileImage/${data.path}`)
+                        setFileName(e.target.value);
+                        setFieldValue(
+                          "profile_img",
+                          `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                        );
                       }}
                       onBlur={handleBlur}
                       value={fileName}
                     />
                     <FormLabel display="flex" justifyContent="space-between">
-                      {errors.email && touched.email && (
-                        <Text variant="input-error-text">{errors.email}</Text>
+                      {errors.profile_img && touched.profile_img && (
+                        <Text variant="input-error-text">
+                          {errors.profile_img}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
@@ -173,26 +186,12 @@ const SignUpForm = () => {
                   )}
                 </FormLabel>
               </FormControl>
-              <FormControl>
-                <Heading variant="tertiary-heading">Dev.to Username</Heading>
-                <Input
-                  variant={"form-input"}
-                  name="devto_username"
-                  type="text"
-                  placeholder={"johndoe"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.devto_username}
-                />
-                <FormLabel display="flex" justifyContent="space-between">
-                  {errors.devto_username && touched.devto_username && (
-                    <Text variant="input-error-text">
-                      {errors.devto_username}
-                    </Text>
-                  )}
-                </FormLabel>
-              </FormControl>
-              <Text variant="secondary-text">Already a member?, login <Link href="/login" style={{textDecoration:"underline"}}>here</Link></Text>
+              <Text variant="secondary-text">
+                Already a member?, login{" "}
+                <Link href="/login" style={{ textDecoration: "underline" }}>
+                  here
+                </Link>
+              </Text>
               <Center>
                 <Button
                   variant="form-button"
@@ -229,7 +228,13 @@ const AlertContainer = () => {
       </AlertTitle>
       <AlertDescription maxWidth="sm" color="whiteAlpha.600">
         Check your email to confirm it before login.
-      <Text variant="secondary-text" color="white">Click <Link href="/login" style={{textDecoration:"underline"}}>here</Link> to login</Text>
+        <Text variant="secondary-text" color="white">
+          Click{" "}
+          <Link href="/login" style={{ textDecoration: "underline" }}>
+            here
+          </Link>{" "}
+          to login
+        </Text>
       </AlertDescription>
     </Alert>
   );
