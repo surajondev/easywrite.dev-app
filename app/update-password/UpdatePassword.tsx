@@ -23,6 +23,7 @@ import { getProfile } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { ProfileSchema } from "@/utils/validations/profileSchema";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 const UpdatePassword = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
@@ -34,11 +35,25 @@ const UpdatePassword = () => {
 
     if (error) {
       console.log(error);
+      return;
+    }
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (session) {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.log(error);
+        return;
+      }
     }
 
     if (data) {
       toast.success("Password successfully reset");
       console.log(data);
+      redirect("/login");
     }
   };
 

@@ -16,6 +16,8 @@ export const PerformanceChart = ({ data }: any) => {
       },
     },
 
+    colors: ["#BC7AF9", "#FFA1F5", "#F8FF95", "#A6FF96"],
+
     xaxis: {
       labels: {
         trim: true,

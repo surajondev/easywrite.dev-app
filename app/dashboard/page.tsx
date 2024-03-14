@@ -10,6 +10,7 @@ import {
   Button,
   Divider,
   Center,
+  Skeleton,
 } from "@chakra-ui/react";
 import { Suspense, useEffect, useState } from "react";
 import { devtoAnalytics } from "@/services/api";
@@ -74,52 +75,57 @@ function Dashboard({ params }: { params: { session: any } }) {
     <Box className="mainContainer">
       <SimpleGrid
         templateColumns={{
-          base: "repeat(1, 1fr)",
+          sm: "repeat(1, 1fr)",
           lg: "repeat(5, 1fr)",
         }}
         spacing="40px"
       >
-        <GridItem colSpan={3}>
-          <Suspense fallback={<AnalyticLoading />}>
-            {data && <PerformanceChart data={data.latest_article_stats} />}
-            {error && (
-              <Box borderRadius="10px" bg="white" height="100%">
-                <Heading variant="secondary-heading" mb={2} p={5}>
-                  Last Articles
-                </Heading>
-                <Text variant="primary-text" pl={3} pb={5}>
-                  {error}
-                </Text>
-              </Box>
-            )}
-          </Suspense>
-        </GridItem>
-        <GridItem colSpan={2}>
-          <Box borderRadius="10px" bg="white" height="100%">
-            <Heading variant="secondary-heading" mb={2} p={5}>
-              Articles
-            </Heading>
-            {articleData &&
-              articleData.map((item: any, index: any) => {
-                if (index < 5) {
-                  return (
-                    <Box pb={5} key={index}>
-                      <Text variant="primary-text" pl={5} pr={3}>
-                        {item.title}
-                      </Text>
-                      <Center>
-                        <Divider width="80%" variant="primary-divider" />
-                      </Center>
-                    </Box>
-                  );
-                }
-              })}
-            {!articleData && (
+        <GridItem colSpan={{ sm: 5, lg: 3 }}>
+          {data && <PerformanceChart data={data.latest_article_stats} />}
+          {error && (
+            <Box borderRadius="10px" bg="white" height="100%">
+              <Heading variant="secondary-heading" mb={2} p={5}>
+                Last Articles
+              </Heading>
               <Text variant="primary-text" pl={3} pb={5}>
-                No Article
+                {error}
               </Text>
-            )}
-          </Box>
+            </Box>
+          )}
+          {!data && (
+            <Skeleton>
+              <div style={{ borderRadius: "10px", height: "400px" }} />
+            </Skeleton>
+          )}
+        </GridItem>
+        <GridItem colSpan={{ sm: 5, lg: 2 }}>
+          {articleData && (
+            <Box borderRadius="10px" bg="white" height="100%">
+              <Heading variant="secondary-heading" mb={2} p={5}>
+                Articles
+              </Heading>
+              {articleData &&
+                articleData.map((item: any, index: any) => {
+                  if (index < 5) {
+                    return (
+                      <Box pb={5} key={index}>
+                        <Text variant="primary-text" pl={5} pr={3}>
+                          {item.title}
+                        </Text>
+                        <Center>
+                          <Divider width="80%" variant="primary-divider" />
+                        </Center>
+                      </Box>
+                    );
+                  }
+                })}
+            </Box>
+          )}
+          {!articleData && (
+            <Skeleton>
+              <div style={{ borderRadius: "10px", height: "400px" }} />
+            </Skeleton>
+          )}
         </GridItem>
         <GridItem colSpan={5}>
           <Flex

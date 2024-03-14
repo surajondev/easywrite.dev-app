@@ -17,6 +17,7 @@ export const ArticlePerTagTree = ({ data }: any) => {
     chart: {
       type: "treemap",
     },
+    colors: ["#BC7AF9", "#FFA1F5", "#F8FF95", "#A6FF96"],
   };
 
   return (

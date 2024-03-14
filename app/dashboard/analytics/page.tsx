@@ -94,10 +94,10 @@ export default function Home({ params }: { params: { session: any } }) {
             </Heading>
             <StatsBar data={data?.last_article_stats} />
           </GridItem>
-          <GridItem colSpan={3}>
+          <GridItem colSpan={{ base: 5, lg: 3 }}>
             {data && <PerformanceChart data={data.latest_article_stats} />}
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={{ base: 5, lg: 2 }}>
             {data && (
               <PopularTags
                 data={data.popular_tags.data}

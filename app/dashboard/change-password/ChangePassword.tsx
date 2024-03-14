@@ -17,7 +17,7 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { updatePassword } from "@/services/api";
+import { changePassword } from "@/services/api";
 import { toast } from "react-toastify";
 import { getProfile } from "@/services/api";
 import { supabase } from "@/lib/supabase";
@@ -28,7 +28,7 @@ const ChangePassword = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
 
   const handleUpdateProfile = async (values: any) => {
-    const data = await updatePassword(values.email);
+    const data = await changePassword(values.email);
     if (data) {
       toast.success(data.data);
       console.log(data);

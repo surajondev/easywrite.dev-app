@@ -8,6 +8,7 @@ import {
   TabIndicator,
   Box,
   Text,
+  Skeleton,
 } from "@chakra-ui/react";
 import { supabase } from "@/lib/supabase";
 import ArticleContainer from "./ArticleContainer";
@@ -16,6 +17,8 @@ const Article = () => {
   const [published, setPublished] = useState<any>([]);
   const [scheduled, setScheduled] = useState<any>([]);
   const [draft, setDraft] = useState<any>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const articleArr = [0, 1, 2, 3, 4];
 
   const fetchArticle = async () => {
     const {
@@ -68,6 +71,7 @@ const Article = () => {
       setPublished(publishedData);
       setScheduled(scheduledData);
       setDraft(draftData);
+      setLoading(false);
       console.log(publishedData, scheduledData, draftData);
     }
   };
@@ -107,6 +111,23 @@ const Article = () => {
                   />
                 );
               })}
+            {loading && (
+              <div>
+                {articleArr.map(() => {
+                  return (
+                    <Skeleton>
+                      <div
+                        style={{
+                          borderRadius: "10px",
+                          height: "40px",
+                          marginTop: "5px",
+                        }}
+                      />
+                    </Skeleton>
+                  );
+                })}
+              </div>
+            )}
           </TabPanel>
           <TabPanel>
             {scheduled.length > 0 &&
@@ -119,6 +140,23 @@ const Article = () => {
                   />
                 );
               })}
+            {loading && (
+              <div>
+                {articleArr.map(() => {
+                  return (
+                    <Skeleton>
+                      <div
+                        style={{
+                          borderRadius: "10px",
+                          height: "40px",
+                          marginTop: "5px",
+                        }}
+                      />
+                    </Skeleton>
+                  );
+                })}
+              </div>
+            )}
           </TabPanel>
           <TabPanel>
             {draft.length > 0 &&
@@ -131,6 +169,23 @@ const Article = () => {
                   />
                 );
               })}
+            {loading && (
+              <div>
+                {articleArr.map(() => {
+                  return (
+                    <Skeleton>
+                      <div
+                        style={{
+                          borderRadius: "10px",
+                          height: "40px",
+                          marginTop: "5px",
+                        }}
+                      />
+                    </Skeleton>
+                  );
+                })}
+              </div>
+            )}
           </TabPanel>
         </TabPanels>
       </Tabs>

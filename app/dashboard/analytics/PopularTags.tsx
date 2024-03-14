@@ -17,6 +17,7 @@ export const PopularTags = ({ data, label }: PopularTagsInterface) => {
       type: "donut",
       height: "10%",
     },
+    colors: ["#BC7AF9", "#FFA1F5", "#F8FF95", "#A6FF96", "#CAEDFF"],
     labels: label,
     dataLabels: {
       enabled: false,
