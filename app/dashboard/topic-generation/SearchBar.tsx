@@ -7,9 +7,7 @@ import {
   InputLeftElement,
   Button,
 } from "@chakra-ui/react";
-import {
-  Select
-} from "chakra-react-select";
+import { Select } from "chakra-react-select";
 import { tagOption } from "./DevtoTagOptions";
 import React, { useState } from "react";
 import { useFormik } from "formik";
@@ -18,12 +16,13 @@ import { generateByTag, generateByText } from "@/services/api";
 
 export const SearchBar = ({ settingData, settingLoading }: any) => {
   const [searchBy, setSearchBy] = useState<any>("text");
+  const [platform, setPlatform] = useState<any>("devto");
 
   const handleSubmit = async (values: any) => {
     let res;
     searchBy === "text"
-      ? (res = await generateByText(values.text))
-      : (res = await generateByTag(values.tag));
+      ? (res = await generateByText(values.text, platform))
+      : (res = await generateByTag(values.tag, platform));
     settingData(res);
     settingLoading(false);
   };
@@ -60,6 +59,23 @@ export const SearchBar = ({ settingData, settingLoading }: any) => {
                 {
                   label: "Search by Tag",
                   value: "tag",
+                },
+              ]}
+            />
+            <Select
+              onChange={(e) => setPlatform(e?.value)}
+              defaultValue={{
+                label: "Platform Devto",
+                value: "devto",
+              }}
+              options={[
+                {
+                  label: "Platform Devto",
+                  value: "devto",
+                },
+                {
+                  label: "Platform Hashnode",
+                  value: "hashnode",
                 },
               ]}
             />

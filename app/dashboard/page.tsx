@@ -52,15 +52,14 @@ function Dashboard({ params }: { params: { session: any } }) {
       console.log(res);
       setData(res);
       updateAnalyticalData(res);
-
-      const { data, error } = await supabase
-        .from("article")
-        .select()
-        .eq("user_id", session?.user.id);
-      console.log("data", data);
-      setArticleData(data);
-      updateArticleData(data);
     }
+    const { data, error } = await supabase
+      .from("article")
+      .select()
+      .eq("user_id", session?.user.id);
+    console.log("data", data);
+    setArticleData(data);
+    updateArticleData(data);
   };
 
   useEffect(() => {
@@ -92,7 +91,7 @@ function Dashboard({ params }: { params: { session: any } }) {
               </Text>
             </Box>
           )}
-          {!data && (
+          {!data && !error && (
             <Skeleton>
               <div style={{ borderRadius: "10px", height: "400px" }} />
             </Skeleton>
