@@ -34,39 +34,62 @@ const Article = () => {
 
     if (data) {
       const publishedData = data.filter((item) => {
-        return (
-          (item.hashnode_data == null && item.devto_data.type == "published") ||
-          (item.hashnode_data.type == "published" &&
-            item.devto_data.type == null) ||
-          (item.hashnode_data.type == "published" &&
-            item.devto_data.type == "published")
-        );
+        if (item.hashnode_data && item.devto_data) {
+          return (
+            item.hashnode_data.type == "published" &&
+            item.devto_data.type == "published"
+          );
+        }
+
+        if (item.hashnode_data && item.devto_data == null) {
+          return item.hashnode_data.type == "published";
+        }
+
+        if (item.hashnode_data == null && item.devto_data) {
+          return item.devto_data.type == "published";
+        }
       });
       const scheduledData = data.filter((item) => {
-        return (
-          (item.hashnode_data == null && item.devto_data.type == "scheduled") ||
-          (item.hashnode_data == "scheduled" && item.devto_data.type == null) ||
-          (item.hashnode_data.type == "scheduled" &&
-            item.devto_data.type == "scheduled") ||
-          (item.hashnode_data.type == "published" &&
-            item.devto_data.type == "scheduled") ||
-          (item.hashnode_data.type == "scheduled" &&
-            item.devto_data.type == "published")
-        );
+        if (item.hashnode_data && item.devto_data) {
+          return (
+            (item.hashnode_data.type == "scheduled" &&
+              item.devto_data.type == "scheduled") ||
+            (item.hashnode_data.type == "published" &&
+              item.devto_data.type == "scheduled") ||
+            (item.hashnode_data.type == "scheduled" &&
+              item.devto_data.type == "published")
+          );
+        }
+
+        if (item.hashnode_data && item.devto_data == null) {
+          return item.hashnode_data.type == "scheduled";
+        }
+
+        if (item.hashnode_data == null && item.devto_data) {
+          return item.devto_data.type == "scheduled";
+        }
       });
       const draftData = data.filter((item) => {
-        return (
-          (item.hashnode_data == null && item.devto_data.type == "draft") ||
-          (item.hashnode_data.type == "draft" &&
-            item.devto_data.type == null) ||
-          (item.hashnode_data.type == "scheduled" &&
-            item.devto_data.type == "draft") ||
-          (item.hashnode_data.type == "draft" &&
-            item.devto_data.type == "scheduled") ||
-          (item.hashnode_data.type == "published" &&
-            item.devto_data.type == "draft") ||
-          (item.hashnode_data == "draft" && item.devto_data.type == "published")
-        );
+        if (item.hashnode_data && item.devto_data) {
+          return (
+            (item.hashnode_data.type == "scheduled" &&
+              item.devto_data.type == "draft") ||
+            (item.hashnode_data.type == "draft" &&
+              item.devto_data.type == "scheduled") ||
+            (item.hashnode_data.type == "published" &&
+              item.devto_data.type == "draft") ||
+            (item.hashnode_data == "draft" &&
+              item.devto_data.type == "published")
+          );
+        }
+
+        if (item.hashnode_data && item.devto_data == null) {
+          return item.hashnode_data.type == "draft";
+        }
+
+        if (item.hashnode_data == null && item.devto_data) {
+          return item.devto_data.type == "draft";
+        }
       });
       setPublished(publishedData);
       setScheduled(scheduledData);
@@ -78,6 +101,15 @@ const Article = () => {
   useEffect(() => {
     fetchArticle();
   }, []);
+
+  const getError = (item: any) => {
+    if (item.devto_data.error) {
+      return "error";
+    }
+    if (item.hashnode_data.error) {
+      return "error";
+    }
+  };
 
   return (
     <Box bg="white" borderRadius="10px" p="18px 25px">
@@ -108,6 +140,7 @@ const Article = () => {
                     article={item}
                     key={item.article_id}
                     type="published"
+                    error="null"
                   />
                 );
               })}
@@ -137,6 +170,7 @@ const Article = () => {
                     article={item}
                     key={item.article_id}
                     type="scheduled"
+                    error={getError(item)}
                   />
                 );
               })}
@@ -166,6 +200,7 @@ const Article = () => {
                     article={item}
                     key={item.article_id}
                     type="draft"
+                    error="null"
                   />
                 );
               })}

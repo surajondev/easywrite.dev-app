@@ -24,6 +24,9 @@ import { addArticle, updateHashnodeArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 import { HashnodeArticleSchema } from "@/utils/validations/hashnodeArticleSchema";
+import { toast } from "react-toastify";
+import { MdErrorOutline } from "react-icons/md";
+import { IconContext } from "react-icons";
 
 const HashnodeSetting = ({
   articleData,
@@ -37,9 +40,15 @@ const HashnodeSetting = ({
   const [timeStampTZ, setTimeStampTZ] = useState<any>(null);
 
   const handleSubmit = async (values: any) => {
-    const tagsArr = values.tags.map((e: any) => {
+    if (body == "new-article") {
+      toast.error("There is no article body");
+      return;
+    }
+    const tagsArr = values.tags.map((e: string) => {
+      console.log(values.tags);
       return {
-        id: e.id.value,
+        //@ts-ignore
+        id: e.id,
       };
     });
 
@@ -62,9 +71,11 @@ const HashnodeSetting = ({
         coverImageURL: values.main_image,
       },
       slug: getSlug(),
-      tags: tagsArr,
+      tags: tagsArr(),
       publicationId: values.publicationId.value,
     };
+
+    console.log(hashnodeData);
 
     const hashnode_data = {
       type: "scheduled",
@@ -87,11 +98,16 @@ const HashnodeSetting = ({
     const response = await addArticle(articleData);
     if (response) {
       console.log(response);
-      setArticleId(response[0].articleId);
+      setArticleId(response[0].article_id);
     }
   };
 
   const handleUpdate = async (values: any) => {
+    if (body == "new-article") {
+      toast.error("There is no article body");
+      return;
+    }
+    console.log(articleId);
     const getSlug = () => {
       const lowerCase = values.title.toLowerCase();
       var slug = lowerCase.replace(/ /g, "-");
@@ -99,9 +115,10 @@ const HashnodeSetting = ({
     };
 
     const tagsArr = values.tags.map((e: string) => {
+      console.log(e);
       return {
         //@ts-ignore
-        id: e.value,
+        id: e.id,
       };
     });
 
@@ -275,13 +292,46 @@ const HashnodeSetting = ({
           >
             <AccordionItem>
               <AccordionButton>
-                <Box as="span" flex="1" textAlign="left">
-                  <Heading variant="tertiary-heading">Hashnode Setting</Heading>
-                </Box>
+                <Flex justifyContent="space-between" width="100%">
+                  <Box as="span" flex="1" textAlign="left">
+                    <Heading variant="tertiary-heading">
+                      Hashnode Setting
+                    </Heading>
+                  </Box>
+                  {articleData[0].hashnode_data != null &&
+                    articleData[0].hashnode_data.error && (
+                      <IconContext.Provider
+                        value={{
+                          color: "red",
+                          size: "1.5em",
+                          className: "stats-card-icon",
+                        }}
+                      >
+                        <MdErrorOutline />
+                      </IconContext.Provider>
+                    )}
+                </Flex>
                 <AccordionIcon />
               </AccordionButton>
               <AccordionPanel pb={4}>
                 <Stack spacing={2}>
+                  {articleData[0].hashnode_data != null &&
+                    articleData[0].hashnode_data.error && (
+                      <IconContext.Provider
+                        value={{
+                          color: "red",
+                          size: "1.5em",
+                          className: "stats-card-icon",
+                        }}
+                      >
+                        <Text variant="input-error-text">
+                          {
+                            articleData[0].hashnode_data.error.response.data
+                              .errors[0].message
+                          }
+                        </Text>
+                      </IconContext.Provider>
+                    )}
                   <FormControl>
                     <Heading variant="tertiary-heading">Title</Heading>
                     <Input
@@ -413,7 +463,7 @@ const HashnodeSetting = ({
                           return { id: item.value };
                         });
                         setFieldValue("tags", tagArr);
-                        console.log(tagArr);
+                        console.log(values.tags);
                       }}
                       options={tagOption}
                     />

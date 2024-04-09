@@ -46,7 +46,10 @@ export default function RootLayout({
       router.push("/login");
     }
 
-    if (session && pathname == "/") {
+    if (
+      session &&
+      (pathname == "/" || pathname == "/register" || pathname == "/login")
+    ) {
       router.push("/dashboard");
     }
 

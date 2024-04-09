@@ -24,6 +24,10 @@ import { addArticle, updateDevtoArticle } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 import { DevtoArticleSchema } from "@/utils/validations/devtoArticleSchema";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { MdErrorOutline } from "react-icons/md";
+import { IconContext } from "react-icons";
 
 const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
   const [fileName, setFileName] = useState<any>(null);
@@ -31,7 +35,14 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
   const [devtoPublication, setDevtoPublication] = useState<any>(null);
   const [timeStampTZ, setTimeStampTZ] = useState<any>(null);
 
+  const router = useRouter();
+
   const handleSubmit = async (values: any) => {
+    if (body == "new-article") {
+      toast.error("There is no article body");
+      return;
+    }
+
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -74,6 +85,11 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
   };
 
   const handleUpdate = async (values: any) => {
+    if (body == "new-article") {
+      toast.error("There is no article body");
+      return;
+    }
+
     const devtoData = {
       title: values.title,
       body_markdown: body,
@@ -242,13 +258,41 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
           >
             <AccordionItem>
               <AccordionButton>
-                <Box as="span" flex="1" textAlign="left">
-                  <Heading variant="tertiary-heading">Dev.to Setting</Heading>
-                </Box>
+                <Flex justifyContent="space-between" width="100%">
+                  <Box as="span" flex="1" textAlign="left">
+                    <Heading variant="tertiary-heading">Dev.to Setting</Heading>
+                  </Box>
+                  {articleData[0].devto_data != null &&
+                    articleData[0].devto_data.error && (
+                      <IconContext.Provider
+                        value={{
+                          color: "red",
+                          size: "1.5em",
+                          className: "stats-card-icon",
+                        }}
+                      >
+                        <MdErrorOutline />
+                      </IconContext.Provider>
+                    )}
+                </Flex>
                 <AccordionIcon />
               </AccordionButton>
               <AccordionPanel pb={4}>
                 <Stack spacing={2}>
+                  {articleData[0].devto_data != null &&
+                    articleData[0].devto_data.error && (
+                      <IconContext.Provider
+                        value={{
+                          color: "red",
+                          size: "1.5em",
+                          className: "stats-card-icon",
+                        }}
+                      >
+                        <Text variant="input-error-text">
+                          {articleData[0].devto_data.error.response.data.error}
+                        </Text>
+                      </IconContext.Provider>
+                    )}
                   <FormControl>
                     <Heading variant="tertiary-heading">Title</Heading>
                     <Input
