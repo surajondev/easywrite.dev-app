@@ -63,7 +63,7 @@ const SignUpForm = () => {
         <Stack spacing={10} width="100%" padding="4em 4em">
           <Heading variant="secondary-heading">Create a new account</Heading>
           <Text variant="primary-text" color="gray.400">
-            It's not difficult, you just have to enter some data and it's done
+            It is not difficult, you just have to enter some data and it is done
             right away!
           </Text>
           {!isSubmitted && (

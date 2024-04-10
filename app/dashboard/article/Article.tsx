@@ -148,9 +148,9 @@ const Article = () => {
               })}
             {loading && (
               <div>
-                {articleArr.map(() => {
+                {articleArr.map((item: any) => {
                   return (
-                    <Skeleton>
+                    <Skeleton key={item}>
                       <div
                         style={{
                           borderRadius: "10px",
@@ -179,9 +179,9 @@ const Article = () => {
               })}
             {loading && (
               <div>
-                {articleArr.map(() => {
+                {articleArr.map((item: any) => {
                   return (
-                    <Skeleton>
+                    <Skeleton key={item}>
                       <div
                         style={{
                           borderRadius: "10px",
@@ -210,9 +210,9 @@ const Article = () => {
               })}
             {loading && (
               <div>
-                {articleArr.map(() => {
+                {articleArr.map((item: any) => {
                   return (
-                    <Skeleton>
+                    <Skeleton key={item}>
                       <div
                         style={{
                           borderRadius: "10px",

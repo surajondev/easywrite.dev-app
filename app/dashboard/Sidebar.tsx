@@ -92,7 +92,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
       <Stack gap={5} pl={7} mt={2}>
         {LinkItems.map((link) => (
-          <Link href={link.href}>
+          <Link href={link.href} key={link}>
             <Flex gap={5} _hover={{ color: "#8B54BD" }} pt={1} pb={1}>
               <IconContext.Provider
                 value={{

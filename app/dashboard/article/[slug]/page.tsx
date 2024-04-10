@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { checkIntegration } from "@/services/api";
 
-const articlePage = () => {
+const ArticlePage = () => {
   const [contentMarkdown, setContentMarkdown] = useState<any>(null);
   const [articleId, setArticleId] = useState<any>(null);
   const [articleData, setArticleData] = useState<any>(null);
@@ -104,4 +104,4 @@ const articlePage = () => {
   );
 };
 
-export default articlePage;
+export default ArticlePage;

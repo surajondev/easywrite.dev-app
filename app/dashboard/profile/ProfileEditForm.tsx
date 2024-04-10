@@ -107,7 +107,7 @@ const ProfileEditForm = () => {
           <Heading variant="secondary-heading">Edit your profile</Heading>
           <Text variant="primary-text" color="gray.400">
             Updating your profile is a breeze; simply make the desired changes,
-            and you're good to go!
+            and you are good to go!
           </Text>
           {!isSubmitted && (
             <Stack spacing={10}>

@@ -254,6 +254,14 @@ const DevtoSetting = ({
         handleSubmit,
         handleBlur,
         setFieldValue,
+      }: {
+        values: any;
+        errors: any;
+        touched: any;
+        handleChange: any;
+        handleSubmit: any;
+        handleBlur: any;
+        setFieldValue: any;
       }) => (
         <Stack>
           <Accordion

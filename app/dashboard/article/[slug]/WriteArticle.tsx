@@ -140,11 +140,9 @@ const PreviewArticle = ({ contentMarkdown }: any) => {
   return (
     <Box>
       {/* @ts-ignore */}
-      <Markdown
-        components={ChakraUIRenderer(MarkdownTheme)}
-        children={contentMarkdown}
-        skipHtml
-      />
+      <Markdown components={ChakraUIRenderer(MarkdownTheme)} skipHtml>
+        {contentMarkdown}
+      </Markdown>
     </Box>
   );
 };
