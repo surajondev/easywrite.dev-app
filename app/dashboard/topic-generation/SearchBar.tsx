@@ -1,11 +1,13 @@
 import {
   Box,
-  Flex,
+  SimpleGrid,
+  GridItem,
   Input,
   FormControl,
   InputGroup,
   InputLeftElement,
   Button,
+  Flex,
 } from "@chakra-ui/react";
 import { Select } from "chakra-react-select";
 import { tagOption } from "./DevtoTagOptions";
@@ -43,79 +45,98 @@ export const SearchBar = ({ settingData, settingLoading }: any) => {
   return (
     <Box bg="white" borderRadius="10px">
       <form onSubmit={formik.handleSubmit}>
-        <Flex gap="2" p="18px 25px">
-          <FormControl width="30%">
-            <Select
-              onChange={(e) => setSearchBy(e?.value)}
-              defaultValue={{
-                label: "Search by Text",
-                value: "text",
-              }}
-              options={[
-                {
-                  label: "Search by Text",
-                  value: "text",
-                },
-                {
-                  label: "Search by Tag",
-                  value: "tag",
-                },
-              ]}
-            />
-            <Select
-              onChange={(e) => setPlatform(e?.value)}
-              defaultValue={{
-                label: "Platform Devto",
-                value: "devto",
-              }}
-              options={[
-                {
-                  label: "Platform Devto",
-                  value: "devto",
-                },
-                {
-                  label: "Platform Hashnode",
-                  value: "hashnode",
-                },
-              ]}
-            />
-          </FormControl>
-          <FormControl>
-            {searchBy === "text" && (
-              <InputGroup>
-                <InputLeftElement pointerEvents="none">
-                  <BiSearch />
-                </InputLeftElement>
-                <Input
-                  id="text"
-                  name="text"
-                  type="text"
-                  variant="filled"
-                  placeholder="Generate topic ideas"
-                  onChange={formik.handleChange}
-                  value={formik.values.text}
+        <SimpleGrid
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            lg: "repeat(5, 1fr)",
+          }}
+          spacing="10px"
+          padding="1.5em 1em"
+        >
+          <GridItem colSpan={{ base: 5, lg: 2 }}>
+            <FormControl width="100%">
+              <Flex width="100%" justifyContent="space-between" gap="10px">
+                <Select
+                  onChange={(e) => setSearchBy(e?.value)}
+                  defaultValue={{
+                    label: "Search by Text",
+                    value: "text",
+                  }}
+                  options={[
+                    {
+                      label: "Search by Text",
+                      value: "text",
+                    },
+                    {
+                      label: "Search by Tag",
+                      value: "tag",
+                    },
+                  ]}
                 />
-              </InputGroup>
-            )}
-            {searchBy === "tag" && (
-              <Select
-                id="tag"
-                name="tag"
-                variant="filled"
-                isMulti={true}
-                colorScheme="purple"
-                onChange={(e) => {
-                  const tagArr = e.map((item) => item.value);
-                  formik.setFieldValue("tag", tagArr);
-                }}
-                options={tagOption}
-              />
-            )}
-          </FormControl>
-          <Button type="submit" variant="primary-button" width="20%">
-            Search
-          </Button>
-        </Flex>
+                <Select
+                  onChange={(e) => setPlatform(e?.value)}
+                  defaultValue={{
+                    label: "Platform Devto",
+                    value: "devto",
+                  }}
+                  options={[
+                    {
+                      label: "Platform Devto",
+                      value: "devto",
+                    },
+                    {
+                      label: "Platform Hashnode",
+                      value: "hashnode",
+                    },
+                  ]}
+                />
+              </Flex>
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={{ base: 5, lg: 3 }}>
+            <FormControl>
+              {searchBy === "text" && (
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <BiSearch />
+                  </InputLeftElement>
+                  <Input
+                    id="text"
+                    name="text"
+                    type="text"
+                    variant="filled"
+                    placeholder="Generate topic ideas"
+                    onChange={formik.handleChange}
+                    value={formik.values.text}
+                  />
+                </InputGroup>
+              )}
+              {searchBy === "tag" && (
+                <Select
+                  id="tag"
+                  name="tag"
+                  variant="filled"
+                  isMulti={true}
+                  colorScheme="purple"
+                  onChange={(e) => {
+                    const tagArr = e.map((item) => item.value);
+                    formik.setFieldValue("tag", tagArr);
+                  }}
+                  options={tagOption}
+                />
+              )}
+            </FormControl>
+          </GridItem>
+          <GridItem colSpan={5} textAlign="center">
+            <Button
+              type="submit"
+              variant="primary-button"
+              width={{ base: "50%", lg: "30%" }}
+            >
+              Search
+            </Button>
+          </GridItem>
+        </SimpleGrid>
       </form>
     </Box>
   );

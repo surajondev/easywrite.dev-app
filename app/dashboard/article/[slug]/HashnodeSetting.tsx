@@ -33,6 +33,7 @@ const HashnodeSetting = ({
   body,
   articleId,
   setArticleId,
+  setArticleData,
 }: any) => {
   const [fileName, setFileName] = useState<any>(null);
   const [imgURL, setImgURL] = useState<any>(null);
@@ -71,7 +72,7 @@ const HashnodeSetting = ({
         coverImageURL: values.main_image,
       },
       slug: getSlug(),
-      tags: tagsArr(),
+      tags: tagsArr,
       publicationId: values.publicationId.value,
     };
 
@@ -99,6 +100,7 @@ const HashnodeSetting = ({
     if (response) {
       console.log(response);
       setArticleId(response[0].article_id);
+      setArticleData(response);
     }
   };
 
@@ -160,6 +162,7 @@ const HashnodeSetting = ({
     const response = await updateHashnodeArticle(articleData);
     if (response) {
       console.log(response);
+      setArticleData(response);
     }
   };
 

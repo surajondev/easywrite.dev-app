@@ -303,6 +303,18 @@ export const addArticle = async ({
   }
 };
 
+export const deleteArticle = async (article_id: any) => {
+  try {
+    const res = await axios.post(`${baseURL}/article/delete`, {
+      article_id,
+    });
+    toast.success("Article Deleted Successfully");
+    return res.data;
+  } catch (error: any) {
+    toast.error(error.response.data.error);
+  }
+};
+
 export const updateDevtoArticle = async ({
   article_id,
   devto,

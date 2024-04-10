@@ -59,6 +59,7 @@ const articlePage = () => {
         <DevtoSetting
           articleId={articleId}
           articleData={articleData}
+          setArticleData={(e: any) => setArticleData(e)}
           body={contentMarkdown}
           setArticleId={(e: any) => setArticleId(e)}
         />
@@ -78,6 +79,7 @@ const articlePage = () => {
           articleId={articleId}
           articleData={articleData}
           body={contentMarkdown}
+          setArticleData={(e: any) => setArticleData(e)}
           setArticleId={(e: any) => setArticleId(e)}
         />
       )}
@@ -95,6 +97,7 @@ const articlePage = () => {
         <WriteArticle
           body={contentMarkdown}
           setContentMarkdown={(e: any) => setContentMarkdown(e)}
+          articleData={articleData}
         />
       )}
     </Stack>

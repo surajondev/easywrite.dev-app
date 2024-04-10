@@ -29,7 +29,13 @@ import { useRouter } from "next/navigation";
 import { MdErrorOutline } from "react-icons/md";
 import { IconContext } from "react-icons";
 
-const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
+const DevtoSetting = ({
+  articleData,
+  body,
+  setArticleId,
+  articleId,
+  setArticleData,
+}: any) => {
   const [fileName, setFileName] = useState<any>(null);
   const [imgURL, setImgURL] = useState<any>(null);
   const [devtoPublication, setDevtoPublication] = useState<any>(null);
@@ -81,6 +87,7 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
     if (response) {
       console.log(response[0]);
       setArticleId(response[0].article_id);
+      setArticleData(response);
     }
   };
 
@@ -124,6 +131,7 @@ const DevtoSetting = ({ articleData, body, setArticleId, articleId }: any) => {
     if (response) {
       console.log(response[0]);
       setArticleId(response[0].article_id);
+      setArticleData(response);
     }
   };
 

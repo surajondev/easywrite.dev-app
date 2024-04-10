@@ -19,6 +19,7 @@ const Article = () => {
   const [draft, setDraft] = useState<any>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const articleArr = [0, 1, 2, 3, 4];
+  const [reload, setReload] = useState<number>(0);
 
   const fetchArticle = async () => {
     const {
@@ -100,13 +101,13 @@ const Article = () => {
   };
   useEffect(() => {
     fetchArticle();
-  }, []);
+  }, [reload]);
 
   const getError = (item: any) => {
-    if (item.devto_data.error) {
+    if (item.devto_data && item.devto_data.error) {
       return "error";
     }
-    if (item.hashnode_data.error) {
+    if (item.hashnode_data && item.hashnode_data.error) {
       return "error";
     }
   };
@@ -141,6 +142,7 @@ const Article = () => {
                     key={item.article_id}
                     type="published"
                     error="null"
+                    reload={() => setReload((prevReload) => prevReload + 1)}
                   />
                 );
               })}
@@ -171,6 +173,7 @@ const Article = () => {
                     key={item.article_id}
                     type="scheduled"
                     error={getError(item)}
+                    reload={() => setReload((prevReload) => prevReload + 1)}
                   />
                 );
               })}
@@ -201,6 +204,7 @@ const Article = () => {
                     key={item.article_id}
                     type="draft"
                     error="null"
+                    reload={() => setReload((prevReload) => prevReload + 1)}
                   />
                 );
               })}

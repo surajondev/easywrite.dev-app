@@ -11,6 +11,7 @@ import {
   FormControl,
   Stack,
   FormLabel,
+  GridItem,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { supabase } from "@/lib/supabase";
@@ -242,374 +243,384 @@ const Platform = () => {
 
   return (
     <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-      <Formik
-        initialValues={{
-          devto: "",
-          label: devtoOrganizationLabel !== null ? devtoOrganizationLabel : [],
-          value: devtoOrganizationValue !== null ? devtoOrganizationValue : [],
-        }}
-        enableReinitialize={true}
-        onSubmit={(values) => console.log(values)}
-        // validationSchema={LoginSchema}
-      >
-        {({ values, handleChange, setFieldValue }) => (
-          <Box bg="white" borderRadius="10px" p="18px 25px">
-            <Center flexDir="column" gap="1em">
-              <Avatar
-                name={PlatfromData.devto.name}
-                src={PlatfromData.devto.image}
-              />
-              <Text variant="secondary-text">{PlatfromData.devto.name}</Text>
-              {checkData !== null && (devtoChange || !checkData.devto) && (
-                <FormControl>
-                  <FormLabel textAlign="center">API Key</FormLabel>
-                  <InputGroup>
-                    <Input
-                      id="devto"
-                      name="devto"
-                      type="text"
-                      variant="form-input"
-                      placeholder="Enter API Keys"
-                      onChange={handleChange}
-                      value={values.devto}
-                    />
-                  </InputGroup>
-                </FormControl>
-              )}
-              {devtoOrganization && (
-                <Box>
-                  <TableContainer>
-                    <Table variant="simple">
-                      <Thead>
-                        <Tr>
-                          <Th>Label</Th>
-                          <Th>Username</Th>
-                        </Tr>
-                      </Thead>
-                      <Tbody>
-                        {devtoArray.map((item: any, index: any) => {
-                          console.log(item);
-                          return (
-                            <Tr key={index}>
-                              <Td>
-                                <FormControl>
-                                  <InputGroup>
-                                    <Input
-                                      id="label"
-                                      name="label"
-                                      type="text"
-                                      variant="form-input"
-                                      placeholder="Personal"
-                                      onChange={(e) => {
-                                        const newArray = [...values.label];
-                                        //@ts-ignore
-                                        newArray[index] = e.target.value;
-                                        setFieldValue("label", newArray);
-                                      }}
-                                      value={values.label[index]}
-                                    />
-                                  </InputGroup>
-                                </FormControl>
-                              </Td>
-                              <Td>
-                                <FormControl>
-                                  <InputGroup>
-                                    <Input
-                                      id="value"
-                                      name="value"
-                                      type="text"
-                                      variant="form-input"
-                                      placeholder="asd6f5asd65fasd9fa"
-                                      onChange={(e) => {
-                                        const newArray = [...values.value];
-                                        //@ts-ignore
-                                        newArray[index] = e.target.value;
-                                        setFieldValue("value", newArray);
-                                      }}
-                                      value={values.value[index]}
-                                    />
-                                  </InputGroup>
-                                </FormControl>
-                              </Td>
-                              <Td>
-                                <Button
-                                  variant="secondary-button"
-                                  backgroundColor="gray.300"
-                                  onClick={() => {
-                                    const newArray = devtoArray.filter(
-                                      (item: any, i: any) => i !== index
-                                    );
-                                    setDevtoArray(newArray);
+      <GridItem colSpan={{ base: 2, lg: 1 }}>
+        <Formik
+          initialValues={{
+            devto: "",
+            label:
+              devtoOrganizationLabel !== null ? devtoOrganizationLabel : [],
+            value:
+              devtoOrganizationValue !== null ? devtoOrganizationValue : [],
+          }}
+          enableReinitialize={true}
+          onSubmit={(values) => console.log(values)}
+          // validationSchema={LoginSchema}
+        >
+          {({ values, handleChange, setFieldValue }) => (
+            <Box bg="white" borderRadius="10px" p="18px 25px">
+              <Center flexDir="column" gap="1em">
+                <Avatar
+                  name={PlatfromData.devto.name}
+                  src={PlatfromData.devto.image}
+                />
+                <Text variant="secondary-text">{PlatfromData.devto.name}</Text>
+                {checkData !== null && (devtoChange || !checkData.devto) && (
+                  <FormControl>
+                    <FormLabel textAlign="center">API Key</FormLabel>
+                    <InputGroup>
+                      <Input
+                        id="devto"
+                        name="devto"
+                        type="text"
+                        variant="form-input"
+                        placeholder="Enter API Keys"
+                        onChange={handleChange}
+                        value={values.devto}
+                      />
+                    </InputGroup>
+                  </FormControl>
+                )}
+                {devtoOrganization && (
+                  <Box>
+                    <TableContainer>
+                      <Table variant="simple">
+                        <Thead>
+                          <Tr>
+                            <Th>Label</Th>
+                            <Th>Username</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {devtoArray.map((item: any, index: any) => {
+                            console.log(item);
+                            return (
+                              <Tr key={index}>
+                                <Td>
+                                  <FormControl>
+                                    <InputGroup>
+                                      <Input
+                                        id="label"
+                                        name="label"
+                                        type="text"
+                                        variant="form-input"
+                                        placeholder="Personal"
+                                        onChange={(e) => {
+                                          const newArray = [...values.label];
+                                          //@ts-ignore
+                                          newArray[index] = e.target.value;
+                                          setFieldValue("label", newArray);
+                                        }}
+                                        value={values.label[index]}
+                                      />
+                                    </InputGroup>
+                                  </FormControl>
+                                </Td>
+                                <Td>
+                                  <FormControl>
+                                    <InputGroup>
+                                      <Input
+                                        id="value"
+                                        name="value"
+                                        type="text"
+                                        variant="form-input"
+                                        placeholder="asd6f5asd65fasd9fa"
+                                        onChange={(e) => {
+                                          const newArray = [...values.value];
+                                          //@ts-ignore
+                                          newArray[index] = e.target.value;
+                                          setFieldValue("value", newArray);
+                                        }}
+                                        value={values.value[index]}
+                                      />
+                                    </InputGroup>
+                                  </FormControl>
+                                </Td>
+                                <Td>
+                                  <Button
+                                    variant="secondary-button"
+                                    backgroundColor="gray.300"
+                                    onClick={() => {
+                                      const newArray = devtoArray.filter(
+                                        (item: any, i: any) => i !== index
+                                      );
+                                      setDevtoArray(newArray);
 
-                                    const arrayLable = [...values.label];
-                                    const arrayValue = [...values.value];
+                                      const arrayLable = [...values.label];
+                                      const arrayValue = [...values.value];
 
-                                    const newArrayLabel = arrayLable.filter(
-                                      (item: any, i: any) => i !== index
-                                    );
-                                    const newArrayValue = arrayValue.filter(
-                                      (item: any, i: any) => i !== index
-                                    );
-                                    setFieldValue("label", newArrayLabel);
-                                    setFieldValue("value", newArrayValue);
-                                  }}
-                                >
-                                  X
-                                </Button>
-                              </Td>
-                            </Tr>
-                          );
-                        })}
-                      </Tbody>
-                    </Table>
-                  </TableContainer>
-                  <Center>
-                    <Stack flexDir="row" gap={3}>
-                      <Button
-                        disabled
-                        variant="secondary-button"
-                        backgroundColor="gray.300"
-                        onClick={() => {
-                          const newArray = [...devtoArray, "a"];
-                          setDevtoArray(newArray);
-                        }}
-                      >
-                        Add More Publication
-                      </Button>
-                      <Button
-                        variant="primary-button"
-                        onClick={() => handleUpdateDevtoPublication(values)}
-                      >
-                        Update
-                      </Button>
-                    </Stack>
-                  </Center>
-                </Box>
-              )}
-              {!devtoChange && checkData.devto && !devtoOrganization && (
-                <Stack flexDir="row" gap={3}>
-                  <Button
-                    disabled
-                    variant="secondary-button"
-                    backgroundColor="gray.300"
-                    onClick={() => setDevtoOrganization(true)}
-                  >
-                    Add Organization
-                  </Button>
-                  <Button
-                    variant="primary-button"
-                    onClick={() => setDevtoChange(true)}
-                  >
-                    Change
-                  </Button>
-                </Stack>
-              )}
-              {(!checkData.devto || devtoChange) &&
-                (!checkData.devto ? (
-                  <Button
-                    variant="primary-button"
-                    onClick={() => handleSubmitDevto(values)}
-                  >
-                    Connect
-                  </Button>
-                ) : (
-                  <Button
-                    variant="primary-button"
-                    onClick={() => handleUpdateDevto(values.devto)}
-                  >
-                    Connect
-                  </Button>
-                ))}
-            </Center>
-          </Box>
-        )}
-      </Formik>
-      <Formik
-        initialValues={{
-          hashnode: "",
-          label:
-            hashnodePublicationLabel !== null ? hashnodePublicationLabel : [],
-          value:
-            hashnodePublicationValue !== null ? hashnodePublicationValue : [],
-        }}
-        enableReinitialize={true}
-        onSubmit={(values) => console.log(values)}
-        // validationSchema={LoginSchema}
-      >
-        {({ values, handleChange, setFieldValue }) => (
-          <Box bg="white" borderRadius="10px" p="18px 25px">
-            <Center flexDir="column" gap="1em">
-              <Avatar
-                name={PlatfromData.hashnode.name}
-                src={PlatfromData.hashnode.image}
-              />
-              <Text variant="secondary-text">{PlatfromData.hashnode.name}</Text>
-              {(!checkData.hashnode || hashnodeChange) && (
-                <FormControl>
-                  <FormLabel textAlign="center">API Key</FormLabel>
-                  <InputGroup>
-                    <Input
-                      id="hashnode"
-                      name="hashnode"
-                      type="text"
-                      variant="form-input"
-                      placeholder="Enter API keys"
-                      onChange={handleChange}
-                      value={values.hashnode}
-                    />
-                  </InputGroup>
-                </FormControl>
-              )}
-              {hashnodePublication && (
-                <Box>
-                  <TableContainer>
-                    <Table variant="simple">
-                      <Thead>
-                        <Tr>
-                          <Th>Label</Th>
-                          <Th>Publication ID</Th>
-                        </Tr>
-                      </Thead>
-                      <Tbody>
-                        {HashnodeArray.map((item: any, index: any) => {
-                          console.log(item);
-                          return (
-                            <Tr key={index}>
-                              <Td>
-                                <FormControl>
-                                  <InputGroup>
-                                    <Input
-                                      id="label"
-                                      name="label"
-                                      type="text"
-                                      variant="form-input"
-                                      placeholder="Personal"
-                                      onChange={(e) => {
-                                        const newArray = [...values.label];
-                                        //@ts-ignore
-                                        newArray[index] = e.target.value;
-                                        setFieldValue("label", newArray);
-                                      }}
-                                      value={values.label[index]}
-                                    />
-                                  </InputGroup>
-                                </FormControl>
-                              </Td>
-                              <Td>
-                                <FormControl>
-                                  <InputGroup>
-                                    <Input
-                                      id="value"
-                                      name="value"
-                                      type="text"
-                                      variant="form-input"
-                                      placeholder="asd6f5asd65fasd9fa"
-                                      onChange={(e) => {
-                                        const newArray = [...values.value];
-                                        //@ts-ignore
-                                        newArray[index] = e.target.value;
-                                        setFieldValue("value", newArray);
-                                      }}
-                                      value={values.value[index]}
-                                    />
-                                  </InputGroup>
-                                </FormControl>
-                              </Td>
-                              <Td>
-                                <Button
-                                  variant="secondary-button"
-                                  backgroundColor="gray.300"
-                                  onClick={() => {
-                                    const newArray = HashnodeArray.filter(
-                                      (item: any, i: any) => i !== index
-                                    );
-                                    setHashnodeArray(newArray);
-
-                                    const arrayLable = [...values.label];
-                                    const arrayValue = [...values.value];
-
-                                    const newArrayLabel = arrayLable.filter(
-                                      (item: any, i: any) => i !== index
-                                    );
-                                    const newArrayValue = arrayValue.filter(
-                                      (item: any, i: any) => i !== index
-                                    );
-                                    setFieldValue("label", newArrayLabel);
-                                    setFieldValue("value", newArrayValue);
-                                  }}
-                                >
-                                  X
-                                </Button>
-                              </Td>
-                            </Tr>
-                          );
-                        })}
-                      </Tbody>
-                    </Table>
-                  </TableContainer>
-                  <Center>
-                    <Stack flexDir="row" gap={3}>
-                      <Button
-                        disabled
-                        variant="secondary-button"
-                        backgroundColor="gray.300"
-                        onClick={() => {
-                          const newArray = [...HashnodeArray, "a"];
-                          setHashnodeArray(newArray);
-                        }}
-                      >
-                        Add More Publication
-                      </Button>
-                      <Button
-                        variant="primary-button"
-                        onClick={() => handleUpdateHashnodePublication(values)}
-                      >
-                        Update
-                      </Button>
-                    </Stack>
-                  </Center>
-                </Box>
-              )}
-              {!hashnodeChange &&
-                checkData.hashnode &&
-                !hashnodePublication && (
+                                      const newArrayLabel = arrayLable.filter(
+                                        (item: any, i: any) => i !== index
+                                      );
+                                      const newArrayValue = arrayValue.filter(
+                                        (item: any, i: any) => i !== index
+                                      );
+                                      setFieldValue("label", newArrayLabel);
+                                      setFieldValue("value", newArrayValue);
+                                    }}
+                                  >
+                                    X
+                                  </Button>
+                                </Td>
+                              </Tr>
+                            );
+                          })}
+                        </Tbody>
+                      </Table>
+                    </TableContainer>
+                    <Center>
+                      <Stack flexDir="row" gap={3}>
+                        <Button
+                          disabled
+                          variant="secondary-button"
+                          backgroundColor="gray.300"
+                          onClick={() => {
+                            const newArray = [...devtoArray, "a"];
+                            setDevtoArray(newArray);
+                          }}
+                        >
+                          Add More Publication
+                        </Button>
+                        <Button
+                          variant="primary-button"
+                          onClick={() => handleUpdateDevtoPublication(values)}
+                        >
+                          Update
+                        </Button>
+                      </Stack>
+                    </Center>
+                  </Box>
+                )}
+                {!devtoChange && checkData.devto && !devtoOrganization && (
                   <Stack flexDir="row" gap={3}>
                     <Button
                       disabled
                       variant="secondary-button"
                       backgroundColor="gray.300"
-                      onClick={() => setHashnodePublication(true)}
+                      onClick={() => setDevtoOrganization(true)}
                     >
-                      Add Publication
+                      Add Organization
                     </Button>
                     <Button
                       variant="primary-button"
-                      onClick={() => setHashnodeChange(true)}
+                      onClick={() => setDevtoChange(true)}
                     >
                       Change
                     </Button>
                   </Stack>
                 )}
-              {(!checkData.hashnode || hashnodeChange) &&
-                (!checkData.hashnode ? (
-                  <Button
-                    variant="primary-button"
-                    onClick={() => handleSubmitHashnode(values)}
-                  >
-                    Connect
-                  </Button>
-                ) : (
-                  <Button
-                    variant="primary-button"
-                    onClick={() => handleUpdateHashnode(values.hashnode)}
-                  >
-                    Connect
-                  </Button>
-                ))}
-            </Center>
-          </Box>
-        )}
-      </Formik>
+                {(!checkData.devto || devtoChange) &&
+                  (!checkData.devto ? (
+                    <Button
+                      variant="primary-button"
+                      onClick={() => handleSubmitDevto(values)}
+                    >
+                      Connect
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="primary-button"
+                      onClick={() => handleUpdateDevto(values.devto)}
+                    >
+                      Connect
+                    </Button>
+                  ))}
+              </Center>
+            </Box>
+          )}
+        </Formik>
+      </GridItem>
+      <GridItem colSpan={{ base: 2, lg: 1 }}>
+        <Formik
+          initialValues={{
+            hashnode: "",
+            label:
+              hashnodePublicationLabel !== null ? hashnodePublicationLabel : [],
+            value:
+              hashnodePublicationValue !== null ? hashnodePublicationValue : [],
+          }}
+          enableReinitialize={true}
+          onSubmit={(values) => console.log(values)}
+          // validationSchema={LoginSchema}
+        >
+          {({ values, handleChange, setFieldValue }) => (
+            <Box bg="white" borderRadius="10px" p="18px 25px">
+              <Center flexDir="column" gap="1em">
+                <Avatar
+                  name={PlatfromData.hashnode.name}
+                  src={PlatfromData.hashnode.image}
+                />
+                <Text variant="secondary-text">
+                  {PlatfromData.hashnode.name}
+                </Text>
+                {(!checkData.hashnode || hashnodeChange) && (
+                  <FormControl>
+                    <FormLabel textAlign="center">API Key</FormLabel>
+                    <InputGroup>
+                      <Input
+                        id="hashnode"
+                        name="hashnode"
+                        type="text"
+                        variant="form-input"
+                        placeholder="Enter API keys"
+                        onChange={handleChange}
+                        value={values.hashnode}
+                      />
+                    </InputGroup>
+                  </FormControl>
+                )}
+                {hashnodePublication && (
+                  <Box>
+                    <TableContainer>
+                      <Table variant="simple">
+                        <Thead>
+                          <Tr>
+                            <Th>Label</Th>
+                            <Th>Publication ID</Th>
+                          </Tr>
+                        </Thead>
+                        <Tbody>
+                          {HashnodeArray.map((item: any, index: any) => {
+                            console.log(item);
+                            return (
+                              <Tr key={index}>
+                                <Td>
+                                  <FormControl>
+                                    <InputGroup>
+                                      <Input
+                                        id="label"
+                                        name="label"
+                                        type="text"
+                                        variant="form-input"
+                                        placeholder="Personal"
+                                        onChange={(e) => {
+                                          const newArray = [...values.label];
+                                          //@ts-ignore
+                                          newArray[index] = e.target.value;
+                                          setFieldValue("label", newArray);
+                                        }}
+                                        value={values.label[index]}
+                                      />
+                                    </InputGroup>
+                                  </FormControl>
+                                </Td>
+                                <Td>
+                                  <FormControl>
+                                    <InputGroup>
+                                      <Input
+                                        id="value"
+                                        name="value"
+                                        type="text"
+                                        variant="form-input"
+                                        placeholder="asd6f5asd65fasd9fa"
+                                        onChange={(e) => {
+                                          const newArray = [...values.value];
+                                          //@ts-ignore
+                                          newArray[index] = e.target.value;
+                                          setFieldValue("value", newArray);
+                                        }}
+                                        value={values.value[index]}
+                                      />
+                                    </InputGroup>
+                                  </FormControl>
+                                </Td>
+                                <Td>
+                                  <Button
+                                    variant="secondary-button"
+                                    backgroundColor="gray.300"
+                                    onClick={() => {
+                                      const newArray = HashnodeArray.filter(
+                                        (item: any, i: any) => i !== index
+                                      );
+                                      setHashnodeArray(newArray);
+
+                                      const arrayLable = [...values.label];
+                                      const arrayValue = [...values.value];
+
+                                      const newArrayLabel = arrayLable.filter(
+                                        (item: any, i: any) => i !== index
+                                      );
+                                      const newArrayValue = arrayValue.filter(
+                                        (item: any, i: any) => i !== index
+                                      );
+                                      setFieldValue("label", newArrayLabel);
+                                      setFieldValue("value", newArrayValue);
+                                    }}
+                                  >
+                                    X
+                                  </Button>
+                                </Td>
+                              </Tr>
+                            );
+                          })}
+                        </Tbody>
+                      </Table>
+                    </TableContainer>
+                    <Center>
+                      <Stack flexDir="row" gap={3}>
+                        <Button
+                          disabled
+                          variant="secondary-button"
+                          backgroundColor="gray.300"
+                          onClick={() => {
+                            const newArray = [...HashnodeArray, "a"];
+                            setHashnodeArray(newArray);
+                          }}
+                        >
+                          Add More Publication
+                        </Button>
+                        <Button
+                          variant="primary-button"
+                          onClick={() =>
+                            handleUpdateHashnodePublication(values)
+                          }
+                        >
+                          Update
+                        </Button>
+                      </Stack>
+                    </Center>
+                  </Box>
+                )}
+                {!hashnodeChange &&
+                  checkData.hashnode &&
+                  !hashnodePublication && (
+                    <Stack flexDir="row" gap={3}>
+                      <Button
+                        disabled
+                        variant="secondary-button"
+                        backgroundColor="gray.300"
+                        onClick={() => setHashnodePublication(true)}
+                      >
+                        Add Publication
+                      </Button>
+                      <Button
+                        variant="primary-button"
+                        onClick={() => setHashnodeChange(true)}
+                      >
+                        Change
+                      </Button>
+                    </Stack>
+                  )}
+                {(!checkData.hashnode || hashnodeChange) &&
+                  (!checkData.hashnode ? (
+                    <Button
+                      variant="primary-button"
+                      onClick={() => handleSubmitHashnode(values)}
+                    >
+                      Connect
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="primary-button"
+                      onClick={() => handleUpdateHashnode(values.hashnode)}
+                    >
+                      Connect
+                    </Button>
+                  ))}
+              </Center>
+            </Box>
+          )}
+        </Formik>
+      </GridItem>
     </Grid>
   );
 };
