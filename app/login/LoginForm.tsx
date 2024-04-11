@@ -31,6 +31,7 @@ const LoginForm = () => {
       });
       if (data) {
         console.log(data);
+        localStorage.setItem("easywrite.dev-login-data", JSON.stringify(data));
         toast.success("User Login");
         router.push("/dashboard");
       }

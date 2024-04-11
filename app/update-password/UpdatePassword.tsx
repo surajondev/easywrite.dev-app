@@ -17,12 +17,8 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { updatePassword } from "@/services/api";
 import { toast } from "react-toastify";
-import { getProfile } from "@/services/api";
 import { supabase } from "@/lib/supabase";
-import { ProfileSchema } from "@/utils/validations/profileSchema";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 const UpdatePassword = () => {

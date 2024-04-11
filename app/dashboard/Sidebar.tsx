@@ -192,6 +192,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     if (error) {
       console.log(error);
     }
+    localStorage.removeItem("easywrite.dev-login-data");
     router.push("/login");
   };
 
