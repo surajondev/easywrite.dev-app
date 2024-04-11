@@ -88,6 +88,11 @@ const LoginForm = () => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.password}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                }
+              }}
             />
             <FormLabel mt={1} display="flex" justifyContent="space-between">
               {errors.password && touched.password && (

@@ -179,6 +179,11 @@ const SignUpForm = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSubmit();
+                    }
+                  }}
                 />
                 <FormLabel display="flex" justifyContent="space-between">
                   {errors.password && touched.password && (
