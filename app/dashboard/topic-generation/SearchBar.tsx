@@ -48,14 +48,19 @@ export const SearchBar = ({ settingData, settingLoading }: any) => {
         <SimpleGrid
           templateColumns={{
             base: "repeat(1, 1fr)",
-            lg: "repeat(5, 1fr)",
+            lg: "repeat(6, 1fr)",
           }}
           spacing="10px"
           padding="1.5em 1em"
         >
-          <GridItem colSpan={{ base: 5, lg: 2 }}>
+          <GridItem colSpan={{ base: 6, lg: 2 }}>
             <FormControl width="100%">
-              <Flex width="100%" justifyContent="space-between" gap="10px">
+              <Flex
+                width="100%"
+                justifyContent={{ lg: "start", base: "space-between" }}
+                border="solid 1px green"
+                gap="10px"
+              >
                 <Select
                   onChange={(e) => setSearchBy(e?.value)}
                   defaultValue={{
@@ -93,7 +98,7 @@ export const SearchBar = ({ settingData, settingLoading }: any) => {
               </Flex>
             </FormControl>
           </GridItem>
-          <GridItem colSpan={{ base: 5, lg: 3 }}>
+          <GridItem colSpan={{ base: 6, lg: 4 }}>
             <FormControl>
               {searchBy === "text" && (
                 <InputGroup>

@@ -24,12 +24,41 @@ import { RegisterSchema } from "@/utils/validations/registerSchema";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 import Link from "next/link";
+import Resizer from "react-image-file-resizer";
 
 const SignUpForm = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
   const [fileName, setFileName] = useState<string>();
+  const [imgData, setImgData] = useState<any>();
 
   const handleSignin = async (values: any) => {
+    console.log(values);
+
+    const imageURL = async () => {
+      const timestamp = Date.now();
+      const { data: imageData, error } = await supabase.storage
+        .from("profileImage")
+        //@ts-ignore
+        .upload(
+          //@ts-ignore
+          `${timestamp}-${imgData.name}`,
+          //@ts-ignore
+          imgData,
+          {
+            cacheControl: "3600",
+            upsert: false,
+          }
+        );
+      if (error) {
+        console.log(error);
+        return;
+      }
+      const imgURL = `${SUPABASE_STORAGE}/profileImage/${imageData.path}`;
+      console.log(imgURL);
+      return imgURL;
+    };
+
+    values.profile_img = await imageURL();
     console.log(values);
     const data = await register(values);
     if (data) {
@@ -37,6 +66,22 @@ const SignUpForm = () => {
       setSubmitted(true);
     }
   };
+
+  const reduceSize = (file: any, type: string) =>
+    new Promise((resolve) => {
+      Resizer.imageFileResizer(
+        file,
+        200,
+        200,
+        "JPEG",
+        50,
+        0,
+        (uri) => {
+          resolve(uri);
+        },
+        type === "uri" ? "base64" : "file"
+      );
+    });
 
   return (
     <Formik
@@ -111,36 +156,25 @@ const SignUpForm = () => {
                       name="profile_img"
                       type="file"
                       onChange={async (e) => {
-                        const timestamp = Date.now();
-                        const { data, error } = await supabase.storage
-                          .from("profileImage")
+                        const newImage = await reduceSize(
                           //@ts-ignore
-                          .upload(
-                            //@ts-ignore
-                            `${timestamp}-${e.target.files[0].name}`,
-                            //@ts-ignore
-                            e.target.files[0],
-                            {
-                              cacheControl: "3600",
-                              upsert: false,
-                            }
-                          );
-                        if (error) {
-                          console.log(error);
-                          return;
-                        }
-                        console.log(
-                          `${SUPABASE_STORAGE}/profileImage/${data.path}`
+                          e.target.files[0],
+                          "uri"
                         );
+                        const newImageSupa = await reduceSize(
+                          //@ts-ignore
+                          e.target.files[0],
+                          "file"
+                        );
+                        setImgData(newImageSupa);
+                        console.log(newImage);
+                        //@ts-ignore
+                        console.log(e.target.files[0]);
                         //@ts-ignore
                         setFileName(e.target.value);
-                        setFieldValue(
-                          "profile_img",
-                          `${SUPABASE_STORAGE}/profileImage/${data.path}`
-                        );
+                        setFieldValue("profile_img", newImage);
                       }}
                       onBlur={handleBlur}
-                      value={fileName}
                     />
                     <FormLabel display="flex" justifyContent="space-between">
                       {errors.profile_img && touched.profile_img && (

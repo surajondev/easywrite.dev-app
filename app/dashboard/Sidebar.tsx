@@ -194,6 +194,7 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
     }
     localStorage.removeItem("easywrite.dev-login-data");
     router.push("/login");
+    router.refresh();
   };
 
   useEffect(() => {
