@@ -58,7 +58,6 @@ export const SearchBar = ({ settingData, settingLoading }: any) => {
               <Flex
                 width="100%"
                 justifyContent={{ lg: "start", base: "space-between" }}
-                border="solid 1px green"
                 gap="10px"
               >
                 <Select
@@ -132,7 +131,7 @@ export const SearchBar = ({ settingData, settingLoading }: any) => {
               )}
             </FormControl>
           </GridItem>
-          <GridItem colSpan={5} textAlign="center">
+          <GridItem colSpan={6} textAlign="center">
             <Button
               type="submit"
               variant="primary-button"

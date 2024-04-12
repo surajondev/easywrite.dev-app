@@ -93,7 +93,7 @@ const ArticlePage = () => {
           Add Hashnode API in Platform
         </Heading>
       )}
-      {contentMarkdown && (
+      {articleData && (
         <WriteArticle
           body={contentMarkdown}
           setContentMarkdown={(e: any) => setContentMarkdown(e)}

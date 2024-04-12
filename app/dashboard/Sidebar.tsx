@@ -21,16 +21,7 @@ import {
   Stack,
   MenuList,
 } from "@chakra-ui/react";
-import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
-  FiSettings,
-  FiMenu,
-  FiBell,
-  FiChevronDown,
-} from "react-icons/fi";
+import { FiHome, FiCompass, FiMenu, FiChevronDown } from "react-icons/fi";
 import { MdOutlineArticle } from "react-icons/md";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { SiPlatformdotsh } from "react-icons/si";
@@ -41,6 +32,7 @@ import { getProfile } from "@/services/api";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { IconContext } from "react-icons";
+import { CgProfile } from "react-icons/cg";
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
@@ -69,7 +61,7 @@ const LinkItems: Array<any> = [
     href: "/dashboard/topic-generation",
   },
   { name: "Platform", icon: <SiPlatformdotsh />, href: "/dashboard/platform" },
-  { name: "Profile", icon: <FiStar />, href: "/dashboard/profile" },
+  { name: "Profile", icon: <CgProfile />, href: "/dashboard/profile" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {

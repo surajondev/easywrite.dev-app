@@ -40,7 +40,7 @@ const HashnodeSetting = ({
   const [hashnodePublication, setHashnodePublication] = useState<any>(null);
   const [timeStampTZ, setTimeStampTZ] = useState<any>(null);
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: any, type: string) => {
     if (body == "new-article") {
       toast.error("There is no article body");
       return;
@@ -79,7 +79,7 @@ const HashnodeSetting = ({
     console.log(hashnodeData);
 
     const hashnode_data = {
-      type: "scheduled",
+      type: type,
       error: "",
     };
 
@@ -273,7 +273,8 @@ const HashnodeSetting = ({
         publishedAt: timeStampTZ ? timeStampTZ : "",
       }}
       enableReinitialize={true}
-      onSubmit={(values) => handleSubmit(values)}
+      //@ts-ignore
+      onSubmit={(values, type: string) => handleSubmit(values, type)}
       validationSchema={HashnodeArticleSchema}
     >
       {({
@@ -542,16 +543,16 @@ const HashnodeSetting = ({
                       <Button
                         variant="secondary-button"
                         bgColor="gray.300"
-                        onClick={() => handleSubmit()}
+                        onClick={() => handleSubmit(values, "draft")}
                       >
                         Save Draft
                       </Button>
                       {articleId === null ? (
                         <Button
                           variant="primary-button"
-                          onClick={() => handleSubmit()}
+                          onClick={() => handleSubmit(values, "scheduled")}
                         >
-                          Publish
+                          Schedule
                         </Button>
                       ) : (
                         <Button

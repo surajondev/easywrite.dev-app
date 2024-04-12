@@ -43,7 +43,7 @@ const DevtoSetting = ({
 
   const router = useRouter();
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: any, type: string) => {
     if (body == "new-article") {
       toast.error("There is no article body");
       return;
@@ -243,7 +243,8 @@ const DevtoSetting = ({
         published_time: timeStampTZ ? timeStampTZ : "",
       }}
       enableReinitialize={true}
-      onSubmit={(values) => handleSubmit(values)}
+      //@ts-ignore
+      onSubmit={(values, type: string) => handleSubmit(values, type)}
       validationSchema={DevtoArticleSchema}
     >
       {({
@@ -523,16 +524,16 @@ const DevtoSetting = ({
                       <Button
                         variant="secondary-button"
                         bgColor="gray.300"
-                        onClick={() => handleSubmit()}
+                        onClick={() => handleSubmit(values, "draft")}
                       >
                         Save Draft
                       </Button>
                       {articleId === null ? (
                         <Button
                           variant="primary-button"
-                          onClick={() => handleSubmit()}
+                          onClick={() => handleSubmit(values, "schedule")}
                         >
-                          Publish
+                          Schedule
                         </Button>
                       ) : (
                         <Button

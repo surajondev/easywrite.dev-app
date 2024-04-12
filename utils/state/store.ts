@@ -2,11 +2,15 @@ import { create } from "zustand";
 
 type AnalyticalState = {
   analyticalData: any;
+  analyticalError: any;
 };
 
 type AnalyticalAction = {
   updateAnalyticalData: (
     analyticalData: AnalyticalState["analyticalData"]
+  ) => void;
+  updateAnalyticalError: (
+    analyticalData: AnalyticalState["analyticalError"]
   ) => void;
 };
 
@@ -33,7 +37,10 @@ type PlatformAction = {
 export const useAnalyticalStore = create<AnalyticalState & AnalyticalAction>(
   (set) => ({
     analyticalData: null,
+    analyticalError: null,
     updateAnalyticalData: (data: any) => set(() => ({ analyticalData: data })),
+    updateAnalyticalError: (data: any) =>
+      set(() => ({ analyticalError: data })),
   })
 );
 

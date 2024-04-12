@@ -12,7 +12,7 @@ import {
   Center,
   Skeleton,
 } from "@chakra-ui/react";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { devtoAnalytics } from "@/services/api";
 import { PerformanceChart } from "./analytics/PerformnaceChart";
 import { VscReactions, VscComment } from "react-icons/vsc";
@@ -21,13 +21,18 @@ import { IoIosStats } from "react-icons/io";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { useAnalyticalStore, useArticleStore } from "@/utils/state/store";
-import AnalyticLoading from "./loading";
 
 function Dashboard({ params }: { params: { session: any } }) {
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState<any>(null);
   const [articleData, setArticleData] = useState<any>(null);
   const analyticalD = useAnalyticalStore((state: any) => state.analyticalData);
+  const analyticalError = useAnalyticalStore(
+    (state: any) => state.analyticalError
+  );
+  const updateAnalyticalError = useAnalyticalStore(
+    (state: any) => state.updateAnalyticalError
+  );
   const updateAnalyticalData = useAnalyticalStore(
     (state: any) => state.updateAnalyticalData
   );
@@ -44,6 +49,8 @@ function Dashboard({ params }: { params: { session: any } }) {
     const res = await devtoAnalytics(session);
     if (res.error) {
       setError(res.error);
+      updateAnalyticalError(res.error);
+      // console.log(res.error);
     } else {
       res.last_article_stats[0].icon = <VscReactions />;
       res.last_article_stats[1].icon = <VscComment />;
@@ -57,6 +64,9 @@ function Dashboard({ params }: { params: { session: any } }) {
       .from("article")
       .select()
       .eq("user_id", session?.user.id);
+    if (error) {
+      console.log(error);
+    }
     console.log("data", data);
     setArticleData(data);
     updateArticleData(data);
@@ -66,8 +76,20 @@ function Dashboard({ params }: { params: { session: any } }) {
     if (!articleD && !analyticalD) {
       handleFetchData();
     }
-    setArticleData(articleD);
-    setData(analyticalD);
+    if (articleD && analyticalD) {
+      console.log("running-else");
+      setArticleData(articleD);
+      setData(analyticalD);
+    }
+    if (articleD && !analyticalD) {
+      console.log("running-articleD");
+      setArticleData(articleD);
+      setError(analyticalError);
+    }
+    if (!articleD && analyticalD) {
+      console.log("running-analyticalD");
+      setData(analyticalD);
+    }
   }, []);
 
   return (
