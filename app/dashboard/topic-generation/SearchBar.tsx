@@ -14,7 +14,7 @@ import { tagOption } from "./DevtoTagOptions";
 import React, { useState } from "react";
 import { useFormik } from "formik";
 import { BiSearch } from "react-icons/bi";
-import { generateByTag, generateByText } from "@/services/api";
+import { generateByTag, generateByText } from "@/api/TopicGeneration";
 
 export const SearchBar = ({ settingData, settingLoading }: any) => {
   const [searchBy, setSearchBy] = useState<any>("text");

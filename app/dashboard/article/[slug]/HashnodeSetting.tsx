@@ -20,7 +20,7 @@ import {
 import { Formik } from "formik";
 import { Select } from "chakra-react-select";
 import { tagOption } from "../../topic-generation/HashnodeTagOptions";
-import { addArticle, updateHashnodeArticle } from "@/services/api";
+import { addArticle, updateHashnodeArticle } from "@/api/Article";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 import { HashnodeArticleSchema } from "@/utils/validations/hashnodeArticleSchema";

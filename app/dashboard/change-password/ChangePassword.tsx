@@ -17,9 +17,9 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { changePassword } from "@/services/api";
+import { changePassword } from "@/api/Profile";
 import { toast } from "react-toastify";
-import { getProfile } from "@/services/api";
+import { getProfile } from "@/api/Profile";
 import { supabase } from "@/lib/supabase";
 import { ProfileSchema } from "@/utils/validations/profileSchema";
 import Link from "next/link";

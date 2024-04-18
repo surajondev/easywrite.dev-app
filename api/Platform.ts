@@ -1,6 +1,6 @@
 import axios from "axios";
 import { supabase } from "@/lib/supabase";
-import { encrypt } from "./decrypt";
+import { encrypt } from "@/lib/crypto";
 import { toast } from "react-toastify";
 
 export const platformIntegrateDevto = async (

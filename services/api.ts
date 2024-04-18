@@ -114,30 +114,6 @@ export const devtoAnalytics = async (session: any) => {
 };
 
 // Generating the topics via the text
-export const generateByText = async (query: string, platform: string) => {
-  try {
-    const res = await axios.post(`${baseURL}/topic-generation/by-text`, {
-      query,
-      platform,
-    });
-    return res.data;
-  } catch (error: any) {
-    toast.error(error.response.data.error);
-  }
-};
-
-// Generating the topics via the tag
-export const generateByTag = async (query: string, platform: string) => {
-  try {
-    const res = await axios.post(`${baseURL}/topic-generation/by-tag`, {
-      query,
-      platform,
-    });
-    return res.data;
-  } catch (error: any) {
-    toast.error(error.response.data.error);
-  }
-};
 
 // Platform integration
 

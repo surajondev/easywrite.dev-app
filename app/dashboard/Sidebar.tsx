@@ -28,7 +28,7 @@ import { SiPlatformdotsh } from "react-icons/si";
 import { IconType } from "react-icons";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useReducer, useMemo } from "react";
-import { getProfile } from "@/services/api";
+import { getProfile } from "@/api/Profile";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { IconContext } from "react-icons";

@@ -20,7 +20,7 @@ import {
 import { Formik } from "formik";
 import { Select } from "chakra-react-select";
 import { tagOption } from "../../topic-generation/DevtoTagOptions";
-import { addArticle, updateDevtoArticle } from "@/services/api";
+import { addArticle, updateDevtoArticle } from "@/api/Article";
 import { supabase } from "@/lib/supabase";
 import { SUPABASE_STORAGE } from "@/utils/constants/supabase";
 import { DevtoArticleSchema } from "@/utils/validations/devtoArticleSchema";

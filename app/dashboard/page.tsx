@@ -13,7 +13,7 @@ import {
   Skeleton,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { devtoAnalytics } from "@/services/api";
+import { devtoAnalytics } from "@/api/Analytics";
 import { PerformanceChart } from "./analytics/PerformnaceChart";
 import { VscReactions, VscComment } from "react-icons/vsc";
 import { AiOutlineClockCircle } from "react-icons/ai";
@@ -47,14 +47,21 @@ function Dashboard({ params }: { params: { session: any } }) {
     } = await supabase.auth.getSession();
 
     const res = await devtoAnalytics(session);
+    //@ts-ignore
     if (res.error) {
+      //@ts-ignore
       setError(res.error);
+      //@ts-ignore
       updateAnalyticalError(res.error);
       // console.log(res.error);
     } else {
+      //@ts-ignore
       res.last_article_stats[0].icon = <VscReactions />;
+      //@ts-ignore
       res.last_article_stats[1].icon = <VscComment />;
+      //@ts-ignore
       res.last_article_stats[2].icon = <AiOutlineClockCircle />;
+      //@ts-ignore
       res.last_article_stats[3].icon = <IoIosStats />;
       console.log(res);
       setData(res);

@@ -12,7 +12,7 @@ import { StatsBar } from "./StatsBar";
 import { PerformanceChart } from "./PerformnaceChart";
 import { ArticlePerTagTree } from "./ArticlePerTagTree";
 import { useEffect, useState } from "react";
-import { devtoAnalytics } from "@/services/api";
+import { devtoAnalytics } from "@/api/Analytics";
 
 import { VscReactions, VscComment } from "react-icons/vsc";
 import { AiOutlineClockCircle } from "react-icons/ai";
@@ -35,12 +35,18 @@ export default function Home({ params }: { params: { session: any } }) {
     } = await supabase.auth.getSession();
 
     const res = await devtoAnalytics(session);
+    //@ts-ignore
     if (res.error) {
+      //@ts-ignore
       setError(res.error);
     } else {
+      //@ts-ignore
       res.last_article_stats[0].icon = <VscReactions />;
+      //@ts-ignore
       res.last_article_stats[1].icon = <VscComment />;
+      //@ts-ignore
       res.last_article_stats[2].icon = <AiOutlineClockCircle />;
+      //@ts-ignore
       res.last_article_stats[3].icon = <IoIosStats />;
       setData(res);
       updateAnalyticalData(res);

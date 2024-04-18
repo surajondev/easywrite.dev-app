@@ -18,9 +18,8 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { updateProfile } from "@/services/api";
+import { getProfile, updateProfile } from "@/api/Profile";
 import { toast } from "react-toastify";
-import { getProfile } from "@/services/api";
 import { supabase } from "@/lib/supabase";
 import { ProfileSchema } from "@/utils/validations/profileSchema";
 import Link from "next/link";
@@ -66,6 +65,7 @@ const ProfileEditForm = () => {
     const data = await getProfile(session);
     setSession(session);
     console.log(data);
+    //@ts-ignore
     setProfileData(data);
   };
 

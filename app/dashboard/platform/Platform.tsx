@@ -32,7 +32,7 @@ import {
   updateHashnode,
   updateHashnodePublication,
   updateDevtoPublication,
-} from "@/services/api";
+} from "@/api/Platform";
 import { usePlatformStore } from "@/utils/state/store";
 
 const Platform = () => {

@@ -19,7 +19,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { deleteArticle } from "@/services/api";
+import { deleteArticle } from "@/api/Article";
 
 const ArticleContainer = ({ article, type, error, reload }: any) => {
   const handleDelete = async (id: string) => {

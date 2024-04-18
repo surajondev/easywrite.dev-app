@@ -7,7 +7,7 @@ import DevtoSetting from "./DevtoSetting";
 import HashnodeSetting from "./HashnodeSetting";
 import { usePathname, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
-import { checkIntegration } from "@/services/api";
+import { checkIntegration } from "@/api/Platform";
 
 const ArticlePage = () => {
   const [contentMarkdown, setContentMarkdown] = useState<any>(null);
@@ -20,6 +20,7 @@ const ArticlePage = () => {
   const pathname = usePathname();
 
   const handleFetchParam = async () => {
+    //@ts-ignore
     const slugArr = pathname.split("/");
     const slug = slugArr[slugArr.length - 1];
     const {

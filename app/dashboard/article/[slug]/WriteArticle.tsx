@@ -24,7 +24,7 @@ import {
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { deleteArticle } from "@/services/api";
+import { deleteArticle } from "@/api/Article";
 import { useRouter } from "next/navigation";
 
 const WriteArticle = ({ body, setContentMarkdown, articleData }: any) => {
