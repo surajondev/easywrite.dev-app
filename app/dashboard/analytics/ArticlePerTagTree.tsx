@@ -25,7 +25,15 @@ export const ArticlePerTagTree = ({ data }: any) => {
       <Heading variant="secondary-heading" mb={2} p={5}>
         Articles Per Tag
       </Heading>
-      {data && <Chart type="treemap" series={series} options={options} />}
+      {data && (
+        <Chart
+          type="treemap"
+          series={series}
+          options={options}
+          width={"100%"}
+          height={"250%"}
+        />
+      )}
     </Box>
   );
 };

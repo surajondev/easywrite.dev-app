@@ -1,6 +1,5 @@
 import axios from "axios";
 import { supabase } from "@/lib/supabase";
-import { encrypt } from "@/lib/crypto";
 import { toast } from "react-toastify";
 
 export const platformIntegrateDevto = async (
@@ -60,7 +59,18 @@ export const platformIntegrateHashnode = async (
   });
 
   //edgefunction
-  const encryptedApiKey = encrypt(apiKey);
+  let encryptedApiKey;
+  const { data: decryptData, error: decryptError }: any =
+    await supabase.functions.invoke("decrypt", {
+      //@ts-ignore
+      body: { api_key: api_key },
+    });
+  if (decryptError) {
+    console.log(decryptError);
+  } else {
+    console.log(decryptData);
+    encryptedApiKey = decryptData.data;
+  }
 
   const platformKey: any = {
     user_id: user_id,
@@ -134,7 +144,18 @@ export const updateHashnode = async (user_id: string, hashnode: string) => {
     },
   });
 
-  const encryptedApiKey = encrypt(apiKey);
+  let encryptedApiKey;
+  const { data: decryptData, error: decryptError }: any =
+    await supabase.functions.invoke("decrypt", {
+      //@ts-ignore
+      body: { api_key: api_key },
+    });
+  if (decryptError) {
+    console.log(decryptError);
+  } else {
+    console.log(decryptData);
+    encryptedApiKey = decryptData.data;
+  }
 
   const platformKey: any = {
     api_key: encryptedApiKey,

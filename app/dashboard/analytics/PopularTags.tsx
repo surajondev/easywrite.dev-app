@@ -31,7 +31,15 @@ export const PopularTags = ({ data, label }: PopularTagsInterface) => {
       <Heading variant="secondary-heading" mb={2} p={4}>
         Popular Tags
       </Heading>
-      {data && <Chart type="donut" series={series} options={options} />}
+      {data && (
+        <Chart
+          type="donut"
+          series={series}
+          options={options}
+          width={"100%"}
+          height={"80%"}
+        />
+      )}
     </Box>
   );
 };

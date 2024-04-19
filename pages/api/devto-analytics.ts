@@ -1,11 +1,13 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import { supabase } from "@/lib/supabase";
-import { decrypt } from "@/lib/crypto";
 import axios from "axios";
-import { DEVTO_URL } from "@/utils/constants/url";
 
-export const devtoAnalytics = async (session: any) => {
-  const user_id = session?.user?.id;
-
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { user_id } = req.body;
+  const DEVTO_URL = "https://dev.to/api";
   // fetching the user data using user_id
   const { data, error } = await supabase
     .from("devto_key")
@@ -13,29 +15,38 @@ export const devtoAnalytics = async (session: any) => {
     .eq("user_id", user_id);
 
   if (error) {
-    //errordb
     console.log(error);
   }
 
   if (data?.length == 0) {
-    return { error: "Add devto API Key" };
+    return res.status(200).send({ error: "Add devto API Key" });
   }
 
-  //@ts-ignore
-  //edgefunction
-  const decryptedApiKey = decrypt(data[0].api_key);
+  let decryptedApiKey;
 
-  const res = await axios.get(`${DEVTO_URL}/articles/me?per_page=1000`, {
+  const { data: decryptData, error: decryptError }: any =
+    await supabase.functions.invoke("decrypt", {
+      //@ts-ignore
+      body: { api_key: data[0]?.api_key },
+    });
+  if (decryptError) {
+    console.log(decryptError);
+  } else {
+    console.log(decryptData);
+    decryptedApiKey = decryptData.data;
+  }
+
+  const response = await axios.get(`${DEVTO_URL}/articles/me?per_page=1000`, {
     headers: {
       "api-key": decryptedApiKey,
       "Accept-Encoding": "gzip, deflate, br",
     },
   });
 
-  const resData: any = res.data;
+  const resData: any = response.data;
 
   if (resData.length === 0) {
-    return { error: "Data not found!" };
+    return res.status(200).send({ error: "Data not found!" });
   }
 
   const last_article_stats = () => {
@@ -169,5 +180,5 @@ export const devtoAnalytics = async (session: any) => {
     randomStats: randomStats(),
   };
 
-  return analyticsRes;
-};
+  return res.status(200).send(analyticsRes);
+}

@@ -22,8 +22,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
-    const query = req.body("query");
-    const platform = req.body("platform");
+    const { query, platform } = req.body;
     console.log(query, platform);
 
     let retriever: any;
@@ -102,7 +101,7 @@ export default async function handler(
 
     console.log();
 
-    const res = await chain.invoke(
+    const response = await chain.invoke(
       `Take Inpiration and Give me 10 topic title based on ${query} for future articles. Also generated expected_reactions, expected_comments every time`
     );
 
@@ -110,9 +109,9 @@ export default async function handler(
     //@ts-ignore
     // console.log(res?.data)
     //@ts-ignore
-    response.status(200).send(res?.data);
+    res.send(response?.data);
   } catch (error) {
     console.error("Error encountered:", error);
-    res.status(500).send("An error occurred while processing your request.");
+    res.send("An error occurred while processing your request.");
   }
 }

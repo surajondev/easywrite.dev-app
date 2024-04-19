@@ -33,7 +33,15 @@ export const PerformanceChart = ({ data }: any) => {
       <Heading variant="secondary-heading" mb={2} p={5}>
         Last Articles
       </Heading>
-      {data && <Chart type="bar" series={series} options={options} />}
+      {data && (
+        <Chart
+          type="bar"
+          series={series}
+          options={options}
+          width={"100%"}
+          height={"150%"}
+        />
+      )}
     </Box>
   );
 };
