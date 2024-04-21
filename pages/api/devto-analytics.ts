@@ -6,35 +6,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { user_id } = req.body;
+  const { decryptedApiKey } = req.body;
   const DEVTO_URL = "https://dev.to/api";
   // fetching the user data using user_id
-  const { data, error } = await supabase
-    .from("devto_key")
-    .select()
-    .eq("user_id", user_id);
-
-  if (error) {
-    console.log(error);
-  }
-
-  if (data?.length == 0) {
-    return res.status(200).send({ error: "Add devto API Key" });
-  }
-
-  let decryptedApiKey;
-
-  const { data: decryptData, error: decryptError }: any =
-    await supabase.functions.invoke("decrypt", {
-      //@ts-ignore
-      body: { api_key: data[0]?.api_key },
-    });
-  if (decryptError) {
-    console.log(decryptError);
-  } else {
-    console.log(decryptData);
-    decryptedApiKey = decryptData.data;
-  }
 
   const response = await axios.get(`${DEVTO_URL}/articles/me?per_page=1000`, {
     headers: {

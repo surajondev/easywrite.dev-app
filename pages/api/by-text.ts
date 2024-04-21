@@ -15,7 +15,7 @@ import {
 import { formatDocumentsAsString } from "langchain/util/document";
 //@ts-ignore
 import { zodToJsonSchema } from "zod-to-json-schema";
-import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase";
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,7 +29,7 @@ export default async function handler(
 
     if (platform == "devto") {
       retriever = new SupabaseHybridSearch(embeddings, {
-        client: supabase,
+        client: supabaseAdmin,
         similarityK: 6,
         keywordK: 6,
         tableName: "documents",
@@ -40,7 +40,7 @@ export default async function handler(
 
     if (platform == "hashnode") {
       retriever = new SupabaseHybridSearch(embeddings, {
-        client: supabase,
+        client: supabaseAdmin,
         similarityK: 6,
         keywordK: 6,
         tableName: "hashnode_data",

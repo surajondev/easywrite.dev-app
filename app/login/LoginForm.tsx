@@ -10,7 +10,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { login } from "@/services/api";
+import { login } from "@/api/Auth";
 import { toast } from "react-toastify";
 import { LoginSchema } from "@/utils/validations/loginSchema";
 import { supabase } from "@/lib/supabase";
@@ -22,20 +22,6 @@ const LoginForm = () => {
 
   const handleLogin = async (values: any) => {
     const res = await login(values);
-    const access_token = res.session.access_token;
-    const refresh_token = res.session.refresh_token;
-    if (res) {
-      const { data, error } = await supabase.auth.setSession({
-        access_token,
-        refresh_token,
-      });
-      if (data) {
-        console.log(data);
-        localStorage.setItem("easywrite.dev-login-data", JSON.stringify(data));
-        toast.success("User Login");
-        router.push("/dashboard");
-      }
-    }
   };
 
   return (

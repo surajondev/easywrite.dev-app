@@ -386,6 +386,13 @@ const Platform = () => {
                         >
                           Update
                         </Button>
+                        <Button
+                          variant="secondayr-button"
+                          background="gray.300"
+                          onClick={() => setDevtoOrganization(false)}
+                        >
+                          X
+                        </Button>
                       </Stack>
                     </Center>
                   </Box>
@@ -417,12 +424,21 @@ const Platform = () => {
                       Connect
                     </Button>
                   ) : (
-                    <Button
-                      variant="primary-button"
-                      onClick={() => handleUpdateDevto(values.devto)}
-                    >
-                      Connect
-                    </Button>
+                    <Center gap={5}>
+                      <Button
+                        variant="primary-button"
+                        onClick={() => handleUpdateDevto(values.devto)}
+                      >
+                        Connect
+                      </Button>
+                      <Button
+                        variant="secondayr-button"
+                        background="gray.300"
+                        onClick={() => setDevtoChange(false)}
+                      >
+                        X
+                      </Button>
+                    </Center>
                   ))}
               </Center>
             </Box>
@@ -576,6 +592,13 @@ const Platform = () => {
                         >
                           Update
                         </Button>
+                        <Button
+                          variant="secondayr-button"
+                          background="gray.300"
+                          onClick={() => setHashnodePublication(false)}
+                        >
+                          X
+                        </Button>
                       </Stack>
                     </Center>
                   </Box>
@@ -609,12 +632,21 @@ const Platform = () => {
                       Connect
                     </Button>
                   ) : (
-                    <Button
-                      variant="primary-button"
-                      onClick={() => handleUpdateHashnode(values.hashnode)}
-                    >
-                      Connect
-                    </Button>
+                    <Center gap={5}>
+                      <Button
+                        variant="primary-button"
+                        onClick={() => handleUpdateHashnode(values.hashnode)}
+                      >
+                        Connect
+                      </Button>
+                      <Button
+                        variant="secondayr-button"
+                        background="gray.300"
+                        onClick={() => setHashnodeChange(false)}
+                      >
+                        X
+                      </Button>
+                    </Center>
                   ))}
               </Center>
             </Box>

@@ -35,6 +35,7 @@ export default function Home({ params }: { params: { session: any } }) {
     } = await supabase.auth.getSession();
 
     const res = await devtoAnalytics(session);
+    console.log(res);
     //@ts-ignore
     if (res.error) {
       //@ts-ignore

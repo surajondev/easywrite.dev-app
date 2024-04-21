@@ -1,5 +1,6 @@
 import { countries } from "@/utils/constants/countries";
 import { supabase } from "@/lib/supabase";
+import { toast } from "react-toastify";
 
 export const register = async ({
   first_name,
@@ -69,10 +70,12 @@ export const login = async ({ email, password }: any) => {
       throw error;
     }
 
+    console.log("User Login");
     return data;
-  } catch (error) {
+  } catch (error: any) {
     //errordb
     console.log(error);
+    toast.error(error);
     //   return error
   }
 };

@@ -13,6 +13,7 @@ const nextConfig = {
     BACKEND_URL: process.env.BACKEND_URL,
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_ANON: process.env.SUPABASE_ANON,
+    SERVICE_ROLE: process.env.SERVICE_ROLE,
     CLIENT_URL: process.env.CLIENT_URL,
     OPENAI_API_KEY: process.env.OPENAI_API_KEY,
     PASSWORD: process.env.PASSWORD,

@@ -63,7 +63,7 @@ export const platformIntegrateHashnode = async (
   const { data: decryptData, error: decryptError }: any =
     await supabase.functions.invoke("decrypt", {
       //@ts-ignore
-      body: { api_key: api_key },
+      body: { api_key: apiKey },
     });
   if (decryptError) {
     console.log(decryptError);
@@ -144,11 +144,18 @@ export const updateHashnode = async (user_id: string, hashnode: string) => {
     },
   });
 
+  console.log("res", res);
+  if (res.data.errors) {
+    console.log(res.data.errors);
+    toast.error("Invalid API Key");
+    return;
+  }
+
   let encryptedApiKey;
   const { data: decryptData, error: decryptError }: any =
-    await supabase.functions.invoke("decrypt", {
+    await supabase.functions.invoke("encrypt", {
       //@ts-ignore
-      body: { api_key: api_key },
+      body: { api_key: apiKey },
     });
   if (decryptError) {
     console.log(decryptError);
@@ -161,6 +168,8 @@ export const updateHashnode = async (user_id: string, hashnode: string) => {
     api_key: encryptedApiKey,
     username: res.data.data.me.username,
   };
+
+  console.log(platformKey);
 
   const { error } = await supabase
     .from("hashnode_key")

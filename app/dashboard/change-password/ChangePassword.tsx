@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Stack,
   Heading,
@@ -19,9 +19,6 @@ import {
 import { Formik } from "formik";
 import { changePassword } from "@/api/Profile";
 import { toast } from "react-toastify";
-import { getProfile } from "@/api/Profile";
-import { supabase } from "@/lib/supabase";
-import { ProfileSchema } from "@/utils/validations/profileSchema";
 import Link from "next/link";
 
 const ChangePassword = () => {

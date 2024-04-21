@@ -22,7 +22,6 @@ export const updateProfile = async (values: any) => {
     first_name: values.first_name,
     last_name: values.last_name,
     profile_img: values.profile_img,
-    email: values.email,
   };
 
   const { error } = await supabase
@@ -34,15 +33,14 @@ export const updateProfile = async (values: any) => {
     console.log(error);
     toast.error(error.message);
   }
-  toast.success("User Updated");
   return { data: "User Updated" };
 };
 
 export const changePassword = async (email: string) => {
-  console.log(email, process.env.SUPABASE_URL);
+  console.log(email, process.env.CLIENT_URL);
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.SUPABASE_URL}/update-password`,
+    redirectTo: `http://localhost:3000/update-password`,
   });
 
   if (error) {
@@ -51,4 +49,27 @@ export const changePassword = async (email: string) => {
   }
 
   return { data: "Password reset email is sent" };
+};
+
+export const changeEmail = async (email: string) => {
+  console.log(email, process.env.CLIENT_URL);
+
+  const { data, error } = await supabase.auth.updateUser(
+    {
+      email: email,
+    },
+    {
+      emailRedirectTo: `${process.env.CLIENT_URL}/email-updated`,
+    }
+  );
+
+  if (error) {
+    console.log(error);
+    toast.error(error.message);
+    return;
+  }
+  if (data) {
+    console.log(data);
+    return { data: "Password reset email is sent" };
+  }
 };

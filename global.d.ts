@@ -5,5 +5,7 @@ namespace NodeJS {
     SUPABASE_ANON: string;
     PASSWORD: string;
     OPENAI_API_KEY: string;
+    CLIENT_URL: string;
+    SERVICE_ROLE: string;
   }
 }

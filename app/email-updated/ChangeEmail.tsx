@@ -21,7 +21,7 @@ import { toast } from "react-toastify";
 import { supabase } from "@/lib/supabase";
 import { redirect } from "next/navigation";
 
-const UpdatePassword = () => {
+const ChangeEmail = () => {
   const [isSubmitted, setSubmitted] = useState<boolean>(false);
 
   const handleUpdateProfile = async (values: any) => {
@@ -52,23 +52,6 @@ const UpdatePassword = () => {
       redirect("/login");
     }
   };
-
-  const handleFetch = () => {
-    const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
-
-      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") {
-        console.log("running");
-      }
-    });
-
-    // call unsubscribe to remove the callback
-    data.subscription.unsubscribe();
-  };
-
-  useEffect(() => {
-    handleFetch();
-  }, []);
 
   return (
     <Formik
@@ -188,4 +171,4 @@ const AlertContainer = () => {
   );
 };
 
-export default UpdatePassword;
+export default ChangeEmail;

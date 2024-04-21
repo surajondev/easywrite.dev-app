@@ -81,8 +81,6 @@ const ProfileEditForm = () => {
         profile_img: profileData
           ? profileData[0].profile_img
           : "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg",
-        devto_username: profileData ? profileData[0].devto_username : "",
-        email: profileData ? profileData[0].email : "",
       }}
       onSubmit={(values) => handleUpdateProfile(values)}
       validationSchema={ProfileSchema}
@@ -186,30 +184,20 @@ const ProfileEditForm = () => {
                       value={fileName}
                     />
                     <FormLabel display="flex" justifyContent="space-between">
-                      {errors.email && touched.email && (
-                        <Text variant="input-error-text">{errors.email}</Text>
+                      {errors.profile_img && touched.profile_img && (
+                        <Text variant="input-error-text">
+                          {errors.profile_img}
+                        </Text>
                       )}
                     </FormLabel>
                   </FormControl>
                 </Flex>
               </Stack>
-              <FormControl>
-                <Heading variant="tertiary-heading">Email</Heading>
-                <Input
-                  variant={"form-input"}
-                  name="email"
-                  type="text"
-                  placeholder={"johndoe@email.com"}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.email}
-                />
-                <FormLabel display="flex" justifyContent="space-between">
-                  {errors.email && touched.email && (
-                    <Text variant="input-error-text">{errors.email}</Text>
-                  )}
-                </FormLabel>
-              </FormControl>
+              <Link href="/dashboard/change-email">
+                <Text variant="secondary-text" color="brand.300" mt={-5}>
+                  Change email
+                </Text>
+              </Link>
               <Link href="/dashboard/change-password">
                 <Text variant="secondary-text" color="brand.300" mt={-5}>
                   Change password
