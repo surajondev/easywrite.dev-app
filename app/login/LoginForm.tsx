@@ -11,9 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { Formik } from "formik";
 import { login } from "@/api/Auth";
-import { toast } from "react-toastify";
 import { LoginSchema } from "@/utils/validations/loginSchema";
-import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -22,6 +20,9 @@ const LoginForm = () => {
 
   const handleLogin = async (values: any) => {
     const res = await login(values);
+    if (res.data) {
+      router.push("/dashboard");
+    }
   };
 
   return (

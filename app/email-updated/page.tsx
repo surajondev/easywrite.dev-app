@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Stack, Flex } from "@chakra-ui/react";
-import ChangeEmail from "./ChangeEmail";
+import EmailUpdated from "./EmailUpdated";
 
 const changePassowrdPage = () => {
   return (
@@ -15,7 +15,7 @@ const changePassowrdPage = () => {
         p="18px 25px"
         mt={16}
       >
-        <ChangeEmail />
+        <EmailUpdated />
       </Flex>
     </Stack>
   );

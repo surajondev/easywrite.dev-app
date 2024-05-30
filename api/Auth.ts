@@ -70,12 +70,13 @@ export const login = async ({ email, password }: any) => {
       throw error;
     }
 
-    console.log("User Login");
-    return data;
+    console.log(data);
+    return { data: data };
   } catch (error: any) {
     //errordb
     console.log(error);
     toast.error(error);
+    return { error: error };
     //   return error
   }
 };
