@@ -77,7 +77,6 @@ export default async function handler(
     const prompt = ChatPromptTemplate.fromMessages(messages);
 
     const llmWithTools = llm.bind({
-      //@ts-ignore
       functions: [
         {
           name: "output_formatter",
