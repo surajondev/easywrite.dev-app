@@ -12,7 +12,7 @@ const EmailUpdated = () => {
     >
       <Heading variant="secondary-heading">Update Password</Heading>
       <Text variant="primary-text" color="gray.400">
-        You're email has been updated! You can now login with the new email.
+        Your email has been updated! You can now login with the new email.
       </Text>
     </Stack>
   );
