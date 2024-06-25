@@ -25,6 +25,7 @@ import { FiHome, FiCompass, FiMenu, FiChevronDown } from "react-icons/fi";
 import { MdOutlineArticle } from "react-icons/md";
 import { IoAnalyticsOutline } from "react-icons/io5";
 import { SiPlatformdotsh } from "react-icons/si";
+import { MdOutlinePictureAsPdf } from "react-icons/md";
 import { IconType } from "react-icons";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useReducer, useMemo } from "react";
@@ -59,6 +60,11 @@ const LinkItems: Array<any> = [
     name: "Topic Generation",
     icon: <FiCompass />,
     href: "/dashboard/topic-generation",
+  },
+  {
+    name: "PDF Extractor",
+    icon: <MdOutlinePictureAsPdf />,
+    href: "/dashboard/pdf-extractor",
   },
   { name: "Platform", icon: <SiPlatformdotsh />, href: "/dashboard/platform" },
   { name: "Profile", icon: <CgProfile />, href: "/dashboard/profile" },

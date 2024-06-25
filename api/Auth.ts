@@ -71,6 +71,7 @@ export const login = async ({ email, password }: any) => {
     }
 
     console.log(data);
+    toast.success("User Login");
     return { data: data };
   } catch (error: any) {
     //errordb

@@ -1,17 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { SupabaseHybridSearch } from "langchain/retrievers/supabase";
+import { SupabaseHybridSearch } from "@langchain/community/retrievers/supabase";
 import { llm, embeddings } from "@/lib/openai";
 import {
   ChatPromptTemplate,
   HumanMessagePromptTemplate,
   SystemMessagePromptTemplate,
-} from "langchain/prompts";
+} from "@langchain/core/prompts";
 import { JsonOutputFunctionsParser } from "langchain/output_parsers";
 import { z } from "zod";
 import {
   RunnablePassthrough,
   RunnableSequence,
-} from "langchain/schema/runnable";
+} from "@langchain/core/runnables";
 import { formatDocumentsAsString } from "langchain/util/document";
 //@ts-ignore
 import { zodToJsonSchema } from "zod-to-json-schema";
@@ -77,6 +77,7 @@ export default async function handler(
     const prompt = ChatPromptTemplate.fromMessages(messages);
 
     const llmWithTools = llm.bind({
+      //@ts-ignore
       functions: [
         {
           name: "output_formatter",

@@ -1,10 +1,9 @@
-import { ChatOpenAI } from "langchain/chat_models/openai";
-
-import { OpenAIEmbeddings } from "langchain/embeddings/openai";
+import { OpenAI } from "@langchain/openai";
+import { OpenAIEmbeddings } from "@langchain/openai";
 
 const openaiKey = process.env.OPENAI_API_KEY;
 
-export const llm = new ChatOpenAI({
+export const llm = new OpenAI({
   openAIApiKey: openaiKey,
   modelName: "gpt-3.5-turbo",
   temperature: 0.9,
