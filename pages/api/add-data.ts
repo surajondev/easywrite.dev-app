@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { embeddings } from "@/lib/openai";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
-import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,6 +11,8 @@ export default async function handler(
   try {
     const { src } = req.body;
     const loader = new PDFLoader(src);
+
+    console.log(src, loader);
 
     const doc = await loader.load();
 
