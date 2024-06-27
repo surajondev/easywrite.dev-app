@@ -3,7 +3,6 @@ import { embeddings } from "@/lib/openai";
 import { PDFLoader } from "@langchain/community/document_loaders/fs/pdf";
 import { SupabaseVectorStore } from "@langchain/community/vectorstores/supabase";
 import { supabase } from "@/lib/supabase";
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

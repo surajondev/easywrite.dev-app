@@ -41,7 +41,7 @@ export default function RootLayout({
       (session === null &&
         pathname != "/register" &&
         pathname != "/forgot-password" &&
-        pathname != "/forgot-password")
+        pathname != "/update-password")
     ) {
       router.push("/login");
     }
