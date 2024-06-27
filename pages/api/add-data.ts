@@ -9,6 +9,7 @@ export default async function handler(
 ) {
   try {
     const { src } = req.body;
+
     const loader = new PDFLoader(src);
 
     console.log(src, loader);
