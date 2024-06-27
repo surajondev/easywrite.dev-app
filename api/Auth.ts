@@ -51,7 +51,7 @@ export const register = async ({
       console.log(deleteUserError);
     }
 
-    console.log(deleteUserError);
+    console.log(userError);
   }
 
   return registerData;

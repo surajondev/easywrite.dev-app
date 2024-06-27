@@ -18,7 +18,7 @@ import {
   AlertDescription,
 } from "@chakra-ui/react";
 import { Formik } from "formik";
-import { register } from "@/services/api";
+import { register } from "@/api/Auth";
 import { toast } from "react-toastify";
 import { RegisterSchema } from "@/utils/validations/registerSchema";
 import { supabase } from "@/lib/supabase";
